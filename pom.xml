@@ -21,15 +21,15 @@
 	<!-- POM file generated with GWT webAppCreator -->
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.interseroh.report</groupId>
-	<artifactId>report-cockpit-birt</artifactId>
+	<artifactId>report-cockpit-birt-web</artifactId>
 	<packaging>war</packaging>
-	<name>report-cockpit-birt</name>
+	<name>report-cockpit-birt-web</name>
 	<version>1.0.0-SNAPSHOT</version>
-	<url>https://github.com/interseroh/report-cockpit-birt</url>
-	<description>ReportingCockpit for BIRT Reports</description>
+	<url>https://github.com/interseroh/report-cockpit-birt-web</url>
+	<description>ReportingCockpit Webapp for BIRT Reports</description>
 	
 	<scm>
-		<developerConnection>scm:git:git@github.com:interseroh/report-cockpit-birt.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:interseroh/report-cockpit-birt-web.git</developerConnection>
 	</scm>
 
 	<properties>

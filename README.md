@@ -1,2 +1,2 @@
 # report-cockpit-birt
-ReportingCockpit for BIRT Reports
+ReportingCockpit Webapp for BIRT Reports

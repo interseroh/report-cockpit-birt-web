@@ -31,7 +31,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "de.interseroh.entsorgung.server.controller" })
+@ComponentScan({ "de.interseroh.report.server.controller" })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	@Bean

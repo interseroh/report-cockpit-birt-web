@@ -33,8 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-@PropertySource({ "classpath:de/interseroh/entsorgung/ui/Messages.properties",
-		"classpath:config.properties", "classpath:version.properties" })
+@PropertySource({ "classpath:config.properties", "classpath:version.properties" })
 @Controller
 public class EntsorgungController {
 

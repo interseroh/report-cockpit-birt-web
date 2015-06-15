@@ -42,7 +42,7 @@ import de.interseroh.report.util.RestProviderBeanScanner;
 import de.interseroh.report.util.RestServiceBeanScanner;
 
 @Configuration
-@ComponentScan("de.interseroh.entsorgung.server")
+@ComponentScan("de.interseroh.report.server")
 @PropertySource("classpath:config.properties")
 public class UiJaxRsConfig {
 

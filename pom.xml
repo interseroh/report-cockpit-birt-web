@@ -429,8 +429,8 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<url>${camunda-tomcat-server}</url>
-					<server>camunda-tomcat-server</server>
+					<url>${tomcat-server}</url>
+					<server>tomcat-server</server>
 					<path>/${project.artifactId}</path>
 				</configuration>
 			</plugin>

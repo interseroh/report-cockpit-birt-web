@@ -8,7 +8,7 @@
 		<welcome-file>home.jsp</welcome-file>
 	</welcome-file-list>
 
-	<!-- Remote logging -->
+	<!-- Remote logging 
 	<servlet>
 		<servlet-name>remoteLogging</servlet-name>
 		<servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
@@ -17,4 +17,5 @@
 		<servlet-name>remoteLogging</servlet-name>
 		<url-pattern>/Entsorgung/remote_logging</url-pattern>
 	</servlet-mapping>
+	-->
 </web-app>

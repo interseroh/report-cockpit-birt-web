@@ -23,32 +23,71 @@ package de.interseroh.report.webconfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.accept.ContentNegotiationManager;
+import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.spring3.SpringTemplateEngine;
+import org.thymeleaf.spring3.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan({ "de.interseroh.report.server.controller" })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false);
+        configurer.ignoreAcceptHeader(false);
+        configurer.defaultContentType(MediaType.TEXT_PLAIN);
+
+        configurer.mediaType("html", MediaType.TEXT_HTML);
+        configurer.mediaType("xml", MediaType.APPLICATION_XML);
+    }
+
 	@Bean
-	public InternalResourceViewResolver viewResolver() {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/");
-		viewResolver.setSuffix(".jsp");
-		return viewResolver;
+    public ViewResolver thymeleafViewResolver() {
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+        viewResolver.setTemplateEngine(templateEngine());
+        viewResolver.setOrder(1);
+        viewResolver.setExcludedViewNames(new String[]{"*.xml"});
+        return viewResolver;
+    }
+
+	@Bean
+	public SpringTemplateEngine templateEngine() {
+		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+		templateEngine.setTemplateResolver(templateResolver());
+		return templateEngine;
 	}
 
-	@Override
+    @Bean
+    public ServletContextTemplateResolver templateResolver() {
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+        templateResolver.setPrefix("/views");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCacheable(false);
+        return templateResolver;
+    }
+
+    @Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/images/**").addResourceLocations(
-				"/images/");
-		registry.addResourceHandler("/Entsorgung/**").addResourceLocations(
-				"/Entsorgung/");
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		registry.addResourceHandler("/images/**").addResourceLocations("/images/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+		registry.addResourceHandler("/Entsorgung/**").addResourceLocations("/Entsorgung/");
 	}
 
 }

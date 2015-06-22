@@ -36,9 +36,9 @@
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <org.springframework.version>3.2.8.RELEASE</org.springframework.version>
-        <org.springweb.version>3.2.8.RELEASE</org.springweb.version>
-        <org.springsecurity.version>3.2.5.RELEASE</org.springsecurity.version>
+        <org.springframework.version>3.2.13.RELEASE</org.springframework.version>
+        <org.springweb.version>3.2.13.RELEASE</org.springweb.version>
+        <org.springsecurity.version>3.2.7.RELEASE</org.springsecurity.version>
         <org.aspectj.aspectjrt.version>1.6.11</org.aspectj.aspectjrt.version>
         <org.aspectj.aspectjweaver.version>1.6.4</org.aspectj.aspectjweaver.version>
         <cxf.version>2.7.6</cxf.version>

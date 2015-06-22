@@ -166,13 +166,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JSTL for JSP page -->
-        <dependency>
-            <groupId>jstl</groupId>
-            <artifactId>jstl</artifactId>
-            <version>${jstl.version}</version>
-        </dependency>
-
         <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>

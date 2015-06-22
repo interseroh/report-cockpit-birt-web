@@ -34,10 +34,6 @@
     </scm>
 
     <properties>
-        <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.6.1</gwtVersion>
-        <gwtBootstrapVersion>0.8</gwtBootstrapVersion>
-        <!-- GWT needs at least java 1.5 -->
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.springframework.version>3.2.8.RELEASE</org.springframework.version>
@@ -73,32 +69,11 @@
             <version>2.1.2</version>
         </dependency>
 
-        <!-- GWT EventBus
         <dependency>
-            <groupId>com.google.gwt.eventbinder</groupId>
-            <artifactId>eventbinder</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        -->
-
-        <!-- GWT -->
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-servlet</artifactId>
-            <version>${gwtVersion}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwtVersion}</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>${gwtVersion}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -121,40 +96,12 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- GWT Mockito -->
         <dependency>
-            <groupId>com.google.gwt.gwtmockito</groupId>
-            <artifactId>gwtmockito</artifactId>
-            <version>1.1.4</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.19</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.gwt</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
-        <!-- GWT Bootstrap 3
-        <dependency>
-            <groupId>org.gwtbootstrap3</groupId>
-            <artifactId>gwtbootstrap3</artifactId>
-            <version>${gwtBootstrapVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.gwtbootstrap3</groupId>
-            <artifactId>gwtbootstrap3-extras</artifactId>
-            <version>${gwtBootstrapVersion}</version>
-        </dependency>
-        -->
-
-        <!-- RestyGWT
-        <dependency>
-            <groupId>org.fusesource.restygwt</groupId>
-            <artifactId>restygwt</artifactId>
-            <version>1.4</version>
-        </dependency>
-        -->
 
         <!-- CXF for JAX-RS Implementation -->
         <dependency>
@@ -290,10 +237,6 @@
     </dependencies>
 
     <build>
-        <!-- Generate compiled stuff in the folder used for developing mode -->
-        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-        <finalName>${project.artifactId}</finalName>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -308,49 +251,6 @@
         </resources>
 
         <plugins>
-            <!-- GWT Maven Plugin
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>2.6.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test</goal>
-                            <goal>i18n</goal>
-                            <goal>generateAsync</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <module>de.interseroh.entsorgung.Entsorgung</module>
-                    <extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
-                    <runTarget>entsorgung.jsp</runTarget>
-                    <hostedWebapp>${webappDirectory}</hostedWebapp>
-                    <inplace>true</inplace>
-                    <i18nMessagesBundle>de.interseroh.entsorgung.ui.Messages</i18nMessagesBundle>
-                </configuration>
-            </plugin>
-             -->
-
-            <!-- Copy static web files before executing gwt:run -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>exploded</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <webappDirectory>${webappDirectory}</webappDirectory>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -360,30 +260,7 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.4.1</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>src/main/gwt-unitCache</directory>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                        <fileset>
-                            <directory>src/main/webapp</directory>
-                            <includes>
-                                <include>Entsorgung/**/*</include>
-                                <include>WEB-INF/deploy/**/*</include>
-                                <include>WEB-INF/lib/*.jar</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -402,25 +279,6 @@
                                 <copy file="src/main/resources/server.properties_example" tofile="src/main/resources/server.properties"/>
                                 <copy file="src/test/resources/log4j.properties_example" tofile="src/test/resources/log4j.properties"/>
                             </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.9.1</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/gwt</source>
-                            </sources>
                         </configuration>
                     </execution>
                 </executions>

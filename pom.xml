@@ -27,7 +27,7 @@
     <name>report-cockpit-birt-web</name>
     <version>1.0.0-SNAPSHOT</version>
     <url>https://github.com/interseroh/report-cockpit-birt-web</url>
-    <description>ReportingCockpit Webapp for BIRT Reports</description>
+    <description>Report Cockpit for BIRT</description>
 
     <scm>
         <developerConnection>scm:git:git@github.com:interseroh/report-cockpit-birt-web.git</developerConnection>

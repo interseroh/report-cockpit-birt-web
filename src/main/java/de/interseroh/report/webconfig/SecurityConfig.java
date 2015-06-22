@@ -20,8 +20,6 @@
  */
 package de.interseroh.report.webconfig;
 
-import javax.inject.Inject;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -30,6 +28,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import javax.inject.Inject;
 
 @PropertySource("classpath:config.properties")
 @Configuration
@@ -42,9 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String LDAP_URL = "ldap://ldap.xxx:389/OU=xxx";
 
-	private static final String IN_MEMORY_USER = "lofidewanto";
+    private static final String IN_MEMORY_USER = "birt";
 
-	private static final String IN_MEMORY_PASSWORD = "lofidewanto";
+    private static final String IN_MEMORY_PASSWORD = "birt";
 
 	private static final String USER_SEARCH_FILTER = "(&(objectCategory=Person)(sAMAccountName={0}))";
 
@@ -55,11 +55,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/home", "/images/**")
-				.permitAll().anyRequest().authenticated().and().formLogin()
+        http.authorizeRequests()
+                    .antMatchers("/", "/index", "/images/**")
+                .permitAll()
+                    .anyRequest().authenticated().and()
+                .formLogin()
 				.loginPage("/login").failureUrl("/login?error")
-				.defaultSuccessUrl("/entsorgung").permitAll().and().logout()
-				.logoutSuccessUrl("/home").permitAll();
+                .defaultSuccessUrl("/index").permitAll().and().logout()
+                .logoutSuccessUrl("/logout").permitAll();
 		http.csrf().disable();
 	}
 

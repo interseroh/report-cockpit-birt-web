@@ -56,14 +56,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                    .antMatchers("/", "/index", "/images/**")
-                .permitAll()
-                    .anyRequest().authenticated().and()
-                .formLogin()
-                    .loginPage("/login").failureUrl("/login?error")
-                .defaultSuccessUrl("/index").permitAll().and().logout()
-                .logoutSuccessUrl("/logout").permitAll();
-        http.csrf().disable();
+                .antMatchers("/", "/index", "/resources/**", "/images/**", "/webjars/**") //white list of urls
+                .permitAll() // allow anyone on these links
+                .anyRequest().authenticated() // all other urls need a authentication
+                .and()
+                    .formLogin()    // configure the login
+                        .loginPage("/login")    // this is the loginPage
+                        .failureUrl("/login?error") // redirect to this page on failure
+                        .defaultSuccessUrl("/secured/report") // redirect to this page on success
+                        .permitAll() // permit any user to access the login page
+                .and()
+                    .logout() // logout config
+                        .logoutUrl("/logout") // url to trigger logout
+                        .logoutSuccessUrl("/index?logout") // redirect to start page
+                        .permitAll(); // allow anyone to call the logout page
+       http.csrf().disable(); // TODO Why is CSRF disabled?
     }
 
     @Inject

@@ -23,55 +23,59 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-    <!-- Navigation bar -->
-    
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" th:fragment="defaultNavbar">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button"
-                        class="navbar-toggle collapsed"
-                        data-toggle="collapse"
-                        data-target="#report-navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">${interserohText}</a>
-            </div>
-            <div class="collapse navbar-collapse" id="report-navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#start">Start</a></li>
-                    <li><a href="#params">Parameter</a></li>
-                    <li><a href="#print">Print</a></li>
-                    <li th:if="${pageContext.request.userPrincipal.name != null}">
-                        <a href="/login?logout">Angebmeldet als: ${pageContext.request.userPrincipal.name} &raquo; Abmelden</a>
-                    </li>
-                    <li th:unless="${pageContext.request.userPrincipal.name == null}">
-                        <a href="/login">Anmelden</a>
-                    </li>
-                </ul>
-            </div>
-            <!--/.navbar-collapse -->
-        </div>
-    </nav>
+<!-- Navigation bar -->
 
-    <div class="container-fluid">
-        <div class="jumbotron">
-            <span>Report Cockpit Birt :: Navbar</span>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" th:fragment="defaultNavbar"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button"
+                    class="navbar-toggle collapsed"
+                    data-toggle="collapse"
+                    data-target="#report-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:text="${interserohText}">Branding</a>
         </div>
+        <div class="collapse navbar-collapse" id="report-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#start" th:href="@{/index}">Start</a></li>
+                <li sec:authorize="isAuthenticated()"> <a href="#params">Parameter</a></li>
+                <li sec:authorize="isAuthenticated()"> <a href="#print">Print</a></li>
+                <li sec:authorize="isAuthenticated()">
+                        <a href="#" th:href="@{/logout}">Angemeldet als: <span sec:authentication="name">Username</span> &raquo; Abmelden</a>
+                </li>
+                <!--<li th:unless="${pageContext.request.userPrincipal.name == null}">-->
+                <!--<a href="/login">Anmelden</a>-->
+                <!--</li>-->
+                <li sec:authorize="!isAuthenticated()" class="navbar-right">
+                    <a href="#" th:href="@{/login}">Anmelden</a>
+                </li>
+            </ul>
+        </div>
+        <!--/.navbar-collapse -->
     </div>
+</nav>
+
+<div class="container">
+    <div class="jumbotron">
+        <span>Report Cockpit Birt :: Navbar</span>
+    </div>
+</div>
 
 
-    <!-- JQuery for Bootstrap -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-            th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>
-    <!-- Bootstrap JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
-            th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script
-            src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+<!-- JQuery for Bootstrap -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>
+<!-- Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script
+        src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 
 
 </body>

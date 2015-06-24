@@ -42,7 +42,7 @@ public class EntsorgungController {
     @Inject
     private Environment env;
 
-    @RequestMapping(value = {"/index"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
     public ModelAndView homePage() {
         logger.debug("Home executed");
 
@@ -68,6 +68,15 @@ public class EntsorgungController {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/index");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"/secured/report"}, method = RequestMethod.GET)
+    public ModelAndView blocked() {
+        logger.debug("Report view executed");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/secured/report");
         return modelAndView;
     }
 

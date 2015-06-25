@@ -266,6 +266,15 @@
             <artifactId>jackson-jaxrs-json-provider</artifactId>
             <version>${jackson-version}</version>
         </dependency>
+
+
+        <!-- BIRT Runtime -->
+        <dependency>
+            <groupId>org.eclipse.birt.runtime</groupId>
+            <artifactId>org.eclipse.birt.runtime</artifactId>
+            <version>4.4.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

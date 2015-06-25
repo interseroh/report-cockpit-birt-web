@@ -20,6 +20,7 @@
  */
 package de.interseroh.report;
 
+import de.interseroh.report.server.reports.ReportGenerationTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -31,6 +32,6 @@ import de.interseroh.report.webconfig.UiJaxRsConfigTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ SecurityConfigTest.class, SecurityConfigAuthTest.class,
-		UiJaxRsConfigTest.class, LocationServiceImplTest.class })
+		UiJaxRsConfigTest.class, LocationServiceImplTest.class, ReportGenerationTest.class})
 public class AllUiTests {
 }

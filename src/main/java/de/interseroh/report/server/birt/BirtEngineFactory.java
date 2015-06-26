@@ -1,4 +1,4 @@
-package de.interseroh.report.server.service;
+package de.interseroh.report.server.birt;
 
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.core.framework.Platform;
@@ -14,7 +14,7 @@ import org.springframework.core.io.Resource;
 import org.thymeleaf.util.ResourcePool;
 
 /**
- * Created by idueppe on 22.06.15.
+ * @author Ingo Düppe (Crowdcode)
  */
 public class BirtEngineFactory implements FactoryBean, ApplicationContextAware, DisposableBean {
 

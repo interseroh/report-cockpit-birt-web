@@ -1,6 +1,6 @@
 package de.interseroh.report.server.birt;
 
-public enum BirtDataType {
+public enum BirtParameterType {
 
     SCALAR_PARAMETER(0),
     FILTER_PARAMETER(1),
@@ -11,7 +11,7 @@ public enum BirtDataType {
 
     private int parameterType;
 
-    BirtDataType(int parameterType) {
+    BirtParameterType(int parameterType) {
         this.parameterType = parameterType;
     }
 
@@ -19,8 +19,8 @@ public enum BirtDataType {
         return parameterType;
     }
 
-    public static BirtDataType valueOf(int parameterType) {
-        for (BirtDataType type : BirtDataType.values()) {
+    public static BirtParameterType valueOf(int parameterType) {
+        for (BirtParameterType type : BirtParameterType.values()) {
             if (type.parameterType == parameterType)
                 return type;
 

@@ -41,10 +41,10 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.interseroh.report.util.RestProviderBeanScanner;
 import de.interseroh.report.util.RestServiceBeanScanner;
 
-@Configuration
+@Configuration()
 @ComponentScan("de.interseroh.report.server")
 @PropertySource("classpath:config.properties")
-public class UiJaxRsConfig {
+public class UiJaxRsConfig extends ReportConfig{
 
 	public static final String API_BASE = "/location/v1/*";
 

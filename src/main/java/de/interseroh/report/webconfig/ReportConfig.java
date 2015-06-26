@@ -20,28 +20,15 @@
  */
 package de.interseroh.report.webconfig;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.interseroh.report.server.birt.BirtReportService;
-import de.interseroh.report.server.service.BirtEngineFactory;
-import de.interseroh.report.util.RestProviderBeanScanner;
-import de.interseroh.report.util.RestServiceBeanScanner;
-import org.apache.cxf.bus.spring.SpringBus;
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
-import org.springframework.context.ApplicationContext;
+import de.interseroh.report.server.birt.BirtEngineFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.ext.RuntimeDelegate;
-import java.util.List;
-
 @Configuration
-@ComponentScan("de.interseroh.report.server.service")
+@ComponentScan("de.interseroh.report.server.birt")
 @PropertySource("classpath:config.properties")
 public class ReportConfig {
 
@@ -49,11 +36,11 @@ public class ReportConfig {
 	public BirtEngineFactory birtEngineFactory() {
 		return new BirtEngineFactory();
 	}
-
-	@Bean
-	public BirtReportService birtReportService() {
-		return new BirtReportService();
-	}
+//
+//	@Bean
+//	public BirtReportService birtReportService() {
+//		return new BirtReportService();
+//	}
 
 
 }

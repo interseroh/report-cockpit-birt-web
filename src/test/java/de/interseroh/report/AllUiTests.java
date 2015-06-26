@@ -20,18 +20,23 @@
  */
 package de.interseroh.report;
 
-import de.interseroh.report.server.reports.ReportGenerationTest;
+import de.interseroh.report.server.birt.BirtDataType;
+import de.interseroh.report.server.location.service.LocationServiceImplTest;
+import de.interseroh.report.server.reports.ReportGenerationBirtTest;
+import de.interseroh.report.webconfig.SecurityConfigAuthTest;
+import de.interseroh.report.webconfig.SecurityConfigTest;
+import de.interseroh.report.webconfig.UiJaxRsConfigTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import de.interseroh.report.server.location.service.LocationServiceImplTest;
-import de.interseroh.report.webconfig.SecurityConfigAuthTest;
-import de.interseroh.report.webconfig.SecurityConfigTest;
-import de.interseroh.report.webconfig.UiJaxRsConfigTest;
-
 @RunWith(Suite.class)
-@SuiteClasses({ SecurityConfigTest.class, SecurityConfigAuthTest.class,
-		UiJaxRsConfigTest.class, LocationServiceImplTest.class, ReportGenerationTest.class})
+@SuiteClasses({
+        SecurityConfigTest.class,
+        SecurityConfigAuthTest.class,
+        UiJaxRsConfigTest.class,
+        LocationServiceImplTest.class,
+        ReportGenerationBirtTest.class,
+        BirtDataType.class})
 public class AllUiTests {
 }

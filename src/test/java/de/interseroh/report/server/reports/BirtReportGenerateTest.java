@@ -20,14 +20,18 @@
  */
 package de.interseroh.report.server.reports;
 
+import de.interseroh.report.server.birt.BirtParameterType;
 import de.interseroh.report.webconfig.ReportConfig;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
+import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
+import org.eclipse.birt.report.engine.api.IParameterDefnBase;
 import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
+import org.eclipse.birt.report.engine.api.IRunTask;
 import org.eclipse.birt.report.engine.api.RenderOption;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,6 +44,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -48,7 +53,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")
-public class ReportGenerationTest {
+public class BirtReportGenerateTest {
 
     @Autowired
     ApplicationContext applicationContext;
@@ -66,23 +71,10 @@ public class ReportGenerationTest {
         assertThat(reportEngine, is(notNullValue()));
 
         String reportName = "/reports/hello_world.rptdesign";
-        String file = this.getClass().getResource(reportName).getPath();
-        IReportRunnable iReportRunnable = reportEngine.openReportDesign(file);
-        IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
+        String outputFile = "target/hello_world.html";
 
-        IRenderOption options = new RenderOption();
+        renderHtmlReport(outputFile, reportName);
 
-        HTMLRenderOption htmlOptions = new HTMLRenderOption( options);
-        htmlOptions.setOutputFormat("html");
-        htmlOptions.setOutputStream(new FileOutputStream("hello_world.html"));
-//        htmlOptions.setImageHandler(new HTMLServerImageHandler());
-//        htmlOptions.setBaseImageURL(request.getContextPath()+"/images");
-//        htmlOptions.setImageDirectory(sc.getRealPath("/images"));
-        runAndRenderTask.setRenderOption(htmlOptions);
-        runAndRenderTask.run();
-        runAndRenderTask.close();
-
-//		applicationContext.getBean("reportEngine");
     }
 
     @Test
@@ -90,23 +82,9 @@ public class ReportGenerationTest {
         assertThat(reportEngine, is(notNullValue()));
 
         String reportName = "/reports/salesinvoice.rptdesign";
-        String file = this.getClass().getResource(reportName).getPath();
-        IReportRunnable iReportRunnable = reportEngine.openReportDesign(file);
-        IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
+        String outputFile = "target/salesinvoice.html";
 
-        IRenderOption options = new RenderOption();
-
-        HTMLRenderOption htmlOptions = new HTMLRenderOption( options);
-        htmlOptions.setOutputFormat("html");
-        htmlOptions.setOutputStream(new FileOutputStream("salesinvoice.html"));
-//        htmlOptions.setImageHandler(new HTMLServerImageHandler());
-//        htmlOptions.setBaseImageURL(request.getContextPath()+"/images");
-//        htmlOptions.setImageDirectory(sc.getRealPath("/images"));
-        runAndRenderTask.setRenderOption(htmlOptions);
-        runAndRenderTask.run();
-        runAndRenderTask.close();
-
-//		applicationContext.getBean("reportEngine");
+        renderHtmlReport(outputFile, reportName);
     }
 
     @Test
@@ -114,24 +92,47 @@ public class ReportGenerationTest {
         assertThat(reportEngine, is(notNullValue()));
 
         String reportName = "/reports/productcatalog.rptdesign";
+        String outputFile = "target/productcatalog.html";
+
+        renderHtmlReport(outputFile, reportName);
+
+    }
+
+    private void renderHtmlReport(String outputFile, String reportName) throws EngineException, FileNotFoundException {
         String file = this.getClass().getResource(reportName).getPath();
         IReportRunnable iReportRunnable = reportEngine.openReportDesign(file);
+
+        IGetParameterDefinitionTask parameterDefinitionTask = reportEngine.createGetParameterDefinitionTask(iReportRunnable);
         IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
+        Collection<IParameterDefnBase> parameterDefns = parameterDefinitionTask.getParameterDefns(true);
+        for (IParameterDefnBase parameterDefn : parameterDefns) {
+            System.out.println("Displayname: "+parameterDefn.getDisplayName());
+            System.out.println("Helptext: "+parameterDefn.getHelpText());
+            System.out.println("Name: "+parameterDefn.getName());
+            System.out.println("Typename: "+parameterDefn.getTypeName());
+            System.out.println("ParameterType: "+ BirtParameterType.valueOf(parameterDefn.getParameterType()));
+            System.out.println("PromptText: "+parameterDefn.getPromptText());
+            System.out.println("DefaultValue: " + parameterDefinitionTask.getDefaultValue(parameterDefn));
+            System.out.println("Required: "+parameterDefn.getHandle());
+
+            runAndRenderTask.setParameterValue(parameterDefn.getName(), 10101);
+        }
+
+
 
         IRenderOption options = new RenderOption();
 
         HTMLRenderOption htmlOptions = new HTMLRenderOption( options);
         htmlOptions.setOutputFormat("html");
-        htmlOptions.setOutputStream(new FileOutputStream("productcatalog.html"));
-//        htmlOptions.setImageHandler(new HTMLServerImageHandler());
-//        htmlOptions.setBaseImageURL(request.getContextPath()+"/images");
-//        htmlOptions.setImageDirectory(sc.getRealPath("/images"));
+        htmlOptions.setOutputStream(new FileOutputStream(outputFile));
+        htmlOptions.setImageHandler(new HTMLServerImageHandler());
+        htmlOptions.setBaseImageURL("images");
+        htmlOptions.setImageDirectory("target/images");
         runAndRenderTask.setRenderOption(htmlOptions);
         runAndRenderTask.run();
         runAndRenderTask.close();
-
-//		applicationContext.getBean("reportEngine");
     }
+
 
 
 }

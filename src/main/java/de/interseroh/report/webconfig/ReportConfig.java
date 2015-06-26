@@ -21,6 +21,7 @@
 package de.interseroh.report.webconfig;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import de.interseroh.report.server.birt.BirtReportService;
 import de.interseroh.report.server.service.BirtEngineFactory;
 import de.interseroh.report.util.RestProviderBeanScanner;
 import de.interseroh.report.util.RestServiceBeanScanner;
@@ -47,6 +48,11 @@ public class ReportConfig {
 	@Bean
 	public BirtEngineFactory birtEngineFactory() {
 		return new BirtEngineFactory();
+	}
+
+	@Bean
+	public BirtReportService birtReportService() {
+		return new BirtReportService();
 	}
 
 

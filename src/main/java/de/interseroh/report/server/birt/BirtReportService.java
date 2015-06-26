@@ -47,7 +47,7 @@ public class BirtReportService {
         IRenderOption options = new RenderOption();
 
         HTMLRenderOption htmlOptions = new HTMLRenderOption(options);
-        htmlOptions.setOutputFormat("html");
+        htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
         htmlOptions.setOutputStream(out);
         htmlOptions.setImageHandler(new HTMLServerImageHandler());
         htmlOptions.setBaseImageURL("images");
@@ -58,7 +58,8 @@ public class BirtReportService {
     }
 
     private String absolutePathOf(String reportName) {
-        return this.getClass().getResource(reportName).getPath();
+        return Thread.currentThread().getContextClassLoader().getResource(reportName).getPath();
+//        return this.getClass().getResource(reportName).getPath();
     }
 
     private void printParameterDefinitions(Collection<IParameterDefn> parameterDefinitions, IGetParameterDefinitionTask task) {

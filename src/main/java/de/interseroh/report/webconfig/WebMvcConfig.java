@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.webconfig;
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,9 +35,6 @@ import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Configuration
 @EnableWebMvc
@@ -66,14 +64,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
-        Set<IDialect> dialects = new HashSet<>();
-        dialects.add(springSecurityDialect());
-        templateEngine.setAdditionalDialects(dialects);
+        templateEngine.addDialect(layoutDialect());
+        templateEngine.addDialect(springSecurityDialect());
         return templateEngine;
     }
 
     @Bean
-    public SpringSecurityDialect springSecurityDialect() {
+    public IDialect layoutDialect() {
+        return new LayoutDialect();
+    }
+
+    @Bean
+    public IDialect springSecurityDialect() {
         return new SpringSecurityDialect();
     }
 

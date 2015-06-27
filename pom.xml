@@ -71,6 +71,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>1.2.9</version>
+        </dependency>
+
         <!-- Webjars (static dependencies distributed as JAR files) -->
         <dependency>
             <groupId>org.webjars</groupId>

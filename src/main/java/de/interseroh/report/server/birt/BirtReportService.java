@@ -3,6 +3,7 @@ package de.interseroh.report.server.birt;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
+import org.eclipse.birt.report.engine.api.IEngineTask;
 import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.eclipse.birt.report.engine.api.IRenderOption;
@@ -35,14 +36,12 @@ public class BirtReportService {
         return parameterDefns;
     }
 
-    public void renderHtmlReport(String reportName, Map<String, Object> paramValues, OutputStream out) throws EngineException, FileNotFoundException {
+    public void renderHtmlReport(String reportName, Map<String, Object> parameters, OutputStream out) throws EngineException, FileNotFoundException {
         IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
 
         IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
 
-        for (Map.Entry<String, Object> parameter : paramValues.entrySet()) {
-            runAndRenderTask.setParameterValue(parameter.getKey(), parameter.getValue());
-        }
+        injectParameters(parameters, runAndRenderTask);
 
         IRenderOption options = new RenderOption();
 
@@ -55,6 +54,12 @@ public class BirtReportService {
         runAndRenderTask.setRenderOption(htmlOptions);
         runAndRenderTask.run();
         runAndRenderTask.close();
+    }
+
+    private void injectParameters(Map<String, Object> parameters, IEngineTask runAndRenderTask) {
+        for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
+            runAndRenderTask.setParameterValue(parameter.getKey(), parameter.getValue());
+        }
     }
 
     private String absolutePathOf(String reportName) {

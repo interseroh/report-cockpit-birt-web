@@ -25,7 +25,7 @@ public enum BirtParameterType {
                 return type;
 
         }
-        return null; // FIXME - Throw UnkknownParameterType Exception
+        throw new UnknownParameterTypeException(parameterType);
     }
 
 }

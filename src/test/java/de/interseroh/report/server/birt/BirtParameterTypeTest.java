@@ -18,7 +18,7 @@ public class BirtParameterTypeTest {
     }
 
     @Test(expected = UnknownParameterTypeException.class)
-    public void testUnknownDataTypeException() throws Exception {
-        BirtDataType.valueOf(-1);
+    public void testUnknownParameterTypeException() throws Exception {
+        BirtParameterType.valueOf(-1);
     }
 }

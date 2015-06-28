@@ -72,7 +72,9 @@ public class BirtReportService {
             runAndRender(runAndRenderTask, pdfOptions);
 
         } catch (EngineException e) {
-            throw new BirtReportException("Error while rendering pdf for Report "+ reportName, e);
+            throw new BirtReportException("Error while rendering pdf for report "+ reportName + ".", e);
+        }
+    }
 
     private void runAndRender(IRunAndRenderTask runAndRenderTask, IRenderOption renderOptions) throws EngineException {
         runAndRenderTask.setRenderOption(renderOptions);

@@ -47,9 +47,8 @@ public class BirtReportService {
         htmlOptions.setImageHandler(new HTMLServerImageHandler());
         htmlOptions.setBaseImageURL("images");
         htmlOptions.setImageDirectory("target/images");
-        runAndRenderTask.setRenderOption(htmlOptions);
-        runAndRenderTask.run();
-        runAndRenderTask.close();
+
+            runAndRender(runAndRenderTask, htmlOptions);
     }
 
 
@@ -66,12 +65,15 @@ public class BirtReportService {
             pdfOptions.setOutputStream(out);
             pdfOptions.setImageHandler(new HTMLServerImageHandler());
 
-            runAndRenderTask.setRenderOption(pdfOptions);
-            runAndRenderTask.run();
-            runAndRenderTask.close();
+            runAndRender(runAndRenderTask, pdfOptions);
 
         } catch (EngineException e) {
             throw new BirtReportException("Error while rendering pdf for Report "+ reportName, e);
+
+    private void runAndRender(IRunAndRenderTask runAndRenderTask, IRenderOption renderOptions) throws EngineException {
+        runAndRenderTask.setRenderOption(renderOptions);
+        runAndRenderTask.run();
+        runAndRenderTask.close();
         }
 
     private IRunAndRenderTask createRunAndRenderTask(String reportName) throws EngineException {

@@ -5,24 +5,30 @@ package de.interseroh.report.server.birt;
  */
 public enum BirtOutputFormat {
 
-    HTML5("html"),
-    PDF("pdf"),
-    EXCEL("xls"),
-    EXCEL2010("xlsx");
+    HTML5("html","text/html; charset=UTF-8"),
+    PDF("pdf","application/pdf"),
+    EXCEL("xls","application/vnd.ms-excel"),
+    EXCEL2010("xlsx","application/vnd.ms-excel");
 
-    private final String urlParameterValue;
+    private final String formatName;
+    private final String contentType;
 
-    private BirtOutputFormat(String urlParameterValue) {
-        this.urlParameterValue = urlParameterValue;
+    private BirtOutputFormat(String formatName, String contentType) {
+        this.formatName = formatName;
+        this.contentType = contentType;
     }
 
-    public String getUrlParameterValue() {
-        return urlParameterValue;
+    public String getFormatName() {
+        return formatName;
     }
 
-    public static BirtOutputFormat from(String urlParameterValue) {
+    public String getContentType() {
+        return contentType;
+    }
+
+    public static BirtOutputFormat from(String formatName) {
         for (BirtOutputFormat format : BirtOutputFormat.values()) {
-            if (format.urlParameterValue.equals(urlParameterValue)) {
+            if (format.formatName.equals(formatName)) {
                 return format;
             }
         }

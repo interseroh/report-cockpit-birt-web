@@ -31,13 +31,17 @@ import static org.junit.Assert.*;
 public class BirtOutputFormatTest {
 
     @Test
-    public void testFromConverting() throws Exception {
+    public void testFromFormat() throws Exception {
         assertThat(BirtOutputFormat.from("xlsx"), is(BirtOutputFormat.EXCEL2010));
+    }
+
+    @Test
+    public void testContentType() throws Exception {
+        assertThat(BirtOutputFormat.EXCEL2010.getContentType(), is("application/msexcel"));
     }
 
     @Test
     public void testDefaultFormat() throws Exception {
         assertThat(BirtOutputFormat.from("unknown_format"), is(BirtOutputFormat.HTML5));
-
     }
 }

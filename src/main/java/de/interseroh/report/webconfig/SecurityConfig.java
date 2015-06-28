@@ -70,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .logoutUrl("/logout") // url to trigger logout
                         .logoutSuccessUrl("/index?logout") // redirect to start page
                         .permitAll(); // allow anyone to call the logout page
-       http.csrf().disable(); // TODO Why is CSRF disabled?
+        http.csrf().disable(); // TODO Why is CSRF disabled?
+        http.headers().disable(); // TODO need a different solution then disabling security headers.
     }
 
     @Inject

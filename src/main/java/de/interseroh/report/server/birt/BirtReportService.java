@@ -10,6 +10,7 @@ import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
+import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.eclipse.birt.report.engine.api.RenderOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,31 @@ public class BirtReportService {
         runAndRenderTask.setRenderOption(htmlOptions);
         runAndRenderTask.run();
         runAndRenderTask.close();
+    }
+
+
+    public void renderPDFReport(String reportName, Map<String, Object> parameters, OutputStream out) throws BirtReportException {
+        try {
+            IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
+            IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
+
+            injectParameters(parameters, runAndRenderTask);
+
+            IRenderOption options = new RenderOption();
+            PDFRenderOption pdfOptions = new PDFRenderOption(options);
+            pdfOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);
+            pdfOptions.setEmbededFont(true); // TODO extract embedded font option to configuration
+            pdfOptions.setOutputStream(out);
+            pdfOptions.setImageHandler(new HTMLServerImageHandler());
+
+            runAndRenderTask.setRenderOption(pdfOptions);
+            runAndRenderTask.run();
+            runAndRenderTask.close();
+
+        } catch (EngineException e) {
+            throw new BirtReportException("Error while rendering pdf for Report "+ reportName, e);
+        }
+
     }
 
     private void injectParameters(Map<String, Object> parameters, IEngineTask runAndRenderTask) {

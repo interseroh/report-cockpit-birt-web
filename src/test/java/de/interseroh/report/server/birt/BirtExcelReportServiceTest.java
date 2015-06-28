@@ -39,6 +39,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Ingo Düppe (Crowdcode)
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")

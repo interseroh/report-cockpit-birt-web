@@ -49,7 +49,7 @@ public class ReportController {
     private BirtReportService reportService;
 
     @RequestMapping(value = "/api/{reportName}", method = RequestMethod.GET)
-    public void renderReportInDefaultFormat(@PathVariable("reportName") String reportName, @PathVariable("format") String format, HttpServletResponse response) throws IOException, BirtReportException {
+    public void renderReportInDefaultFormat(@PathVariable("reportName") String reportName, HttpServletResponse response) throws IOException, BirtReportException {
         renderReport(reportName, BirtOutputFormat.HTML5.getFormatName(), response);
     }
 

@@ -37,6 +37,8 @@ public class BirtReportService {
         return parameterDefns;
     }
 
+    public void renderHtmlReport(String reportName, Map<String, Object> parameters, OutputStream out) throws BirtReportException {
+        try {
             IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
         injectParameters(parameters, runAndRenderTask);
@@ -49,6 +51,9 @@ public class BirtReportService {
         htmlOptions.setImageDirectory("target/images");
 
             runAndRender(runAndRenderTask, htmlOptions);
+        } catch (EngineException e) {
+            throw new BirtReportException("Error while rendering pdf for report " + reportName + ".", e);
+        }
     }
 
 

@@ -65,8 +65,8 @@ public class BirtReportService {
 
             PDFRenderOption pdfOptions = new PDFRenderOption();
             pdfOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);
-            pdfOptions.setEmbededFont(true); // TODO extract embedded font option to configuration
             pdfOptions.setOutputStream(out);
+            pdfOptions.setEmbededFont(true); // TODO idueppe - should be configurable from cockpit
             pdfOptions.setImageHandler(new HTMLServerImageHandler());
 
             runAndRender(runAndRenderTask, pdfOptions);

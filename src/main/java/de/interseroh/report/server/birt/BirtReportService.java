@@ -96,6 +96,7 @@ public class BirtReportService {
             htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
             htmlOptions.setOutputStream(out);
             htmlOptions.setImageHandler(new HTMLServerImageHandler());
+            htmlOptions.setEmbeddable(true);
 
             htmlOptions.setBaseImageURL(baseImageURL);
             htmlOptions.setImageDirectory(imageDirectory);
@@ -122,7 +123,7 @@ public class BirtReportService {
             runAndRender(runAndRenderTask, pdfOptions);
 
         } catch (EngineException e) {
-            throw new BirtReportException("Error while rendering pdf for report "+ reportName + ".", e);
+            throw new BirtReportException("Error while rendering pdf for report " + reportName + ".", e);
         }
     }
 
@@ -142,7 +143,7 @@ public class BirtReportService {
 
             runAndRender(runAndRenderTask, excelRenderOptions);
         } catch (EngineException e) {
-            throw new BirtReportException("Error while rendering excel export for report "+reportName+".", e);
+            throw new BirtReportException("Error while rendering excel export for report " + reportName + ".", e);
         }
     }
 

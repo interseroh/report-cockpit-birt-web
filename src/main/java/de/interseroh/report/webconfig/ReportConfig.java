@@ -36,11 +36,7 @@ public class ReportConfig {
 	public BirtEngineFactory birtEngineFactory() {
 		return new BirtEngineFactory();
 	}
-//
-//	@Bean
-//	public BirtReportService birtReportService() {
-//		return new BirtReportService();
-//	}
+
 
 
 }

@@ -20,10 +20,10 @@
  */
 package de.interseroh.report.server.controller;
 
-import com.ibm.wsdl.extensions.mime.MIMEContentImpl;
+import de.interseroh.report.server.birt.BirtOutputFormat;
 import de.interseroh.report.server.birt.BirtReportException;
 import de.interseroh.report.server.birt.BirtReportService;
-import org.eclipse.birt.report.engine.api.EngineException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +33,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.wsdl.extensions.mime.MIMEContent;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -44,21 +43,50 @@ import java.util.HashMap;
 @RequestMapping("/report")
 public class ReportController {
 
+    private static final Logger logger = Logger.getLogger(ReportController.class);
+
     @Autowired
     private BirtReportService reportService;
 
-    @RequestMapping(value="/api/{reportName}", method = RequestMethod.GET)
-    public void generateReport(@PathVariable("reportName") String reportName, HttpServletRequest request, HttpServletResponse response) throws IOException, BirtReportException {
-        response.setContentType("text/html; charset=UTF-8");
-        String reportFileName = "/reports/" + reportName + ".rptdesign";
-        reportService.renderHtmlReport(reportFileName, new HashMap<String, Object>(), response.getOutputStream());
+    @RequestMapping(value = "/api/{reportName}", method = RequestMethod.GET)
+    public void renderReportInDefaultFormat(@PathVariable("reportName") String reportName, @PathVariable("format") String format, HttpServletResponse response) throws IOException, BirtReportException {
+        renderReport(reportName, BirtOutputFormat.HTML5.getFormatName(), response);
     }
 
-    @RequestMapping(value="/{reportName}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/{reportName}/{format}", method = RequestMethod.GET)
+    public void renderReport(@PathVariable("reportName") String reportName, @PathVariable("format") String format, HttpServletResponse response) throws IOException, BirtReportException {
+        logger.debug("Rendering " + reportName + " in " + format + ".");
+        BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
+        response.setContentType(outputFormat.getContentType());
+
+        // TODO idueppe - need configurable folder
+        String reportFileName = "/reports/" + reportName + ".rptdesign";
+
+        HashMap<String, Object> parameters = new HashMap<String, Object>();
+
+        switch (outputFormat) {
+            case HTML5:
+                reportService.renderHtmlReport(reportFileName, parameters, response.getOutputStream());
+                break;
+            case PDF:
+                response.setHeader("Content-disposition", "inline; filename=" + reportName + ".pdf");
+                reportService.renderPDFReport(reportFileName, parameters, response.getOutputStream());
+                break;
+            case EXCEL2010:
+                response.setHeader("Content-disposition", "attachment; filename=" + reportName + ".xlsx");
+                reportService.renderExcelReport(reportFileName, parameters, response.getOutputStream());
+            case EXCEL:
+                response.setHeader("Content-disposition", "attachment; filename=" + reportName + ".xls");
+                reportService.renderExcelReport(reportFileName, parameters, response.getOutputStream());
+        }
+        // TODO idueppe - need exception handling
+    }
+
+    @RequestMapping(value = "/{reportName}", method = RequestMethod.GET)
     public ModelAndView reportView(@PathVariable("reportName") String reportName, HttpServletRequest request, HttpServletResponse reponse) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/secured/report");
-        modelAndView.addObject("reportUrl", "/api/"+reportName);
+        modelAndView.addObject("reportUrl", "/api/" + reportName);
         return modelAndView;
     }
 }

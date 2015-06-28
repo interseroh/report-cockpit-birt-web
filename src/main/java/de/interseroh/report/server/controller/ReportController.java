@@ -1,6 +1,7 @@
 package de.interseroh.report.server.controller;
 
 import com.ibm.wsdl.extensions.mime.MIMEContentImpl;
+import de.interseroh.report.server.birt.BirtReportException;
 import de.interseroh.report.server.birt.BirtReportService;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ReportController {
     private BirtReportService reportService;
 
     @RequestMapping(value="/api/{reportName}", method = RequestMethod.GET)
-    public void generateReport(@PathVariable("reportName") String reportName, HttpServletRequest request, HttpServletResponse response) throws IOException, EngineException {
+    public void generateReport(@PathVariable("reportName") String reportName, HttpServletRequest request, HttpServletResponse response) throws IOException, BirtReportException {
         response.setContentType("text/html; charset=UTF-8");
         String reportFileName = "/reports/" + reportName + ".rptdesign";
         reportService.renderHtmlReport(reportFileName, new HashMap<String, Object>(), response.getOutputStream());

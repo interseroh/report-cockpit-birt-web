@@ -42,14 +42,14 @@ public class BirtReportService {
         try {
             IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
-        injectParameters(parameters, runAndRenderTask);
+            injectParameters(parameters, runAndRenderTask);
 
             HTMLRenderOption htmlOptions = new HTMLRenderOption();
-        htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
-        htmlOptions.setOutputStream(out);
-        htmlOptions.setImageHandler(new HTMLServerImageHandler());
-        htmlOptions.setBaseImageURL("images");
-        htmlOptions.setImageDirectory("target/images");
+            htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
+            htmlOptions.setOutputStream(out);
+            htmlOptions.setImageHandler(new HTMLServerImageHandler());
+            htmlOptions.setBaseImageURL("images");
+            htmlOptions.setImageDirectory("target/images");
 
             runAndRender(runAndRenderTask, htmlOptions);
         } catch (EngineException e) {
@@ -101,7 +101,7 @@ public class BirtReportService {
         runAndRenderTask.setRenderOption(renderOptions);
         runAndRenderTask.run();
         runAndRenderTask.close();
-        }
+    }
 
     private IRunAndRenderTask createRunAndRenderTask(String reportName) throws EngineException {
         IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));

@@ -41,9 +41,7 @@ public class BirtReportService {
 
         injectParameters(parameters, runAndRenderTask);
 
-        IRenderOption options = new RenderOption();
-
-        HTMLRenderOption htmlOptions = new HTMLRenderOption(options);
+            HTMLRenderOption htmlOptions = new HTMLRenderOption();
         htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
         htmlOptions.setOutputStream(out);
         htmlOptions.setImageHandler(new HTMLServerImageHandler());

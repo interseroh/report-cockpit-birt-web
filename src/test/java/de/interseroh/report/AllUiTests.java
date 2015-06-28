@@ -23,6 +23,7 @@ package de.interseroh.report;
 import de.interseroh.report.server.birt.BirtDataTypeTest;
 import de.interseroh.report.server.birt.BirtExcelReportServiceTest;
 import de.interseroh.report.server.birt.BirtHtmlReportServiceTest;
+import de.interseroh.report.server.birt.BirtOutputFormatTest;
 import de.interseroh.report.server.birt.BirtParameterTypeTest;
 import de.interseroh.report.server.birt.BirtPdfReportServiceTest;
 import de.interseroh.report.server.location.service.LocationServiceImplTest;
@@ -45,6 +46,7 @@ import org.junit.runners.Suite.SuiteClasses;
         BirtHtmlReportServiceTest.class,
         BirtExcelReportServiceTest.class,
         BirtDataTypeTest.class,
-        BirtParameterTypeTest.class})
+        BirtParameterTypeTest.class,
+        BirtOutputFormatTest.class})
 public class AllUiTests {
 }

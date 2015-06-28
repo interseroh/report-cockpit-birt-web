@@ -18,20 +18,21 @@
  * 
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.reports;
+package de.interseroh.report.server.birt;
 
 import de.interseroh.report.server.birt.BirtParameterType;
+import de.interseroh.report.server.birt.BirtReportService;
 import de.interseroh.report.webconfig.ReportConfig;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
+import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.eclipse.birt.report.engine.api.IParameterDefnBase;
 import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
-import org.eclipse.birt.report.engine.api.IRunTask;
 import org.eclipse.birt.report.engine.api.RenderOption;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,6 +46,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -53,13 +56,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")
-public class BirtReportGenerateTest {
+public class BirtHtmlReportServiceTest {
 
     @Autowired
-    ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     @Autowired
-    IReportEngine reportEngine;
+    private BirtReportService reportService;
 
 
     @BeforeClass
@@ -68,7 +71,7 @@ public class BirtReportGenerateTest {
 
     @Test
     public void testHelloWorldReport() throws EngineException, FileNotFoundException {
-        assertThat(reportEngine, is(notNullValue()));
+        assertThat(reportService, is(notNullValue()));
 
         String reportName = "/reports/hello_world.rptdesign";
         String outputFile = "target/hello_world.html";
@@ -79,7 +82,7 @@ public class BirtReportGenerateTest {
 
     @Test
     public void testSalesInvoiceReport() throws EngineException, FileNotFoundException {
-        assertThat(reportEngine, is(notNullValue()));
+        assertThat(reportService, is(notNullValue()));
 
         String reportName = "/reports/salesinvoice.rptdesign";
         String outputFile = "target/salesinvoice.html";
@@ -89,7 +92,7 @@ public class BirtReportGenerateTest {
 
     @Test
     public void testProductCatalogReport() throws EngineException, FileNotFoundException {
-        assertThat(reportEngine, is(notNullValue()));
+        assertThat(reportService, is(notNullValue()));
 
         String reportName = "/reports/productcatalog.rptdesign";
         String outputFile = "target/productcatalog.html";
@@ -99,38 +102,13 @@ public class BirtReportGenerateTest {
     }
 
     private void renderHtmlReport(String outputFile, String reportName) throws EngineException, FileNotFoundException {
-        String file = this.getClass().getResource(reportName).getPath();
-        IReportRunnable iReportRunnable = reportEngine.openReportDesign(file);
-
-        IGetParameterDefinitionTask parameterDefinitionTask = reportEngine.createGetParameterDefinitionTask(iReportRunnable);
-        IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
-        Collection<IParameterDefnBase> parameterDefns = parameterDefinitionTask.getParameterDefns(true);
-        for (IParameterDefnBase parameterDefn : parameterDefns) {
-            System.out.println("Displayname: "+parameterDefn.getDisplayName());
-            System.out.println("Helptext: "+parameterDefn.getHelpText());
-            System.out.println("Name: "+parameterDefn.getName());
-            System.out.println("Typename: "+parameterDefn.getTypeName());
-            System.out.println("ParameterType: "+ BirtParameterType.valueOf(parameterDefn.getParameterType()));
-            System.out.println("PromptText: "+parameterDefn.getPromptText());
-            System.out.println("DefaultValue: " + parameterDefinitionTask.getDefaultValue(parameterDefn));
-            System.out.println("Required: "+parameterDefn.getHandle());
-
-            runAndRenderTask.setParameterValue(parameterDefn.getName(), 10101);
+        Collection<IParameterDefn> parameterDefinitions = reportService.getParameterDefinitions(reportName);
+        Map<String, Object> params = new HashMap<>();
+        for (IParameterDefn definition : parameterDefinitions) {
+            if ("OrderNumber".equals(definition.getName()))
+                params.put("OrderNumber", 10110);
         }
-
-
-
-        IRenderOption options = new RenderOption();
-
-        HTMLRenderOption htmlOptions = new HTMLRenderOption( options);
-        htmlOptions.setOutputFormat("html");
-        htmlOptions.setOutputStream(new FileOutputStream(outputFile));
-        htmlOptions.setImageHandler(new HTMLServerImageHandler());
-        htmlOptions.setBaseImageURL("images");
-        htmlOptions.setImageDirectory("target/images");
-        runAndRenderTask.setRenderOption(htmlOptions);
-        runAndRenderTask.run();
-        runAndRenderTask.close();
+        reportService.renderHtmlReport(reportName, params, new FileOutputStream(outputFile));
     }
 
 

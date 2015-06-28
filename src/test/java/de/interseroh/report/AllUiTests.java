@@ -20,10 +20,9 @@
  */
 package de.interseroh.report;
 
-import de.interseroh.report.server.birt.BirtDataType;
 import de.interseroh.report.server.birt.BirtDataTypeTest;
 import de.interseroh.report.server.location.service.LocationServiceImplTest;
-import de.interseroh.report.server.reports.BirtReportGenerateTest;
+import de.interseroh.report.server.birt.BirtReportGenerateTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
 import de.interseroh.report.webconfig.UiJaxRsConfigTest;

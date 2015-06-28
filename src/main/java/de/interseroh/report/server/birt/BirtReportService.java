@@ -1,5 +1,6 @@
 package de.interseroh.report.server.birt;
 
+import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
@@ -73,6 +74,26 @@ public class BirtReportService {
 
         } catch (EngineException e) {
             throw new BirtReportException("Error while rendering pdf for report "+ reportName + ".", e);
+        }
+    }
+
+    public void renderExcelReport(String reportName, Map<String, Object> parameters, OutputStream out) throws BirtReportException {
+        try {
+            IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+
+            injectParameters(parameters, runAndRenderTask);
+
+            EXCELRenderOption excelRenderOptions = new EXCELRenderOption();
+            excelRenderOptions.setOutputFormat("xlsx");
+            excelRenderOptions.setOutputStream(out);
+            excelRenderOptions.setEnableMultipleSheet(true); // TODO idueppe - should be configurable from cockpit
+            excelRenderOptions.setHideGridlines(true); // TODO idueppe - should be configurable from cockpit
+//            excelRenderOptions.setOfficeVersion(); // TODO idueppe - should be configurable from cockpit
+            excelRenderOptions.setImageHandler(new HTMLServerImageHandler());
+
+            runAndRender(runAndRenderTask, excelRenderOptions);
+        } catch (EngineException e) {
+            throw new BirtReportException("Error while rendering excel export for report "+reportName+".", e);
         }
     }
 

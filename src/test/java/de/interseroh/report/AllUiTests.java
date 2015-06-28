@@ -21,6 +21,9 @@
 package de.interseroh.report;
 
 import de.interseroh.report.server.birt.BirtDataTypeTest;
+import de.interseroh.report.server.birt.BirtHtmlReportServiceTest;
+import de.interseroh.report.server.birt.BirtParameterTypeTest;
+import de.interseroh.report.server.birt.BirtPdfReportServiceTest;
 import de.interseroh.report.server.location.service.LocationServiceImplTest;
 import de.interseroh.report.server.birt.BirtReportGenerateTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
@@ -37,6 +40,9 @@ import org.junit.runners.Suite.SuiteClasses;
         UiJaxRsConfigTest.class,
         LocationServiceImplTest.class,
         BirtReportGenerateTest.class,
-        BirtDataTypeTest.class})
+        BirtPdfReportServiceTest.class,
+        BirtHtmlReportServiceTest.class,
+        BirtDataTypeTest.class,
+        BirtParameterTypeTest.class})
 public class AllUiTests {
 }

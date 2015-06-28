@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.server.birt;
 
+import org.apache.log4j.Logger;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
@@ -32,20 +33,47 @@ import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
 import org.eclipse.birt.report.engine.api.PDFRenderOption;
-import org.eclipse.birt.report.engine.api.RenderOption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
+import javax.annotation.PostConstruct;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 
 @Service
+@PropertySource({"classpath:report-config.properties"})
 public class BirtReportService {
+
+    private static final Logger logger = Logger.getLogger(BirtReportService.class);
+
+    public static final String REPORT_BASE_IMAGE_URL_KEY = "report.base.image.url";
+    public static final String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
+    public static final String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
+
+    @Autowired
+    private Environment environment;
 
     @Autowired
     private IReportEngine reportEngine;
+
+    private String baseImageURL;
+    private String imageDirectory;
+
+    @PostConstruct
+    public void init() {
+        logger.info("Initializing Birt Report Service URLs");
+
+        String baseImageContextPath = environment.getProperty(REPORT_BASE_IMAGE_CONTEXT_PATH_KEY, "/report-cockpit-birt");
+        baseImageURL = baseImageContextPath + environment.getProperty(REPORT_BASE_IMAGE_URL_KEY);
+        String defaultDirectory = environment.getProperty("java.io.tmpdir");
+        imageDirectory = environment.getProperty(REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
+
+        logger.info("\tBaseImageUrl:   " + baseImageURL);
+        logger.info("\tImageDirectory: " + imageDirectory);
+    }
 
     public Collection<IParameterDefn> getParameterDefinitions(String reportName) throws EngineException {
         IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
@@ -68,8 +96,9 @@ public class BirtReportService {
             htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
             htmlOptions.setOutputStream(out);
             htmlOptions.setImageHandler(new HTMLServerImageHandler());
-            htmlOptions.setBaseImageURL("images");
-            htmlOptions.setImageDirectory("target/images");
+
+            htmlOptions.setBaseImageURL(baseImageURL);
+            htmlOptions.setImageDirectory(imageDirectory);
 
             runAndRender(runAndRenderTask, htmlOptions);
         } catch (EngineException e) {

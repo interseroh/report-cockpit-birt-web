@@ -20,10 +20,16 @@
  */
 package de.interseroh.report.webconfig;
 
+import de.interseroh.report.server.birt.BirtReportService;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
+import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.Path;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -36,10 +42,18 @@ import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import java.io.File;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan({"de.interseroh.report.server.controller"})
+@PropertySource({"classpath:report-config.properties"})
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+
+    private static Logger logger = Logger.getLogger(WebMvcConfig.class);
+
+    @Autowired
+    private Environment environment;
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

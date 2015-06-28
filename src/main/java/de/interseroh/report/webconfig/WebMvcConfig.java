@@ -109,6 +109,24 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         registry.addResourceHandler("/Entsorgung/**").addResourceLocations("/Entsorgung/");
+
+        // FIXME idueppe - not dry.. see BirtReportService
+        String defaultDirectory = environment.getProperty("java.io.tmpdir");
+        String baseImageURL = environment.getProperty(BirtReportService.REPORT_BASE_IMAGE_URL_KEY);
+        String imageDirectory = "file://"+environment.getProperty(BirtReportService.REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
+
+        logger.info("\tBaseImageUrl:   " + baseImageURL);
+        logger.info("\tImageDirectory: " + ensureTrailingSeparator(imageDirectory));
+
+
+        registry.addResourceHandler(baseImageURL+"/**").addResourceLocations(ensureTrailingSeparator(imageDirectory));
+    }
+
+    private String ensureTrailingSeparator(String imageDirectory) {
+        if (imageDirectory.charAt(imageDirectory.length()-1) != File.separatorChar) {
+            imageDirectory = imageDirectory + "/";
+        }
+        return imageDirectory;
     }
 
 }

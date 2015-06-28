@@ -6,7 +6,7 @@ package de.interseroh.report.server.birt;
  */
 public class UnknownParameterTypeException extends BirtSystemException {
 
-    public UnknownParameterTypeException(int dataType) {
-        super("The Parameter with the id " + dataType + " is unknown. Please check " + BirtDataType.class.getName() + "!");
+    public UnknownParameterTypeException(int parameterType) {
+        super("The Parameter with the id " + parameterType + " is unknown. Please check " + BirtParameterType.class.getName() + "!");
     }
 }

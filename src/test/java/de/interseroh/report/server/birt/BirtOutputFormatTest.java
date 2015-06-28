@@ -37,7 +37,7 @@ public class BirtOutputFormatTest {
 
     @Test
     public void testContentType() throws Exception {
-        assertThat(BirtOutputFormat.EXCEL2010.getContentType(), is("application/msexcel"));
+        assertThat(BirtOutputFormat.EXCEL2010.getContentType(), is("application/vnd.ms-excel"));
     }
 
     @Test

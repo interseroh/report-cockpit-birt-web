@@ -37,10 +37,7 @@ public class BirtReportService {
         return parameterDefns;
     }
 
-    public void renderHtmlReport(String reportName, Map<String, Object> parameters, OutputStream out) throws EngineException, FileNotFoundException {
-        IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
-
-        IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
+            IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
         injectParameters(parameters, runAndRenderTask);
 
@@ -60,8 +57,7 @@ public class BirtReportService {
 
     public void renderPDFReport(String reportName, Map<String, Object> parameters, OutputStream out) throws BirtReportException {
         try {
-            IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
-            IRunAndRenderTask runAndRenderTask = reportEngine.createRunAndRenderTask(iReportRunnable);
+            IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
             injectParameters(parameters, runAndRenderTask);
 
@@ -80,6 +76,9 @@ public class BirtReportService {
             throw new BirtReportException("Error while rendering pdf for Report "+ reportName, e);
         }
 
+    private IRunAndRenderTask createRunAndRenderTask(String reportName) throws EngineException {
+        IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
+        return reportEngine.createRunAndRenderTask(iReportRunnable);
     }
 
     private void injectParameters(Map<String, Object> parameters, IEngineTask runAndRenderTask) {

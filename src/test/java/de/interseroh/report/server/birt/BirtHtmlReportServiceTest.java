@@ -70,7 +70,7 @@ public class BirtHtmlReportServiceTest {
     }
 
     @Test
-    public void testHelloWorldReport() throws EngineException, FileNotFoundException {
+    public void testHelloWorldReport() throws EngineException, FileNotFoundException, BirtReportException {
         assertThat(reportService, is(notNullValue()));
 
         String reportName = "/reports/hello_world.rptdesign";
@@ -81,7 +81,7 @@ public class BirtHtmlReportServiceTest {
     }
 
     @Test
-    public void testSalesInvoiceReport() throws EngineException, FileNotFoundException {
+    public void testSalesInvoiceReport() throws EngineException, FileNotFoundException, BirtReportException {
         assertThat(reportService, is(notNullValue()));
 
         String reportName = "/reports/salesinvoice.rptdesign";
@@ -91,7 +91,7 @@ public class BirtHtmlReportServiceTest {
     }
 
     @Test
-    public void testProductCatalogReport() throws EngineException, FileNotFoundException {
+    public void testProductCatalogReport() throws EngineException, FileNotFoundException, BirtReportException {
         assertThat(reportService, is(notNullValue()));
 
         String reportName = "/reports/productcatalog.rptdesign";
@@ -101,7 +101,7 @@ public class BirtHtmlReportServiceTest {
 
     }
 
-    private void renderHtmlReport(String outputFile, String reportName) throws EngineException, FileNotFoundException {
+    private void renderHtmlReport(String outputFile, String reportName) throws EngineException, FileNotFoundException, BirtReportException {
         Collection<IParameterDefn> parameterDefinitions = reportService.getParameterDefinitions(reportName);
         Map<String, Object> params = new HashMap<>();
         for (IParameterDefn definition : parameterDefinitions) {

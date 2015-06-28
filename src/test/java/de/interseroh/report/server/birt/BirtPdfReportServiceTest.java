@@ -60,8 +60,6 @@ public class BirtPdfReportServiceTest {
 
     @Test
     public void testHelloWorldReport() throws Exception{
-        assertThat(reportService, is(notNullValue()));
-
         String reportName = "/reports/hello_world.rptdesign";
         String outputFile = "target/hello_world.pdf";
 
@@ -71,8 +69,6 @@ public class BirtPdfReportServiceTest {
 
     @Test
     public void testSalesInvoiceReport() throws Exception{
-        assertThat(reportService, is(notNullValue()));
-
         String reportName = "/reports/salesinvoice.rptdesign";
         String outputFile = "target/salesinvoice.pdf";
 
@@ -81,13 +77,35 @@ public class BirtPdfReportServiceTest {
 
     @Test
     public void testProductCatalogReport() throws Exception {
-        assertThat(reportService, is(notNullValue()));
-
         String reportName = "/reports/productcatalog.rptdesign";
         String outputFile = "target/productcatalog.pdf";
 
         renderPdfReport(outputFile, reportName);
+    }
 
+    @Test
+    public void testProductListAfterReport() throws Exception {
+        String reportName = "/reports/productlistafter.rptdesign";
+        String outputFile = "target/productlistafter.pdf";
+
+        renderPdfReport(outputFile, reportName);
+    }
+
+    @Test
+    public void testEmployeeAfterReport() throws Exception {
+        String reportName = "/reports/employeeafter.rptdesign";
+        String outputFile = "target/employeeafter.pdf";
+
+        renderPdfReport(outputFile, reportName);
+    }
+
+
+    @Test
+    public void testStaticCrossTable() throws Exception {
+        String reportName = "/reports/staticcrosstable.rptdesign";
+        String outputFile = "target/staticcrosstable.pdf";
+
+        renderPdfReport(outputFile, reportName);
     }
 
     private void renderPdfReport(String outputFile, String reportName) throws EngineException, FileNotFoundException, BirtReportException {

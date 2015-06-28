@@ -25,7 +25,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ // GwtTestEntsorgung.class
+@SuiteClasses({
 })
 public class AllUiITs {
 }

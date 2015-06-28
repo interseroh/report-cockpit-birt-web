@@ -63,8 +63,7 @@ public class BirtReportService {
 
             injectParameters(parameters, runAndRenderTask);
 
-            IRenderOption options = new RenderOption();
-            PDFRenderOption pdfOptions = new PDFRenderOption(options);
+            PDFRenderOption pdfOptions = new PDFRenderOption();
             pdfOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);
             pdfOptions.setEmbededFont(true); // TODO extract embedded font option to configuration
             pdfOptions.setOutputStream(out);

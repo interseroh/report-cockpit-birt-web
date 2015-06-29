@@ -15,78 +15,84 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
+ * 
  * (c) 2015 - Interseroh
  */
 package de.interseroh.report.server.controller;
 
-import de.interseroh.report.server.birt.BirtOutputFormat;
-import de.interseroh.report.server.birt.BirtReportException;
-import de.interseroh.report.server.birt.BirtReportService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
 
-/**
- * @author Ingo Düppe (Crowdcode)
- */
 @Controller
-@RequestMapping("/report")
+@PropertySource({"classpath:config.properties", "classpath:version.properties"})
 public class ReportController {
 
     private static final Logger logger = Logger.getLogger(ReportController.class);
 
     @Autowired
-    private BirtReportService reportService;
+    private Environment env;
 
-    @RequestMapping(value = "/api/{reportName}", method = RequestMethod.GET)
-    public void renderReportInDefaultFormat(@PathVariable("reportName") String reportName, HttpServletResponse response) throws IOException, BirtReportException {
-        renderReport(reportName, BirtOutputFormat.HTML5.getFormatName(), response);
-    }
+    @RequestMapping(value = {"/index"}, method = RequestMethod.GET)
+    public ModelAndView index() {
+        logger.debug("Index view executed");
 
-    @RequestMapping(value = "/api/{reportName}/{format}", method = RequestMethod.GET)
-    public void renderReport(@PathVariable("reportName") String reportName, @PathVariable("format") String format, HttpServletResponse response) throws IOException, BirtReportException {
-        logger.debug("Rendering " + reportName + " in " + format + ".");
-        BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
-        response.setContentType(outputFormat.getContentType());
-
-        // TODO idueppe - need configurable folder
-        String reportFileName = "/reports/" + reportName + ".rptdesign";
-
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-
-        switch (outputFormat) {
-            case HTML5:
-                reportService.renderHtmlReport(reportFileName, parameters, response.getOutputStream());
-                break;
-            case PDF:
-                response.setHeader("Content-disposition", "inline; filename=" + reportName + ".pdf");
-                reportService.renderPDFReport(reportFileName, parameters, response.getOutputStream());
-                break;
-            case EXCEL2010:
-                response.setHeader("Content-disposition", "attachment; filename=" + reportName + ".xlsx");
-                reportService.renderExcelReport(reportFileName, parameters, response.getOutputStream());
-            case EXCEL:
-                response.setHeader("Content-disposition", "attachment; filename=" + reportName + ".xls");
-                reportService.renderExcelReport(reportFileName, parameters, response.getOutputStream());
-        }
-        // TODO idueppe - need exception handling
-    }
-
-    @RequestMapping(value = "/{reportName}", method = RequestMethod.GET)
-    public ModelAndView reportView(@PathVariable("reportName") String reportName, HttpServletRequest request, HttpServletResponse reponse) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/secured/report");
-        modelAndView.addObject("reportUrl", "/api/" + reportName);
+        modelAndView.setViewName("/index");
+
+        // TODO idueppe - use messaging instead.
+        String brandingText = env.getProperty("text.branding", "Report Cockpit for Birt");
+        modelAndView.addObject("text.branding", brandingText);
+
+        String version = env.getProperty("version");
+        modelAndView.addObject("version", version);
+
         return modelAndView;
     }
+
+    @RequestMapping(value = "/report/{reportName}", method = RequestMethod.GET)
+    public ModelAndView reportView(@PathVariable("reportName") String reportName, HttpServletResponse reponse) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/report");
+        modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView login(
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "logout", required = false) String logout,
+            @RequestParam(value = "autherror", required = false) String authError,
+            HttpServletRequest request) throws ServletException {
+        logger.debug("Login executed");
+
+        ModelAndView model = new ModelAndView();
+        if (error != null) {
+            model.addObject("error", "Benutzername und/oder Passwort falsch!");
+        }
+        if (logout != null) {
+            request.logout();
+            model.addObject("msg", "Logout war erfolgreich.");
+        }
+        if (authError != null) {
+            request.logout();
+            model.addObject("error",
+                    "Sie haben keinen Zugriff auf dieser Anwendung.");
+        }
+        model.setViewName("/login");
+
+        return model;
+    }
+
 }

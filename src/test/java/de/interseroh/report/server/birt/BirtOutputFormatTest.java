@@ -20,28 +20,31 @@
  */
 package de.interseroh.report.server.birt;
 
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Test;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public class BirtOutputFormatTest {
 
-    @Test
-    public void testFromFormat() throws Exception {
-        assertThat(BirtOutputFormat.from("xlsx"), is(BirtOutputFormat.EXCEL2010));
-    }
+	@Test
+	public void testFromFormat() throws Exception {
+		assertThat(BirtOutputFormat.from("xlsx"),
+				is(BirtOutputFormat.EXCEL2010));
+	}
 
-    @Test
-    public void testContentType() throws Exception {
-        assertThat(BirtOutputFormat.EXCEL2010.getContentType(), is("application/vnd.ms-excel"));
-    }
+	@Test
+	public void testContentType() throws Exception {
+		assertThat(BirtOutputFormat.EXCEL2010.getContentType(),
+				is("application/vnd.ms-excel"));
+	}
 
-    @Test
-    public void testDefaultFormat() throws Exception {
-        assertThat(BirtOutputFormat.from("unknown_format"), is(BirtOutputFormat.HTML5));
-    }
+	@Test
+	public void testDefaultFormat() throws Exception {
+		assertThat(BirtOutputFormat.from("unknown_format"),
+				is(BirtOutputFormat.HTML5));
+	}
 }

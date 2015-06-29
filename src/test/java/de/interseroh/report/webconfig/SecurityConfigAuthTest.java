@@ -33,8 +33,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
-import de.interseroh.report.webconfig.SecurityConfig;
-
 @RunWith(MockitoJUnitRunner.class)
 public class SecurityConfigAuthTest {
 

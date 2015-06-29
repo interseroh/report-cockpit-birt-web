@@ -20,12 +20,12 @@
  */
 package de.interseroh.report.webconfig;
 
-import de.interseroh.report.server.birt.BirtReportService;
-import de.interseroh.report.server.birt.BirtEngineFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+
+import de.interseroh.report.server.birt.BirtEngineFactory;
 
 @Configuration
 @ComponentScan("de.interseroh.report.server.birt")
@@ -36,7 +36,5 @@ public class ReportConfig {
 	public BirtEngineFactory birtEngineFactory() {
 		return new BirtEngineFactory();
 	}
-
-
 
 }

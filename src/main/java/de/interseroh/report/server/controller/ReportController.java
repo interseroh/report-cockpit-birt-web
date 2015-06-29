@@ -20,6 +20,10 @@
  */
 package de.interseroh.report.server.controller;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -31,68 +35,68 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @Controller
-@PropertySource({"classpath:config.properties", "classpath:version.properties"})
+@PropertySource({ "classpath:config.properties", "classpath:version.properties" })
 public class ReportController {
 
-    private static final Logger logger = Logger.getLogger(ReportController.class);
+	private static final Logger logger = Logger
+			.getLogger(ReportController.class);
 
-    @Autowired
-    private Environment env;
+	@Autowired
+	private Environment env;
 
-    @RequestMapping(value = {"/index"}, method = RequestMethod.GET)
-    public ModelAndView index() {
-        logger.debug("Index view executed");
+	@RequestMapping(value = { "/index" }, method = RequestMethod.GET)
+	public ModelAndView index() {
+		logger.debug("Index view executed");
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/index");
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/index");
 
-        // TODO idueppe - use messaging instead.
-        String brandingText = env.getProperty("text.branding", "Report Cockpit for Birt");
-        modelAndView.addObject("text.branding", brandingText);
+		// TODO idueppe - use messaging instead.
+		String brandingText = env.getProperty("text.branding",
+				"Report Cockpit for Birt");
+		modelAndView.addObject("text.branding", brandingText);
 
-        String version = env.getProperty("version");
-        modelAndView.addObject("version", version);
+		String version = env.getProperty("version");
+		modelAndView.addObject("version", version);
 
-        return modelAndView;
-    }
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "/report/{reportName}", method = RequestMethod.GET)
-    public ModelAndView reportView(@PathVariable("reportName") String reportName, HttpServletResponse reponse) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/report");
-        modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
-        return modelAndView;
-    }
+	@RequestMapping(value = "/report/{reportName}", method = RequestMethod.GET)
+	public ModelAndView reportView(
+			@PathVariable("reportName") String reportName,
+			HttpServletResponse reponse) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/report");
+		modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView login(
-            @RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "logout", required = false) String logout,
-            @RequestParam(value = "autherror", required = false) String authError,
-            HttpServletRequest request) throws ServletException {
-        logger.debug("Login executed");
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView login(
+			@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout,
+			@RequestParam(value = "autherror", required = false) String authError,
+			HttpServletRequest request) throws ServletException {
+		logger.debug("Login executed");
 
-        ModelAndView model = new ModelAndView();
-        if (error != null) {
-            model.addObject("error", "Benutzername und/oder Passwort falsch!");
-        }
-        if (logout != null) {
-            request.logout();
-            model.addObject("msg", "Logout war erfolgreich.");
-        }
-        if (authError != null) {
-            request.logout();
-            model.addObject("error",
-                    "Sie haben keinen Zugriff auf dieser Anwendung.");
-        }
-        model.setViewName("/login");
+		ModelAndView model = new ModelAndView();
+		if (error != null) {
+			model.addObject("error", "Benutzername und/oder Passwort falsch!");
+		}
+		if (logout != null) {
+			request.logout();
+			model.addObject("msg", "Logout war erfolgreich.");
+		}
+		if (authError != null) {
+			request.logout();
+			model.addObject("error",
+					"Sie haben keinen Zugriff auf dieser Anwendung.");
+		}
+		model.setViewName("/login");
 
-        return model;
-    }
+		return model;
+	}
 
 }

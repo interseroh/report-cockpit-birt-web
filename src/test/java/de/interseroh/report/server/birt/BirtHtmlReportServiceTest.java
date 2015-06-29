@@ -20,20 +20,14 @@
  */
 package de.interseroh.report.server.birt;
 
-import de.interseroh.report.server.birt.BirtParameterType;
-import de.interseroh.report.server.birt.BirtReportService;
-import de.interseroh.report.webconfig.ReportConfig;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.birt.report.engine.api.EngineException;
-import org.eclipse.birt.report.engine.api.HTMLRenderOption;
-import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
-import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
-import org.eclipse.birt.report.engine.api.IParameterDefnBase;
-import org.eclipse.birt.report.engine.api.IRenderOption;
-import org.eclipse.birt.report.engine.api.IReportEngine;
-import org.eclipse.birt.report.engine.api.IReportRunnable;
-import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
-import org.eclipse.birt.report.engine.api.RenderOption;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,16 +37,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import de.interseroh.report.webconfig.ReportConfig;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -62,45 +47,48 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @PropertySource("classpath:config.properties")
 public class BirtHtmlReportServiceTest {
 
-    @Autowired
-    private ApplicationContext applicationContext;
+	@Autowired
+	private ApplicationContext applicationContext;
 
-    @Autowired
-    private BirtReportService reportService;
+	@Autowired
+	private BirtReportService reportService;
 
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+	}
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+	@Test
+	public void testHelloWorldReport() throws EngineException,
+			FileNotFoundException, BirtReportException {
+		renderHtmlReport("hello_world");
+	}
 
-    @Test
-    public void testHelloWorldReport() throws EngineException, FileNotFoundException, BirtReportException {
-        renderHtmlReport("hello_world");
-    }
+	@Test
+	public void testSalesInvoiceReport() throws EngineException,
+			FileNotFoundException, BirtReportException {
+		renderHtmlReport("salesinvoice");
+	}
 
-    @Test
-    public void testSalesInvoiceReport() throws EngineException, FileNotFoundException, BirtReportException {
-        renderHtmlReport("salesinvoice");
-    }
+	@Test
+	public void testProductCatalogReport() throws EngineException,
+			FileNotFoundException, BirtReportException {
+		renderHtmlReport("productcatalog");
+	}
 
-    @Test
-    public void testProductCatalogReport() throws EngineException, FileNotFoundException, BirtReportException {
-        renderHtmlReport("productcatalog");
-    }
+	private void renderHtmlReport(String reportName) throws EngineException,
+			FileNotFoundException, BirtReportException {
+		String reportFileName = reportName + ".rptdesign";
+		String outputFileName = "target/" + reportName + ".html";
 
-    private void renderHtmlReport(String reportName) throws EngineException, FileNotFoundException, BirtReportException {
-        String reportFileName = reportName + ".rptdesign";
-        String outputFileName = "target/" + reportName + ".html";
-
-        Collection<IParameterDefn> parameterDefinitions = reportService.getParameterDefinitions(reportFileName);
-        Map<String, Object> params = new HashMap<>();
-        for (IParameterDefn definition : parameterDefinitions) {
-            if ("OrderNumber".equals(definition.getName()))
-                params.put("OrderNumber", 10110);
-        }
-        reportService.renderHtmlReport(reportFileName, params, new FileOutputStream(outputFileName));
-    }
-
-
+		Collection<IParameterDefn> parameterDefinitions = reportService
+				.getParameterDefinitions(reportFileName);
+		Map<String, Object> params = new HashMap<>();
+		for (IParameterDefn definition : parameterDefinitions) {
+			if ("OrderNumber".equals(definition.getName()))
+				params.put("OrderNumber", 10110);
+		}
+		reportService.renderHtmlReport(reportFileName, params,
+				new FileOutputStream(outputFileName));
+	}
 
 }

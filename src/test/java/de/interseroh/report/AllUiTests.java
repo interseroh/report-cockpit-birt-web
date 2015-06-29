@@ -20,6 +20,10 @@
  */
 package de.interseroh.report;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
 import de.interseroh.report.server.birt.BirtDataTypeTest;
 import de.interseroh.report.server.birt.BirtExcelReportServiceTest;
 import de.interseroh.report.server.birt.BirtHtmlReportServiceTest;
@@ -29,20 +33,12 @@ import de.interseroh.report.server.birt.BirtPdfReportServiceTest;
 import de.interseroh.report.server.birt.BirtReportGenerateTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({
-        SecurityConfigTest.class,
-        SecurityConfigAuthTest.class,
-        BirtReportGenerateTest.class,
-        BirtPdfReportServiceTest.class,
-        BirtHtmlReportServiceTest.class,
-        BirtExcelReportServiceTest.class,
-        BirtDataTypeTest.class,
-        BirtParameterTypeTest.class,
-        BirtOutputFormatTest.class})
+@SuiteClasses({ SecurityConfigTest.class, SecurityConfigAuthTest.class,
+		BirtReportGenerateTest.class, BirtPdfReportServiceTest.class,
+		BirtHtmlReportServiceTest.class, BirtExcelReportServiceTest.class,
+		BirtDataTypeTest.class, BirtParameterTypeTest.class,
+		BirtOutputFormatTest.class })
 public class AllUiTests {
 }

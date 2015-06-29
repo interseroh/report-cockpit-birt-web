@@ -20,9 +20,11 @@
  */
 package de.interseroh.report.server.controller;
 
-import de.interseroh.report.server.birt.BirtOutputFormat;
-import de.interseroh.report.server.birt.BirtReportException;
-import de.interseroh.report.server.birt.BirtReportService;
+import java.io.IOException;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +32,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
+import de.interseroh.report.server.birt.BirtOutputFormat;
+import de.interseroh.report.server.birt.BirtReportException;
+import de.interseroh.report.server.birt.BirtReportService;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -41,44 +43,58 @@ import java.util.HashMap;
 @RequestMapping("/api")
 public class ReportRestApiController {
 
-    private static final Logger logger = Logger.getLogger(ReportRestApiController.class);
+	private static final Logger logger = Logger
+			.getLogger(ReportRestApiController.class);
 
-    @Autowired
-    private BirtReportService reportService;
+	@Autowired
+	private BirtReportService reportService;
 
-    @RequestMapping(value = "/render/{reportName}", method = RequestMethod.GET)
-    public void renderReportInDefaultFormat(@PathVariable("reportName") String reportName, HttpServletResponse response) throws IOException, BirtReportException {
-        renderReport(reportName, BirtOutputFormat.HTML5.getFormatName(), response);
-    }
+	@RequestMapping(value = "/render/{reportName}", method = RequestMethod.GET)
+	public void renderReportInDefaultFormat(
+			@PathVariable("reportName") String reportName,
+			HttpServletResponse response) throws IOException,
+			BirtReportException {
+		renderReport(reportName, BirtOutputFormat.HTML5.getFormatName(),
+				response);
+	}
 
-    @RequestMapping(value = "/render/{reportName}/{format}", method = RequestMethod.GET)
-    public void renderReport(@PathVariable("reportName") String reportName, @PathVariable("format") String format, HttpServletResponse response) throws IOException, BirtReportException {
-        logger.debug("Rendering " + reportName + " in " + format + ".");
-        BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
-        response.setContentType(outputFormat.getContentType());
+	@RequestMapping(value = "/render/{reportName}/{format}", method = RequestMethod.GET)
+	public void renderReport(@PathVariable("reportName") String reportName,
+			@PathVariable("format") String format, HttpServletResponse response)
+			throws IOException, BirtReportException {
+		logger.debug("Rendering " + reportName + " in " + format + ".");
+		BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
+		response.setContentType(outputFormat.getContentType());
 
-        String reportFileName = reportName + ".rptdesign";
+		String reportFileName = reportName + ".rptdesign";
 
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
-        switch (outputFormat) {
-            case HTML5:
-                reportService.renderHtmlReport(reportFileName, parameters, response.getOutputStream());
-                break;
-            case PDF:
-                response.setHeader("Content-disposition", "inline; filename=" + reportName + ".pdf");
-                reportService.renderPDFReport(reportFileName, parameters, response.getOutputStream());
-                break;
-            case EXCEL2010:
-                response.setHeader("Content-disposition", "attachment; filename=" + reportName + ".xlsx");
-                reportService.renderExcelReport(reportFileName, parameters, response.getOutputStream());
-            case EXCEL:
-                response.setHeader("Content-disposition", "attachment; filename=" + reportName + ".xls");
-                reportService.renderExcelReport(reportFileName, parameters, response.getOutputStream());
-        }
-        // TODO idueppe - need exception handling
-    }
+		switch (outputFormat) {
+		case HTML5:
+			reportService.renderHtmlReport(reportFileName, parameters,
+					response.getOutputStream());
+			break;
+		case PDF:
+			response.setHeader("Content-disposition", "inline; filename="
+					+ reportName + ".pdf");
+			reportService.renderPDFReport(reportFileName, parameters,
+					response.getOutputStream());
+			break;
+		case EXCEL2010:
+			response.setHeader("Content-disposition", "attachment; filename="
+					+ reportName + ".xlsx");
+			reportService.renderExcelReport(reportFileName, parameters,
+					response.getOutputStream());
+		case EXCEL:
+			response.setHeader("Content-disposition", "attachment; filename="
+					+ reportName + ".xls");
+			reportService.renderExcelReport(reportFileName, parameters,
+					response.getOutputStream());
+		}
+		// TODO idueppe - need exception handling
+	}
 
-    // TODO idueppe - add report parameter controller
+	// TODO idueppe - add report parameter controller
 
 }

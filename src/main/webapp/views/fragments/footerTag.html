@@ -14,17 +14,22 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="jumbotron">
-            <span>Report Cockpit Birt :: HeaderTag Fragment</span>
+<div class="container-fluid">
+    <div class="jumbotron">
+        <span>Report Cockpit Birt :: HeaderTag Fragment</span>
+    </div>
+</div>
+
+<footer class="container-fluid" th:fragment="footerTag">
+    <div class="row">
+        <div class="col-sm-12 pull-right">
+            <small>
+                <span>Build by <a href="http://www.crowdcode.io">Crowdcode</a></span>
+                <span th:text="${version}">Version</span>
+            </small>
         </div>
     </div>
-
-    <footer class="container-fluid" th:fragment="footerTag">
-        <div class="jumbotron">
-            <span>Powered by Crowdcode</span>
-        </div>
-    </footer>
+</footer>
 </body>
 </html>
 

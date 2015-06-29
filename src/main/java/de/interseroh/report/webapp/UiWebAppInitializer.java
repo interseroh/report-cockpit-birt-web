@@ -20,8 +20,8 @@
  */
 package de.interseroh.report.webapp;
 
+import de.interseroh.report.webconfig.ReportConfig;
 import de.interseroh.report.webconfig.SecurityConfig;
-import de.interseroh.report.webconfig.UiJaxRsConfig;
 import de.interseroh.report.webconfig.WebMvcConfig;
 import org.apache.log4j.Logger;
 import org.springframework.web.WebApplicationInitializer;
@@ -46,11 +46,8 @@ public class UiWebAppInitializer implements WebApplicationInitializer {
 
     private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
 
-//	private static final String CXF_SERVLET_NAME = "CXFServlet";
-
     private static final String SPRING_SECURITY_FILTER_NAME = "springSecurityFilterChain";
 
-//	private static final String GWT_CACHE_CONTROL_FILTER_NAME = "gwtCacheControlFilterChain";
 
     @Override
     public void onStartup(ServletContext servletContext)
@@ -61,21 +58,11 @@ public class UiWebAppInitializer implements WebApplicationInitializer {
         servletContext.addListener(new ContextLoaderListener(rootContext));
         servletContext.addListener(new SessionListener());
 
-//		addApacheCxfServlet(servletContext);
         addMvcServlet(servletContext);
-
         addSecurityFilter(servletContext);
-//		addGwtCacheControlFilter(servletContext);
 
         logger.info("WebApp *report-cockpit-birt-web* ready...");
     }
-
-//	private void addGwtCacheControlFilter(ServletContext servletContext) {
-//		servletContext.addFilter(GWT_CACHE_CONTROL_FILTER_NAME,
-//				GwtCacheControlFilter.class).addMappingForUrlPatterns(
-//				EnumSet.<DispatcherType> of(DispatcherType.REQUEST), false,
-//				"/*");
-//	}
 
     private void addMvcServlet(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
@@ -97,18 +84,8 @@ public class UiWebAppInitializer implements WebApplicationInitializer {
 
     private AnnotationConfigWebApplicationContext getRootContext() {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(SecurityConfig.class, UiJaxRsConfig.class);
-
+        context.register(SecurityConfig.class, ReportConfig.class);
         return context;
     }
-
-//	private void addApacheCxfServlet(ServletContext servletContext) {
-//		CXFServlet cxfServlet = new CXFServlet();
-//
-//		ServletRegistration.Dynamic appServlet = servletContext.addServlet(
-//				CXF_SERVLET_NAME, cxfServlet);
-//		appServlet.setLoadOnStartup(1);
-//		appServlet.addMapping(UiJaxRsConfig.API_BASE);
-//	}
 
 }

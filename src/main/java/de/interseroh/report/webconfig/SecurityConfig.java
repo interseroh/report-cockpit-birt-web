@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()    // configure the login
                         .loginPage("/login")    // this is the loginPage
                         .failureUrl("/login?error") // redirect to this page on failure
-                        .defaultSuccessUrl("/secured/report") // redirect to this page on success
+                        .defaultSuccessUrl("/index") // redirect to this page on success
                         .permitAll() // permit any user to access the login page
                 .and()
                     .logout() // logout config

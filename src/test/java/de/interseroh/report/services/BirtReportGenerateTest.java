@@ -18,7 +18,7 @@
  * 
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.services;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

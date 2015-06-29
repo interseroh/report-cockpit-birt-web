@@ -18,28 +18,56 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.eclipse.birt.report.engine.api.IParameterDefnBase;
-import org.junit.Test;
+package de.interseroh.report.model;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class BirtParameterTypeTest {
+public class Parameter {
 
-	@Test
-	public void testGetType() throws Exception {
-		assertThat(
-				BirtParameterType.valueOf(IParameterDefnBase.SCALAR_PARAMETER)
-						.getType(), is(IParameterDefnBase.SCALAR_PARAMETER));
+	private String name;
+	private String value;
+	private String defaultValue;
+	private String dataType;
+	private String displayLabel;
+
+	public String getName() {
+		return name;
 	}
 
-	@Test(expected = UnknownParameterTypeException.class)
-	public void testUnknownParameterTypeException() throws Exception {
-		BirtParameterType.valueOf(-1);
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
+	public String getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
+	}
+
+	public String getDisplayLabel() {
+		return displayLabel;
+	}
+
+	public void setDisplayLabel(String displayLabel) {
+		this.displayLabel = displayLabel;
 	}
 }

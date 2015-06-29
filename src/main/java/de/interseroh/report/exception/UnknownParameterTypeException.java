@@ -18,7 +18,9 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.exception;
+
+import de.interseroh.report.services.BirtParameterType;
 
 /**
  * @author Ingo Düppe (Crowdcode)

@@ -18,7 +18,7 @@
  * 
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.services;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.interseroh.report.exception.BirtReportException;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.junit.BeforeClass;
@@ -45,7 +46,7 @@ import de.interseroh.report.webconfig.ReportConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")
-public class BirtHtmlReportServiceTest {
+public class BirtPdfReportServiceTest {
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -58,24 +59,36 @@ public class BirtHtmlReportServiceTest {
 	}
 
 	@Test
-	public void testHelloWorldReport() throws EngineException,
-			FileNotFoundException, BirtReportException {
-		renderHtmlReport("hello_world");
+	public void testHelloWorldReport() throws Exception {
+		renderPdfReport("hello_world");
 	}
 
 	@Test
-	public void testSalesInvoiceReport() throws EngineException,
-			FileNotFoundException, BirtReportException {
-		renderHtmlReport("salesinvoice");
+	public void testSalesInvoiceReport() throws Exception {
+		renderPdfReport("salesinvoice");
 	}
 
 	@Test
-	public void testProductCatalogReport() throws EngineException,
-			FileNotFoundException, BirtReportException {
-		renderHtmlReport("productcatalog");
+	public void testProductCatalogReport() throws Exception {
+		renderPdfReport("productcatalog");
 	}
 
-	private void renderHtmlReport(String reportName) throws EngineException,
+	@Test
+	public void testProductListAfterReport() throws Exception {
+		renderPdfReport("productlistafter");
+	}
+
+	@Test
+	public void testEmployeeAfterReport() throws Exception {
+		renderPdfReport("employeeafter");
+	}
+
+	@Test
+	public void testStaticCrossTableReport() throws Exception {
+		renderPdfReport("staticcrosstable");
+	}
+
+	private void renderPdfReport(String reportName) throws EngineException,
 			FileNotFoundException, BirtReportException {
 		String reportFileName = reportName + ".rptdesign";
 		String outputFileName = "target/" + reportName + ".html";
@@ -87,7 +100,7 @@ public class BirtHtmlReportServiceTest {
 			if ("OrderNumber".equals(definition.getName()))
 				params.put("OrderNumber", 10110);
 		}
-		reportService.renderHtmlReport(reportFileName, params,
+		reportService.renderPDFReport(reportFileName, params,
 				new FileOutputStream(outputFileName));
 	}
 

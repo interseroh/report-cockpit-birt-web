@@ -18,33 +18,29 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.services;
 
-import de.interseroh.report.server.exception.ApplicationException;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import de.interseroh.report.exception.UnknownParameterTypeException;
+import org.eclipse.birt.report.engine.api.IParameterDefnBase;
+import org.junit.Test;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class BirtReportException extends ApplicationException {
+public class BirtParameterTypeTest {
 
-	public BirtReportException() {
+	@Test
+	public void testGetType() throws Exception {
+		assertThat(
+				BirtParameterType.valueOf(IParameterDefnBase.SCALAR_PARAMETER)
+						.getType(), is(IParameterDefnBase.SCALAR_PARAMETER));
 	}
 
-	public BirtReportException(String message) {
-		super(message);
+	@Test(expected = UnknownParameterTypeException.class)
+	public void testUnknownParameterTypeException() throws Exception {
+		BirtParameterType.valueOf(-1);
 	}
-
-	public BirtReportException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public BirtReportException(Throwable cause) {
-		super(cause);
-	}
-
-	public BirtReportException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
 }

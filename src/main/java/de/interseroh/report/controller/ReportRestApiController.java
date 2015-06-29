@@ -18,7 +18,7 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.controller;
+package de.interseroh.report.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import de.interseroh.report.server.birt.BirtOutputFormat;
-import de.interseroh.report.server.birt.BirtReportException;
-import de.interseroh.report.server.birt.BirtReportService;
+import de.interseroh.report.services.BirtOutputFormat;
+import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.services.BirtReportService;
 
 /**
  * @author Ingo Düppe (Crowdcode)

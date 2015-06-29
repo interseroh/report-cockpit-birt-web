@@ -18,7 +18,7 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.services;
 
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.core.framework.Platform;
@@ -31,6 +31,8 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+
+import de.interseroh.report.exception.BirtSystemException;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -47,20 +49,20 @@ public class BirtEngineFactory implements FactoryBean, ApplicationContextAware,
 
 	@Override
 	public Object getObject() throws Exception {
-		EngineConfig config = new EngineConfig();
-		config.getAppContext().put(SPRING_KEY, this.applicationContext);
-
 		try {
+			EngineConfig config = new EngineConfig();
+			config.getAppContext().put(SPRING_KEY, this.applicationContext);
+
 			Platform.startup(config);
+			IReportEngineFactory factory = (IReportEngineFactory) Platform
+					.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
+			birtEngine = factory.createReportEngine(config);
+
+			return birtEngine;
 		} catch (BirtException be) {
-			throw new RuntimeException("Could not start the Birt engine!", be);
+			throw new BirtSystemException("Failed to start birt engine.", be);
 		}
 
-		IReportEngineFactory factory = (IReportEngineFactory) Platform
-				.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
-		birtEngine = factory.createReportEngine(config);
-
-		return birtEngine;
 	}
 
 	@Override

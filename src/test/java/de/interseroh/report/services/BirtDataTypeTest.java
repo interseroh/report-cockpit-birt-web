@@ -18,33 +18,28 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.services;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import de.interseroh.report.exception.UnknownDataTypeException;
+import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.junit.Test;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class BirtOutputFormatTest {
+public class BirtDataTypeTest {
 
 	@Test
-	public void testFromFormat() throws Exception {
-		assertThat(BirtOutputFormat.from("xlsx"),
-				is(BirtOutputFormat.EXCEL2010));
+	public void testGetType() throws Exception {
+		assertThat(BirtDataType.valueOf(IParameterDefn.TYPE_FLOAT).getType(),
+				is(IParameterDefn.TYPE_FLOAT));
 	}
 
-	@Test
-	public void testContentType() throws Exception {
-		assertThat(BirtOutputFormat.EXCEL2010.getContentType(),
-				is("application/vnd.ms-excel"));
-	}
-
-	@Test
-	public void testDefaultFormat() throws Exception {
-		assertThat(BirtOutputFormat.from("unknown_format"),
-				is(BirtOutputFormat.HTML5));
+	@Test(expected = UnknownDataTypeException.class)
+	public void testUnknownDataTypeException() throws Exception {
+		BirtDataType.valueOf(-1);
 	}
 }

@@ -24,21 +24,27 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import de.interseroh.report.server.birt.BirtDataTypeTest;
-import de.interseroh.report.server.birt.BirtExcelReportServiceTest;
-import de.interseroh.report.server.birt.BirtHtmlReportServiceTest;
-import de.interseroh.report.server.birt.BirtOutputFormatTest;
-import de.interseroh.report.server.birt.BirtParameterTypeTest;
-import de.interseroh.report.server.birt.BirtPdfReportServiceTest;
-import de.interseroh.report.server.birt.BirtReportGenerateTest;
+import de.interseroh.report.services.BirtDataTypeTest;
+import de.interseroh.report.services.BirtExcelReportServiceTest;
+import de.interseroh.report.services.BirtHtmlReportServiceTest;
+import de.interseroh.report.services.BirtOutputFormatTest;
+import de.interseroh.report.services.BirtParameterTypeTest;
+import de.interseroh.report.services.BirtPdfReportServiceTest;
+import de.interseroh.report.services.BirtReportGenerateTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ SecurityConfigTest.class, SecurityConfigAuthTest.class,
-		BirtReportGenerateTest.class, BirtPdfReportServiceTest.class,
-		BirtHtmlReportServiceTest.class, BirtExcelReportServiceTest.class,
-		BirtDataTypeTest.class, BirtParameterTypeTest.class,
-		BirtOutputFormatTest.class })
+@SuiteClasses({ //
+SecurityConfigTest.class, //
+		SecurityConfigAuthTest.class, //
+		BirtReportGenerateTest.class, //
+		BirtPdfReportServiceTest.class, //
+		BirtHtmlReportServiceTest.class, //
+		BirtExcelReportServiceTest.class, //
+		BirtDataTypeTest.class, //
+		BirtParameterTypeTest.class,//
+		BirtOutputFormatTest.class //
+})
 public class AllUiTests {
 }

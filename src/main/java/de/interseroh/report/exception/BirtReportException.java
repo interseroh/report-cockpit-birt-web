@@ -18,30 +18,33 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.exception;
+package de.interseroh.report.exception;
+
+import de.interseroh.report.exception.ApplicationException;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class SystemException extends RuntimeException {
+public class BirtReportException extends ApplicationException {
 
-	public SystemException() {
+	public BirtReportException() {
 	}
 
-	public SystemException(String message) {
+	public BirtReportException(String message) {
 		super(message);
 	}
 
-	public SystemException(String message, Throwable cause) {
+	public BirtReportException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public SystemException(Throwable cause) {
+	public BirtReportException(Throwable cause) {
 		super(cause);
 	}
 
-	public SystemException(String message, Throwable cause,
+	public BirtReportException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
+
 }

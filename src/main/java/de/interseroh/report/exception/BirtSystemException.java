@@ -18,16 +18,32 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.exception;
+
+import de.interseroh.report.exception.SystemException;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class UnknownDataTypeException extends BirtSystemException {
+public class BirtSystemException extends SystemException {
 
-	public UnknownDataTypeException(int dataType) {
-		super("The DataType with the id " + dataType
-				+ " is unknown. Please check " + BirtDataType.class.getName()
-				+ "!");
+	public BirtSystemException() {
+	}
+
+	public BirtSystemException(String message) {
+		super(message);
+	}
+
+	public BirtSystemException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public BirtSystemException(Throwable cause) {
+		super(cause);
+	}
+
+	public BirtSystemException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 	}
 }

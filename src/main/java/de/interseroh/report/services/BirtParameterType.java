@@ -15,19 +15,39 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.util.annotation;
+package de.interseroh.report.services;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import de.interseroh.report.exception.UnknownParameterTypeException;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-public @interface RestService {
+public enum BirtParameterType {
+
+	SCALAR_PARAMETER(0), //
+	FILTER_PARAMETER(1), //
+	LIST_PARAMETER(2), //
+	TABLE_PARAMETER(3), //
+	PARAMETER_GROUP(4), //
+	CASCADING_PARAMETER_GROUP(5); //
+
+	private int parameterType;
+
+	BirtParameterType(int parameterType) {
+		this.parameterType = parameterType;
+	}
+
+	public int getType() {
+		return parameterType;
+	}
+
+	public static BirtParameterType valueOf(int parameterType) {
+		for (BirtParameterType type : BirtParameterType.values()) {
+			if (type.parameterType == parameterType)
+				return type;
+
+		}
+		throw new UnknownParameterTypeException(parameterType);
+	}
+
 }

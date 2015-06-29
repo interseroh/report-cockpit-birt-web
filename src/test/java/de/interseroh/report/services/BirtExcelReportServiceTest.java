@@ -18,17 +18,15 @@
  * 
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.services;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Collection;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.interseroh.report.exception.BirtReportException;
 import org.eclipse.birt.report.engine.api.EngineException;
-import org.eclipse.birt.report.engine.api.IParameterDefn;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,17 +43,18 @@ import de.interseroh.report.webconfig.ReportConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")
-public class BirtPdfReportServiceTest {
+public class BirtExcelReportServiceTest {
+
+	private static final String INPUT_SUFFIX = ".rptdesign";
+
+	private static final String OUTPUT_SUFFIX = ".xlsx";
+	private static final String OUTPUT_PREFIX = "target/";
 
 	@Autowired
 	private ApplicationContext applicationContext;
 
 	@Autowired
 	private BirtReportService reportService;
-
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-	}
 
 	@Test
 	public void testHelloWorldReport() throws Exception {
@@ -88,19 +87,20 @@ public class BirtPdfReportServiceTest {
 	}
 
 	private void renderPdfReport(String reportName) throws EngineException,
-			FileNotFoundException, BirtReportException {
-		String reportFileName = reportName + ".rptdesign";
-		String outputFileName = "target/" + reportName + ".html";
+			IOException, BirtReportException {
+		String reportResourceName = reportName + INPUT_SUFFIX;
+		String reportOutputName = OUTPUT_PREFIX + reportName + OUTPUT_SUFFIX;
 
-		Collection<IParameterDefn> parameterDefinitions = reportService
-				.getParameterDefinitions(reportFileName);
-		Map<String, Object> params = new HashMap<>();
-		for (IParameterDefn definition : parameterDefinitions) {
-			if ("OrderNumber".equals(definition.getName()))
-				params.put("OrderNumber", 10110);
+		reportService.getParameterDefinitions(reportResourceName); // just for
+																	// printing
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("OrderNumber", 10110);
+
+		try (FileOutputStream out = new FileOutputStream(reportOutputName);) {
+			reportService
+					.renderExcelReport(reportResourceName, parameters, out);
 		}
-		reportService.renderPDFReport(reportFileName, params,
-				new FileOutputStream(outputFileName));
 	}
 
 }

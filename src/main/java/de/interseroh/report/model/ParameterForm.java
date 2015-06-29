@@ -18,32 +18,24 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.model;
 
-import de.interseroh.report.server.exception.SystemException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class BirtSystemException extends SystemException {
+public class ParameterForm {
 
-	public BirtSystemException() {
+	private List<Parameter> parameters = new ArrayList<>();
+
+	public List<Parameter> getParameters() {
+		return parameters;
 	}
 
-	public BirtSystemException(String message) {
-		super(message);
+	public void setParameters(List<Parameter> parameters) {
+		this.parameters = parameters;
 	}
 
-	public BirtSystemException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public BirtSystemException(Throwable cause) {
-		super(cause);
-	}
-
-	public BirtSystemException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
 }

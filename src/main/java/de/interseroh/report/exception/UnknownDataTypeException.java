@@ -18,30 +18,18 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.exception;
 
-public enum BirtDataType {
+import de.interseroh.report.services.BirtDataType;
 
-	TYPE_ANY(0), TYPE_STRING(1), TYPE_FLOAT(2), TYPE_DECIMAL(3), TYPE_DATE_TIME(
-			4), TYPE_BOOLEAN(5), TYPE_INTEGER(6), TYPE_DATE(7), TYPE_TIME(8);
+/**
+ * @author Ingo Düppe (Crowdcode)
+ */
+public class UnknownDataTypeException extends BirtSystemException {
 
-	private int dataType;
-
-	BirtDataType(int dataType) {
-		this.dataType = dataType;
+	public UnknownDataTypeException(int dataType) {
+		super("The DataType with the id " + dataType
+				+ " is unknown. Please check " + BirtDataType.class.getName()
+				+ "!");
 	}
-
-	public int getType() {
-		return dataType;
-	}
-
-	public static BirtDataType valueOf(int dataType) {
-		for (BirtDataType type : BirtDataType.values()) {
-			if (type.dataType == dataType)
-				return type;
-
-		}
-		throw new UnknownDataTypeException(dataType);
-	}
-
 }

@@ -20,8 +20,6 @@
  */
 package de.interseroh.report.webconfig;
 
-import javax.inject.Inject;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -31,134 +29,137 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.inject.Inject;
+
 @PropertySource("classpath:config.properties")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String MANAGER_PASSWORD = "xxx";
+    private static final String MANAGER_PASSWORD = "xxx";
 
-	private static final String MANAGER_DN = "xxx";
+    private static final String MANAGER_DN = "xxx";
 
-	private static final String LDAP_URL = "ldap://ldap.xxx:389/OU=xxx";
+    private static final String LDAP_URL = "ldap://ldap.xxx:389/OU=xxx";
 
-	private static final String IN_MEMORY_USER = "birt";
+    private static final String IN_MEMORY_USER = "birt";
 
-	private static final String IN_MEMORY_PASSWORD = "birt";
+    private static final String IN_MEMORY_PASSWORD = "birt";
 
-	private static final String USER_SEARCH_FILTER = "(&(objectCategory=Person)(sAMAccountName={0}))";
+    private static final String USER_SEARCH_FILTER = "(&(objectCategory=Person)(sAMAccountName={0}))";
 
-	private static final Logger logger = Logger.getLogger(SecurityConfig.class);
+    private static final Logger logger = Logger.getLogger(SecurityConfig.class);
 
-	@Inject
-	private Environment env;
+    @Inject
+    private Environment env;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/", "/index", "/resources/**", "/images/**",
-						"/webjars/**") // white list of urls
-				.permitAll() // allow anyone on these links
-				.anyRequest().authenticated() // all other urls need a
-												// authentication
-				.and().formLogin() // configure the login
-				.loginPage("/login") // this is the loginPage
-				.failureUrl("/login?error") // redirect to this page on failure
-				.defaultSuccessUrl("/index") // redirect to this page on success
-				.permitAll() // permit any user to access the login page
-				.and().logout() // logout config
-				.logoutUrl("/logout") // url to trigger logout
-				.logoutSuccessUrl("/index?logout") // redirect to start page
-				.permitAll(); // allow anyone to call the logout page
-		http.csrf().disable(); // TODO Why is CSRF disabled?
-		http.headers().disable(); // TODO need a different solution then
-									// disabling security headers.
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/", "/index", "/resources/**", "/images/**", "/webjars/**") //white list of urls
+                .permitAll() // allow anyone on these links
+                .anyRequest().authenticated() // all other urls need a authentication
+                .and()
+                    .formLogin()    // configure the login
+                        .loginPage("/login")    // this is the loginPage
+                        .failureUrl("/login?error") // redirect to this page on failure
+                        .defaultSuccessUrl("/index") // redirect to this page on success
+                        .permitAll() // permit any user to access the login page
+                .and()
+                    .logout() // logout config
+                        .logoutUrl("/logout") // url to trigger logout
+                        .logoutSuccessUrl("/index?logout") // redirect to start page
+                        .permitAll(); // allow anyone to call the logout page
 
-	@Inject
-	public void configureGlobal(AuthenticationManagerBuilder auth)
-			throws Exception {
-		logger.debug("configureGlobal: mapping login to LDAP");
 
-		// LDAP or InMemory
-		String ldapAuth = prepareLdapAuth();
-		if (!ldapAuth.equalsIgnoreCase("true")) {
-			// In memory authentication
-			String inMemoryUser = prepareInMemoryUser();
-			String inMemoryPassword = prepareInMemoryPassword();
+        http.csrf().disable(); // TODO Why is CSRF disabled?
+        http.headers().disable(); // TODO need a different solution then disabling security headers.
+    }
 
-			auth.inMemoryAuthentication().withUser(inMemoryUser)
-					.password(inMemoryPassword).roles("USER");
-		} else {
-			// LDAP authentication
-			String ldapUrl = prepareLdapUrl();
-			String managerDn = prepareManagerDn();
-			String managerPassword = prepareManagerPassword();
+    @Inject
+    public void configureGlobal(AuthenticationManagerBuilder auth)
+            throws Exception {
+        logger.debug("configureGlobal: mapping login to LDAP");
 
-			auth.ldapAuthentication().userSearchFilter(USER_SEARCH_FILTER)
-					.contextSource().managerDn(managerDn)
-					.managerPassword(managerPassword).url(ldapUrl);
-		}
-	}
+        // LDAP or InMemory
+        String ldapAuth = prepareLdapAuth();
+        if (!ldapAuth.equalsIgnoreCase("true")) {
+            // In memory authentication
+            String inMemoryUser = prepareInMemoryUser();
+            String inMemoryPassword = prepareInMemoryPassword();
 
-	String prepareLdapAuth() {
-		String ldapAuth = "true";
-		String confLdapAuth = env.getProperty("ldap.authentication");
+            auth.inMemoryAuthentication().withUser(inMemoryUser)
+                    .password(inMemoryPassword).roles("USER");
+        } else {
+            // LDAP authentication
+            String ldapUrl = prepareLdapUrl();
+            String managerDn = prepareManagerDn();
+            String managerPassword = prepareManagerPassword();
 
-		if (confLdapAuth != null && !confLdapAuth.equals("")) {
-			ldapAuth = confLdapAuth;
-		}
+            auth.ldapAuthentication().userSearchFilter(USER_SEARCH_FILTER)
+                    .contextSource().managerDn(managerDn)
+                    .managerPassword(managerPassword).url(ldapUrl);
+        }
+    }
 
-		if (!ldapAuth.equalsIgnoreCase("true")
-				&& !ldapAuth.equalsIgnoreCase("false")) {
-			ldapAuth = "true";
-		}
+    String prepareLdapAuth() {
+        String ldapAuth = "true";
+        String confLdapAuth = env.getProperty("ldap.authentication");
 
-		return ldapAuth;
-	}
+        if (confLdapAuth != null && !confLdapAuth.equals("")) {
+            ldapAuth = confLdapAuth;
+        }
 
-	String prepareManagerPassword() {
-		String managerPassword = MANAGER_PASSWORD;
-		String confManagerPassword = env.getProperty("ldap.managerPassword");
-		if (confManagerPassword != null && !confManagerPassword.equals("")) {
-			managerPassword = confManagerPassword;
-		}
-		return managerPassword;
-	}
+        if (!ldapAuth.equalsIgnoreCase("true")
+                && !ldapAuth.equalsIgnoreCase("false")) {
+            ldapAuth = "true";
+        }
 
-	String prepareManagerDn() {
-		String managerDn = MANAGER_DN;
-		String confManagerDn = env.getProperty("ldap.managerDn");
-		if (confManagerDn != null && !confManagerDn.equals("")) {
-			managerDn = confManagerDn;
-		}
-		return managerDn;
-	}
+        return ldapAuth;
+    }
 
-	String prepareLdapUrl() {
-		String ldapUrl = LDAP_URL;
-		String confLdapUrl = env.getProperty("ldap.url");
-		if (confLdapUrl != null && !confLdapUrl.equals("")) {
-			ldapUrl = confLdapUrl;
-		}
-		return ldapUrl;
-	}
+    String prepareManagerPassword() {
+        String managerPassword = MANAGER_PASSWORD;
+        String confManagerPassword = env.getProperty("ldap.managerPassword");
+        if (confManagerPassword != null && !confManagerPassword.equals("")) {
+            managerPassword = confManagerPassword;
+        }
+        return managerPassword;
+    }
 
-	String prepareInMemoryPassword() {
-		String inMemoryPassword = IN_MEMORY_PASSWORD;
-		String confInMemoryPassword = env.getProperty("ldap.inmemory.password");
-		if (confInMemoryPassword != null && !confInMemoryPassword.equals("")) {
-			inMemoryPassword = confInMemoryPassword;
-		}
-		return inMemoryPassword;
-	}
+    String prepareManagerDn() {
+        String managerDn = MANAGER_DN;
+        String confManagerDn = env.getProperty("ldap.managerDn");
+        if (confManagerDn != null && !confManagerDn.equals("")) {
+            managerDn = confManagerDn;
+        }
+        return managerDn;
+    }
 
-	String prepareInMemoryUser() {
-		String inMemoryUser = IN_MEMORY_USER;
-		String confInMemoryUser = env.getProperty("ldap.inmemory.user");
-		if (confInMemoryUser != null && !confInMemoryUser.equals("")) {
-			inMemoryUser = confInMemoryUser;
-		}
-		return inMemoryUser;
-	}
+    String prepareLdapUrl() {
+        String ldapUrl = LDAP_URL;
+        String confLdapUrl = env.getProperty("ldap.url");
+        if (confLdapUrl != null && !confLdapUrl.equals("")) {
+            ldapUrl = confLdapUrl;
+        }
+        return ldapUrl;
+    }
+
+    String prepareInMemoryPassword() {
+        String inMemoryPassword = IN_MEMORY_PASSWORD;
+        String confInMemoryPassword = env.getProperty("ldap.inmemory.password");
+        if (confInMemoryPassword != null && !confInMemoryPassword.equals("")) {
+            inMemoryPassword = confInMemoryPassword;
+        }
+        return inMemoryPassword;
+    }
+
+    String prepareInMemoryUser() {
+        String inMemoryUser = IN_MEMORY_USER;
+        String confInMemoryUser = env.getProperty("ldap.inmemory.user");
+        if (confInMemoryUser != null && !confInMemoryUser.equals("")) {
+            inMemoryUser = confInMemoryUser;
+        }
+        return inMemoryUser;
+    }
 }

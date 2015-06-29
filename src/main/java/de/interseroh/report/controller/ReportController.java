@@ -18,7 +18,7 @@
  * 
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.controller;
+package de.interseroh.report.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

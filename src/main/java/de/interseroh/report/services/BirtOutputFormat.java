@@ -1,13 +1,14 @@
-package de.interseroh.report.server.birt;
+package de.interseroh.report.services;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public enum BirtOutputFormat {
 
-	HTML5("html", "text/html; charset=UTF-8"), PDF("pdf", "application/pdf"), EXCEL(
-			"xls", "application/vnd.ms-excel"), EXCEL2010("xlsx",
-			"application/vnd.ms-excel");
+	HTML5("html", "text/html; charset=UTF-8"), //
+    PDF("pdf", "application/pdf"), //
+    EXCEL("xls", "application/vnd.ms-excel"), //
+    EXCEL2010("xlsx", "application/vnd.ms-excel");
 
 	private final String formatName;
 	private final String contentType;

@@ -43,11 +43,11 @@ import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import de.interseroh.report.server.birt.BirtReportService;
+import de.interseroh.report.services.BirtReportService;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "de.interseroh.report.server.controller" })
+@ComponentScan({"de.interseroh.report.controller"})
 @PropertySource({ "classpath:report-config.properties" })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 

@@ -25,7 +25,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import de.interseroh.report.server.birt.BirtEngineFactory;
+import de.interseroh.report.services.BirtEngineFactory;
 
 @Configuration
 @ComponentScan("de.interseroh.report.server.birt")

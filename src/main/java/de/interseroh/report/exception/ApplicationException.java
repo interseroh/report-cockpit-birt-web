@@ -18,30 +18,31 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.server.birt;
+package de.interseroh.report.exception;
 
-public enum BirtParameterType {
+/**
+ * @author Ingo Düppe (Crowdcode)
+ */
+public class ApplicationException extends Exception {
 
-	SCALAR_PARAMETER(0), FILTER_PARAMETER(1), LIST_PARAMETER(2), TABLE_PARAMETER(
-			3), PARAMETER_GROUP(4), CASCADING_PARAMETER_GROUP(5);
-
-	private int parameterType;
-
-	BirtParameterType(int parameterType) {
-		this.parameterType = parameterType;
+	public ApplicationException() {
 	}
 
-	public int getType() {
-		return parameterType;
+	public ApplicationException(String message) {
+		super(message);
 	}
 
-	public static BirtParameterType valueOf(int parameterType) {
-		for (BirtParameterType type : BirtParameterType.values()) {
-			if (type.parameterType == parameterType)
-				return type;
+	public ApplicationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-		}
-		throw new UnknownParameterTypeException(parameterType);
+	public ApplicationException(Throwable cause) {
+		super(cause);
+	}
+
+	public ApplicationException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
 }

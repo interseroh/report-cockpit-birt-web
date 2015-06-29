@@ -75,44 +75,30 @@ public class BirtHtmlReportServiceTest {
 
     @Test
     public void testHelloWorldReport() throws EngineException, FileNotFoundException, BirtReportException {
-        assertThat(reportService, is(notNullValue()));
-
-        String reportName = "/reports/hello_world.rptdesign";
-        String outputFile = "target/hello_world.html";
-
-        renderHtmlReport(outputFile, reportName);
-
+        renderHtmlReport("hello_world");
     }
 
     @Test
     public void testSalesInvoiceReport() throws EngineException, FileNotFoundException, BirtReportException {
-        assertThat(reportService, is(notNullValue()));
-
-        String reportName = "/reports/salesinvoice.rptdesign";
-        String outputFile = "target/salesinvoice.html";
-
-        renderHtmlReport(outputFile, reportName);
+        renderHtmlReport("salesinvoice");
     }
 
     @Test
     public void testProductCatalogReport() throws EngineException, FileNotFoundException, BirtReportException {
-        assertThat(reportService, is(notNullValue()));
-
-        String reportName = "/reports/productcatalog.rptdesign";
-        String outputFile = "target/productcatalog.html";
-
-        renderHtmlReport(outputFile, reportName);
-
+        renderHtmlReport("productcatalog");
     }
 
-    private void renderHtmlReport(String outputFile, String reportName) throws EngineException, FileNotFoundException, BirtReportException {
-        Collection<IParameterDefn> parameterDefinitions = reportService.getParameterDefinitions(reportName);
+    private void renderHtmlReport(String reportName) throws EngineException, FileNotFoundException, BirtReportException {
+        String reportFileName = reportName + ".rptdesign";
+        String outputFileName = "target/" + reportName + ".html";
+
+        Collection<IParameterDefn> parameterDefinitions = reportService.getParameterDefinitions(reportFileName);
         Map<String, Object> params = new HashMap<>();
         for (IParameterDefn definition : parameterDefinitions) {
             if ("OrderNumber".equals(definition.getName()))
                 params.put("OrderNumber", 10110);
         }
-        reportService.renderHtmlReport(reportName, params, new FileOutputStream(outputFile));
+        reportService.renderHtmlReport(reportFileName, params, new FileOutputStream(outputFileName));
     }
 
 

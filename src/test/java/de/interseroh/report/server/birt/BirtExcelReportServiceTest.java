@@ -47,7 +47,6 @@ import java.util.Map;
 @PropertySource("classpath:config.properties")
 public class BirtExcelReportServiceTest {
 
-    private static final String INPUT_PREFIX = "/reports/";
     private static final String INPUT_SUFFIX = ".rptdesign";
 
     private static final String OUTPUT_SUFFIX = ".xlsx";
@@ -87,12 +86,12 @@ public class BirtExcelReportServiceTest {
 
 
     @Test
-    public void testStaticCrossTable() throws Exception {
+    public void testStaticCrossTableReport() throws Exception {
         renderPdfReport("staticcrosstable");
     }
 
     private void renderPdfReport(String reportName) throws EngineException, IOException, BirtReportException {
-        String reportResourceName = INPUT_PREFIX + reportName + INPUT_SUFFIX;
+        String reportResourceName = reportName + INPUT_SUFFIX;
         String reportOutputName = OUTPUT_PREFIX + reportName + OUTPUT_SUFFIX;
 
         reportService.getParameterDefinitions(reportResourceName); // just for printing

@@ -36,9 +36,12 @@ import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
@@ -49,12 +52,17 @@ public class BirtReportService {
 
     private static final Logger logger = Logger.getLogger(BirtReportService.class);
 
+    public static final String REPORT_SOURCE_URL_KEY = "report.source.url";
     public static final String REPORT_BASE_IMAGE_URL_KEY = "report.base.image.url";
     public static final String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
     public static final String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
 
+
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Autowired
     private IReportEngine reportEngine;
@@ -75,15 +83,19 @@ public class BirtReportService {
         logger.info("\tImageDirectory: " + imageDirectory);
     }
 
-    public Collection<IParameterDefn> getParameterDefinitions(String reportName) throws EngineException {
-        IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
-        IGetParameterDefinitionTask parameterDefinitionTask = reportEngine.createGetParameterDefinitionTask(iReportRunnable);
+    public Collection<IParameterDefn> getParameterDefinitions(String reportName) throws BirtReportException {
+        try {
+            IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
+            IGetParameterDefinitionTask parameterDefinitionTask = reportEngine.createGetParameterDefinitionTask(iReportRunnable);
 
-        boolean includeParameterGroups = true;
-        Collection<IParameterDefn> parameterDefns = parameterDefinitionTask.getParameterDefns(includeParameterGroups);
-        printParameterDefinitions(parameterDefns, parameterDefinitionTask);
+            boolean includeParameterGroups = true;
+            Collection<IParameterDefn> parameterDefns = parameterDefinitionTask.getParameterDefns(includeParameterGroups);
+            printParameterDefinitions(parameterDefns, parameterDefinitionTask);
 
-        return parameterDefns;
+            return parameterDefns;
+        } catch (EngineException |  IOException e ) {
+            throw new BirtReportException("Error while getting parameter definition for "+reportName+".", e);
+        }
     }
 
     public void renderHtmlReport(String reportName, Map<String, Object> parameters, OutputStream out) throws BirtReportException {
@@ -102,7 +114,7 @@ public class BirtReportService {
             htmlOptions.setImageDirectory(imageDirectory);
 
             runAndRender(runAndRenderTask, htmlOptions);
-        } catch (EngineException e) {
+        } catch (EngineException | IOException e) {
             throw new BirtReportException("Error while rendering pdf for report " + reportName + ".", e);
         }
     }
@@ -122,7 +134,7 @@ public class BirtReportService {
 
             runAndRender(runAndRenderTask, pdfOptions);
 
-        } catch (EngineException e) {
+        } catch (EngineException |IOException e) {
             throw new BirtReportException("Error while rendering pdf for report " + reportName + ".", e);
         }
     }
@@ -142,7 +154,7 @@ public class BirtReportService {
             excelRenderOptions.setImageHandler(new HTMLServerImageHandler());
 
             runAndRender(runAndRenderTask, excelRenderOptions);
-        } catch (EngineException e) {
+        } catch (EngineException | IOException e) {
             throw new BirtReportException("Error while rendering excel export for report " + reportName + ".", e);
         }
     }
@@ -153,7 +165,7 @@ public class BirtReportService {
         runAndRenderTask.close();
     }
 
-    private IRunAndRenderTask createRunAndRenderTask(String reportName) throws EngineException {
+    private IRunAndRenderTask createRunAndRenderTask(String reportName) throws EngineException, IOException {
         IReportRunnable iReportRunnable = reportEngine.openReportDesign(absolutePathOf(reportName));
         return reportEngine.createRunAndRenderTask(iReportRunnable);
     }
@@ -164,9 +176,10 @@ public class BirtReportService {
         }
     }
 
-    private String absolutePathOf(String reportName) {
-//        return Thread.currentThread().getContextClassLoader().getResource(reportName).getPath();
-        return getClass().getResource(reportName).getPath();
+    private String absolutePathOf(String reportName) throws IOException {
+        String location = environment.getProperty(REPORT_SOURCE_URL_KEY) + "/" + reportName;
+        Resource resource = resourceLoader.getResource(location);
+        return resource.getFile().getAbsolutePath();
     }
 
     private void printParameterDefinitions(Collection<IParameterDefn> parameterDefinitions, IGetParameterDefinitionTask task) {

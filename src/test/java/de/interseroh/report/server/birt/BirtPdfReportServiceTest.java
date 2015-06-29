@@ -64,62 +64,45 @@ public class BirtPdfReportServiceTest {
 
     @Test
     public void testHelloWorldReport() throws Exception{
-        String reportName = "/reports/hello_world.rptdesign";
-        String outputFile = "target/hello_world.pdf";
-
-        renderPdfReport(outputFile, reportName);
-
+        renderPdfReport("hello_world");
     }
 
     @Test
     public void testSalesInvoiceReport() throws Exception{
-        String reportName = "/reports/salesinvoice.rptdesign";
-        String outputFile = "target/salesinvoice.pdf";
-
-        renderPdfReport(outputFile, reportName);
+        renderPdfReport("salesinvoice");
     }
 
     @Test
     public void testProductCatalogReport() throws Exception {
-        String reportName = "/reports/productcatalog.rptdesign";
-        String outputFile = "target/productcatalog.pdf";
-
-        renderPdfReport(outputFile, reportName);
+        renderPdfReport("productcatalog");
     }
 
     @Test
     public void testProductListAfterReport() throws Exception {
-        String reportName = "/reports/productlistafter.rptdesign";
-        String outputFile = "target/productlistafter.pdf";
-
-        renderPdfReport(outputFile, reportName);
+        renderPdfReport("productlistafter");
     }
 
     @Test
     public void testEmployeeAfterReport() throws Exception {
-        String reportName = "/reports/employeeafter.rptdesign";
-        String outputFile = "target/employeeafter.pdf";
-
-        renderPdfReport(outputFile, reportName);
+        renderPdfReport("employeeafter");
     }
-
 
     @Test
-    public void testStaticCrossTable() throws Exception {
-        String reportName = "/reports/staticcrosstable.rptdesign";
-        String outputFile = "target/staticcrosstable.pdf";
-
-        renderPdfReport(outputFile, reportName);
+    public void testStaticCrossTableReport() throws Exception {
+        renderPdfReport("staticcrosstable");
     }
 
-    private void renderPdfReport(String outputFile, String reportName) throws EngineException, FileNotFoundException, BirtReportException {
-        Collection<IParameterDefn> parameterDefinitions = reportService.getParameterDefinitions(reportName);
+    private void renderPdfReport(String reportName) throws EngineException, FileNotFoundException, BirtReportException {
+        String reportFileName = reportName + ".rptdesign";
+        String outputFileName = "target/" + reportName + ".html";
+
+        Collection<IParameterDefn> parameterDefinitions = reportService.getParameterDefinitions(reportFileName);
         Map<String, Object> params = new HashMap<>();
         for (IParameterDefn definition : parameterDefinitions) {
             if ("OrderNumber".equals(definition.getName()))
                 params.put("OrderNumber", 10110);
         }
-        reportService.renderPDFReport(reportName, params, new FileOutputStream(outputFile));
+        reportService.renderPDFReport(reportFileName, params, new FileOutputStream(outputFileName));
     }
 
 

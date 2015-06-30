@@ -28,30 +28,38 @@ import org.eclipse.birt.report.engine.api.IReportEngineFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.io.Resource;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import de.interseroh.report.exception.BirtSystemException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
+@Component
 public class BirtEngineFactory implements FactoryBean, ApplicationContextAware,
 		DisposableBean {
+
+    private Logger logger = Logger.getLogger(BirtEngineFactory.class.getName());
 
 	public static final String SPRING_KEY = "spring";
 	private ApplicationContext applicationContext;
 
 	private IReportEngine birtEngine;
 
-	private Resource logDirectory;
+	@Autowired
+	private Environment env;
 
 	@Override
 	public Object getObject() throws Exception {
 		try {
-			EngineConfig config = new EngineConfig();
-			config.getAppContext().put(SPRING_KEY, this.applicationContext);
+            EngineConfig config = getEngineConfig();
 
 			Platform.startup(config);
 			IReportEngineFactory factory = (IReportEngineFactory) Platform
@@ -65,7 +73,16 @@ public class BirtEngineFactory implements FactoryBean, ApplicationContextAware,
 
 	}
 
-	@Override
+    private EngineConfig getEngineConfig() {
+        EngineConfig config = new EngineConfig();
+        config.setTempDir(env.getProperty("java.io.tmpdir"));
+        config.getAppContext().put(SPRING_KEY, this.applicationContext);
+//        config.setLogConfig(".", Level.ALL);
+        config.setLogger(logger);
+        return config;
+    }
+
+    @Override
 	public Class<?> getObjectType() {
 		return IReportEngine.class;
 	}

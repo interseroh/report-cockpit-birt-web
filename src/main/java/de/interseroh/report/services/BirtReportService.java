@@ -129,7 +129,7 @@ public class BirtReportService {
 			htmlOptions.setBaseImageURL(baseImageURL);
 			htmlOptions.setImageDirectory(imageDirectory);
 
-			runAndRender(runAndRenderTask, htmlOptions);
+			runAndRenderTask(runAndRenderTask, htmlOptions);
 		} catch (EngineException | IOException e) {
 			throw new RenderReportException("html", reportName, e);
 		}
@@ -150,7 +150,7 @@ public class BirtReportService {
 												// configurable from cockpit
 			pdfOptions.setImageHandler(new HTMLServerImageHandler());
 
-			runAndRender(runAndRenderTask, pdfOptions);
+			runAndRenderTask(runAndRenderTask, pdfOptions);
 
 		} catch (EngineException | IOException e) {
 			throw new RenderReportException("pdf", reportName, e);
@@ -179,14 +179,14 @@ public class BirtReportService {
 			// be configurable from cockpit
 			excelRenderOptions.setImageHandler(new HTMLServerImageHandler());
 
-			runAndRender(runAndRenderTask, excelRenderOptions);
+			runAndRenderTask(runAndRenderTask, excelRenderOptions);
 		} catch (EngineException | IOException e) {
 			throw new RenderReportException("excel", reportName, e);
 		}
 		}
 	}
 
-	private void runAndRender(IRunAndRenderTask runAndRenderTask,
+	private void runAndRenderTask(IRunAndRenderTask runAndRenderTask,
 			IRenderOption renderOptions) throws EngineException {
 		runAndRenderTask.setRenderOption(renderOptions);
 		runAndRenderTask.run();

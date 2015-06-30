@@ -35,7 +35,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import de.interseroh.report.webconfig.ReportConfig;
 import de.interseroh.report.webconfig.SecurityConfig;
 import de.interseroh.report.webconfig.WebMvcConfig;
 
@@ -85,7 +84,7 @@ public class UiWebAppInitializer implements WebApplicationInitializer {
 
 	private AnnotationConfigWebApplicationContext getRootContext() {
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-		context.register(SecurityConfig.class, ReportConfig.class);
+		context.register(SecurityConfig.class);
 		return context;
 	}
 

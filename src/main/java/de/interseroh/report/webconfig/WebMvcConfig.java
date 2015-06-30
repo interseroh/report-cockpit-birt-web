@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
@@ -47,8 +48,10 @@ import de.interseroh.report.services.BirtReportService;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({"de.interseroh.report.controller"})
+@ComponentScan({ "de.interseroh.report.controller",
+		"de.interseroh.report.model" })
 @PropertySource({ "classpath:report-config.properties" })
+@Import({ ReportConfig.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	private static Logger logger = Logger.getLogger(WebMvcConfig.class);

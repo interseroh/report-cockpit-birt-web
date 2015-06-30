@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import de.interseroh.report.exception.BirtReportException;
 import org.apache.log4j.Logger;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
@@ -47,6 +46,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+
+import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.exception.RenderReportException;
+import de.interseroh.report.model.Parameter;
 
 @Service
 @PropertySource({ "classpath:report-config.properties" })
@@ -128,9 +131,7 @@ public class BirtReportService {
 
 			runAndRender(runAndRenderTask, htmlOptions);
 		} catch (EngineException | IOException e) {
-			throw new BirtReportException(
-					"Error while rendering pdf for report " + reportName + ".",
-					e);
+			throw new RenderReportException("html", reportName, e);
 		}
 	}
 
@@ -152,9 +153,7 @@ public class BirtReportService {
 			runAndRender(runAndRenderTask, pdfOptions);
 
 		} catch (EngineException | IOException e) {
-			throw new BirtReportException(
-					"Error while rendering pdf for report " + reportName + ".",
-					e);
+			throw new RenderReportException("pdf", reportName, e);
 		}
 	}
 
@@ -182,9 +181,8 @@ public class BirtReportService {
 
 			runAndRender(runAndRenderTask, excelRenderOptions);
 		} catch (EngineException | IOException e) {
-			throw new BirtReportException(
-					"Error while rendering excel export for report "
-							+ reportName + ".", e);
+			throw new RenderReportException("excel", reportName, e);
+		}
 		}
 	}
 

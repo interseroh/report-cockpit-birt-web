@@ -66,30 +66,28 @@ public class ReportRestApiController {
 		BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
 		response.setContentType(outputFormat.getContentType());
 
-		String reportFileName = reportName + ".rptdesign";
-
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
 		switch (outputFormat) {
 		case HTML5:
-			reportService.renderHtmlReport(reportFileName, parameters,
+			reportService.renderHtmlReport(reportName, parameters,
 					response.getOutputStream());
 			break;
 		case PDF:
 			response.setHeader("Content-disposition", "inline; filename="
 					+ reportName + ".pdf");
-			reportService.renderPDFReport(reportFileName, parameters,
+			reportService.renderPDFReport(reportName, parameters,
 					response.getOutputStream());
 			break;
 		case EXCEL2010:
 			response.setHeader("Content-disposition", "attachment; filename="
 					+ reportName + ".xlsx");
-			reportService.renderExcelReport(reportFileName, parameters,
+			reportService.renderExcelReport(reportName, parameters,
 					response.getOutputStream());
 		case EXCEL:
 			response.setHeader("Content-disposition", "attachment; filename="
 					+ reportName + ".xls");
-			reportService.renderExcelReport(reportFileName, parameters,
+			reportService.renderExcelReport(reportName, parameters,
 					response.getOutputStream());
 		}
 		// TODO idueppe - need exception handling

@@ -26,9 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.interseroh.report.exception.BirtReportException;
 import org.eclipse.birt.report.engine.api.EngineException;
-import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +36,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.model.Parameter;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
@@ -47,9 +47,6 @@ import de.interseroh.report.webconfig.ReportConfig;
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")
 public class BirtPdfReportServiceTest {
-
-	@Autowired
-	private ApplicationContext applicationContext;
 
 	@Autowired
 	private BirtReportService reportService;
@@ -88,20 +85,31 @@ public class BirtPdfReportServiceTest {
 		renderPdfReport("staticcrosstable");
 	}
 
-	private void renderPdfReport(String reportName) throws EngineException,
-			FileNotFoundException, BirtReportException {
-		String reportFileName = reportName + ".rptdesign";
-		String outputFileName = "target/" + reportName + ".html";
+    @Test
+    public void testCustomerOrdersFinal() throws Exception {
+        renderPdfReport("customer_orders_final");
+    }
 
-		Collection<IParameterDefn> parameterDefinitions = reportService
-				.getParameterDefinitions(reportFileName);
+    @Test
+    public void testCascadeParameters() throws Exception {
+        renderPdfReport("cascade_parameters");
+    }
+
+	private void renderPdfReport(String reportName) throws Exception {
+		String outputFileName = "target/" + reportName + ".pdf";
+
+		Collection<Parameter> parameterDefinitions = reportService
+				.getParameterDefinitions(reportName);
 		Map<String, Object> params = new HashMap<>();
-		for (IParameterDefn definition : parameterDefinitions) {
-			if ("OrderNumber".equals(definition.getName()))
+		for (Parameter parameter : parameterDefinitions) {
+			if ("OrderNumber".equals(parameter.getName()))
 				params.put("OrderNumber", 10110);
 		}
-		reportService.renderPDFReport(reportFileName, params,
-				new FileOutputStream(outputFileName));
+        params.put("order",10298);
+        params.put("customer",112);
+		try (FileOutputStream fos = new FileOutputStream(outputFileName)) {
+            reportService.renderPDFReport(reportName, params, fos);
+        }
 	}
 
 }

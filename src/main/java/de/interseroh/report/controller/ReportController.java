@@ -20,10 +20,12 @@
  */
 package de.interseroh.report.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.interseroh.report.model.ParameterForm;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -65,10 +67,18 @@ public class ReportController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/parameters");
-		modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
+
+		modelAndView.addObject("reportName", reportName);
+        modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
+
 
 		Collection<Parameter> parameters = reportService
 				.getParameterDefinitions(reportName);
+
+        ParameterForm form = new ParameterForm();
+        form.setParameters(new ArrayList<>(parameters));
+
+        modelAndView.addObject("parameterForm", form);
 		modelAndView.addObject("parameters", parameters);
 
 		return modelAndView;

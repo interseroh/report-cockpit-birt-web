@@ -22,6 +22,8 @@ package de.interseroh.report.services;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -35,10 +37,14 @@ import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.IEngineTask;
 import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
+import org.eclipse.birt.report.engine.api.IParameterDefnBase;
+import org.eclipse.birt.report.engine.api.IParameterGroupDefn;
+import org.eclipse.birt.report.engine.api.IParameterSelectionChoice;
 import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
+import org.eclipse.birt.report.engine.api.IScalarParameterDefn;
 import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -62,6 +68,7 @@ public class BirtReportService {
 	public static final String REPORT_BASE_IMAGE_URL_KEY = "report.base.image.url";
 	public static final String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
 	public static final String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
+	public static final String REPORT_FILE_SUFFIX = ".rptdesign";
 
 	@Autowired
 	private Environment environment;
@@ -91,25 +98,55 @@ public class BirtReportService {
 		logger.info("\tImageDirectory: " + imageDirectory);
 	}
 
-	public Collection<IParameterDefn> getParameterDefinitions(String reportName)
+	public Collection<Parameter> getParameterDefinitions(String reportName)
 			throws BirtReportException {
 		try {
+			String reportFileName = absolutePathOf(reportFileName(reportName));
+
 			IReportRunnable iReportRunnable = reportEngine
-					.openReportDesign(absolutePathOf(reportName));
-			IGetParameterDefinitionTask parameterDefinitionTask = reportEngine
+					.openReportDesign(reportFileName);
+			IGetParameterDefinitionTask task = reportEngine
 					.createGetParameterDefinitionTask(iReportRunnable);
 
 			boolean includeParameterGroups = true;
-			Collection<IParameterDefn> parameterDefns = parameterDefinitionTask
+			Collection<IParameterDefnBase> parameterDefinitions = task
 					.getParameterDefns(includeParameterGroups);
-			printParameterDefinitions(parameterDefns, parameterDefinitionTask);
 
-			return parameterDefns;
+			Collection<Parameter> params = extractParameters(task,
+					parameterDefinitions);
+
+			printParameterDefinitions(parameterDefinitions, task);
+
+			return params;
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
 					"Error while getting parameter definition for "
 							+ reportName + ".", e);
 		}
+	}
+
+	private Collection<Parameter> extractParameters(
+			IGetParameterDefinitionTask task,
+			Collection<IParameterDefnBase> parameterDefinitions) {
+		Collection<Parameter> params = new ArrayList<>();
+		for (IParameterDefnBase definition : parameterDefinitions) {
+			Parameter parameter = new Parameter();
+			parameter.setName(definition.getName());
+			parameter.setDisplayLabel(definition.getDisplayName());
+			if (definition instanceof IParameterDefn) {
+				IParameterDefn param = (IParameterDefn) definition;
+				parameter.setDataType(BirtDataType.valueOf(param.getDataType())
+						.getHtmlFieldType());
+				Object defaultValue = task.getDefaultValue(definition);
+				// TODO idueppe - convert default value to string
+				if (defaultValue != null)
+					defaultValue = defaultValue.toString();
+				parameter.setDefaultValue((String) defaultValue);
+			}
+
+			params.add(parameter);
+		}
+		return params;
 	}
 
 	public void renderHtmlReport(String reportName,
@@ -168,15 +205,12 @@ public class BirtReportService {
 			EXCELRenderOption excelRenderOptions = new EXCELRenderOption();
 			excelRenderOptions.setOutputFormat("xlsx");
 			excelRenderOptions.setOutputStream(out);
-			excelRenderOptions.setEnableMultipleSheet(true); // TODO idueppe -
-																// should be
-																// configurable
-																// from cockpit
-			excelRenderOptions.setHideGridlines(true); // TODO idueppe - should
-														// be configurable from
-														// cockpit
-			// excelRenderOptions.setOfficeVersion(); // TODO idueppe - should
-			// be configurable from cockpit
+			excelRenderOptions.setEnableMultipleSheet(true);
+			// TODO idueppe - should be configurable from cockpit
+			excelRenderOptions.setHideGridlines(true);
+			// TODO idueppe - should be configurable from cockpit
+			// excelRenderOptions.setOfficeVersion();
+			// TODO idueppe - should be configurable from cockpit
 			excelRenderOptions.setImageHandler(new HTMLServerImageHandler());
 
 			runAndRenderTask(runAndRenderTask, excelRenderOptions);
@@ -184,6 +218,9 @@ public class BirtReportService {
 			throw new RenderReportException("excel", reportName, e);
 		}
 		}
+
+	private String reportFileName(String reportName) {
+		return reportName + REPORT_FILE_SUFFIX;
 	}
 
 	private void runAndRenderTask(IRunAndRenderTask runAndRenderTask,
@@ -195,8 +232,9 @@ public class BirtReportService {
 
 	private IRunAndRenderTask createRunAndRenderTask(String reportName)
 			throws EngineException, IOException {
+		String reportFileName = absolutePathOf(reportFileName(reportName));
 		IReportRunnable iReportRunnable = reportEngine
-				.openReportDesign(absolutePathOf(reportName));
+				.openReportDesign(reportFileName);
 		return reportEngine.createRunAndRenderTask(iReportRunnable);
 	}
 
@@ -208,32 +246,43 @@ public class BirtReportService {
 		}
 	}
 
-	private String absolutePathOf(String reportName) throws IOException {
+	private String absolutePathOf(String reportFileName) throws IOException {
 		String location = environment.getProperty(REPORT_SOURCE_URL_KEY) + "/"
-				+ reportName;
+				+ reportFileName;
 		Resource resource = resourceLoader.getResource(location);
 		return resource.getFile().getAbsolutePath();
 	}
 
 	private void printParameterDefinitions(
-			Collection<IParameterDefn> parameterDefinitions,
+			Collection<IParameterDefnBase> parameterDefinitions,
 			IGetParameterDefinitionTask task) {
-		for (IParameterDefn parameterDefn : parameterDefinitions) {
-			System.out
-					.println("Displayname: " + parameterDefn.getDisplayName());
-			System.out.println("Helptext: " + parameterDefn.getHelpText());
-			System.out.println("Name: " + parameterDefn.getName());
-			System.out.println("Typename: " + parameterDefn.getTypeName());
-			System.out.println("ParameterType: "
-					+ BirtParameterType.valueOf(parameterDefn
+		for (IParameterDefnBase definition : parameterDefinitions) {
+			PrintStream out = System.out;
+            out.println("----------------------------------------------");
+			out.println("Displayname: " + definition.getDisplayName());
+			out.println("Helptext: " + definition.getHelpText());
+			out.println("Name: " + definition.getName());
+			out.println("Typename: " + definition.getTypeName());
+			out.println("ParameterType: "
+					+ BirtParameterType.valueOf(definition
 							.getParameterType()));
-			System.out.println("DataType: "
-					+ BirtDataType.valueOf(parameterDefn.getDataType()));
-			System.out.println("PromptText: " + parameterDefn.getPromptText());
-			System.out.println("DefaultValue: "
-					+ task.getDefaultValue(parameterDefn));
-			System.out.println("Required: " + parameterDefn.isRequired());
 
+			if (definition instanceof IScalarParameterDefn) {
+				IScalarParameterDefn scalar = (IScalarParameterDefn) definition;
+                out.println("DataType: "
+                        + BirtDataType.valueOf(scalar.getDataType()));
+                out.println("PromptText: " + scalar.getPromptText());
+                out.println("Required: "+ scalar.isRequired());
+				out.println("AllowNewValues: " + scalar.allowNewValues());
+				out.println("DisplayInFixedOrder: " + scalar.displayInFixedOrder());
+				out.println("IsValueConcealed: " + scalar.isValueConcealed());
+				out.println("DisplayFormat: " + scalar.getDisplayFormat());
+				out.println("ControlType: " + scalar.getControlType());
+				out.println("DefaultValue: " + scalar.getDefaultValue());
+				out.println("ScalarParameterType: " + scalar.getScalarParameterType());
+
+
+			}
 		}
 
 	}

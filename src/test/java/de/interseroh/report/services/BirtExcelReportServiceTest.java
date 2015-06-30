@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.interseroh.report.exception.BirtReportException;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +34,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
@@ -44,8 +44,6 @@ import de.interseroh.report.webconfig.ReportConfig;
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")
 public class BirtExcelReportServiceTest {
-
-	private static final String INPUT_SUFFIX = ".rptdesign";
 
 	private static final String OUTPUT_SUFFIX = ".xlsx";
 	private static final String OUTPUT_PREFIX = "target/";
@@ -86,20 +84,17 @@ public class BirtExcelReportServiceTest {
 		renderPdfReport("staticcrosstable");
 	}
 
-	private void renderPdfReport(String reportName) throws EngineException,
-			IOException, BirtReportException {
-		String reportResourceName = reportName + INPUT_SUFFIX;
+	private void renderPdfReport(String reportName) throws Exception {
 		String reportOutputName = OUTPUT_PREFIX + reportName + OUTPUT_SUFFIX;
 
-		reportService.getParameterDefinitions(reportResourceName); // just for
-																	// printing
+		// just for printing
+		reportService.getParameterDefinitions(reportName);
 
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("OrderNumber", 10110);
 
-		try (FileOutputStream out = new FileOutputStream(reportOutputName);) {
-			reportService
-					.renderExcelReport(reportResourceName, parameters, out);
+		try (FileOutputStream out = new FileOutputStream(reportOutputName)) {
+			reportService.renderExcelReport(reportName, parameters, out);
 		}
 	}
 

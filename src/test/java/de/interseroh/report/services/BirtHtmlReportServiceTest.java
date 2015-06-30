@@ -26,9 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.interseroh.report.exception.BirtReportException;
 import org.eclipse.birt.report.engine.api.EngineException;
-import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +36,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.model.Parameter;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
@@ -78,18 +78,17 @@ public class BirtHtmlReportServiceTest {
 
 	private void renderHtmlReport(String reportName) throws EngineException,
 			FileNotFoundException, BirtReportException {
-		String reportFileName = reportName + ".rptdesign";
 		String outputFileName = "target/" + reportName + ".html";
 
-		Collection<IParameterDefn> parameterDefinitions = reportService
-				.getParameterDefinitions(reportFileName);
+		Collection<Parameter> parameters = reportService
+				.getParameterDefinitions(reportName);
 		Map<String, Object> params = new HashMap<>();
-		for (IParameterDefn definition : parameterDefinitions) {
+		for (Parameter definition : parameters) {
 			if ("OrderNumber".equals(definition.getName()))
 				params.put("OrderNumber", 10110);
 		}
-		reportService.renderHtmlReport(reportFileName, params,
-				new FileOutputStream(outputFileName));
+		FileOutputStream fos = new FileOutputStream(outputFileName);
+		reportService.renderHtmlReport(reportName, params, fos);
 	}
 
 }

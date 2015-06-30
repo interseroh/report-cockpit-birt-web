@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final Logger logger = Logger.getLogger(SecurityConfig.class);
 
-    @Inject
+    @Autowired
     private Environment env;
 
     @Override

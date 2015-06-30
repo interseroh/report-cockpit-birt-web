@@ -46,9 +46,6 @@ public class ReportController {
 			.getLogger(ReportController.class);
 
 	@Autowired
-	private Environment env;
-
-	@Autowired
 	private BirtReportService reportService;
 
 	@RequestMapping(value = "/report/{reportName}", method = RequestMethod.GET)

@@ -366,6 +366,8 @@
                     <includes>
                         <include>**/*AllUiTests.java</include>
                     </includes>
+                    <!-- Disable Assertions due to Birt Engine -->
+                    <enableAssertions>false</enableAssertions>
                 </configuration>
             </plugin>
 

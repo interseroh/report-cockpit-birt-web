@@ -27,20 +27,22 @@ import de.interseroh.report.exception.UnknownDataTypeException;
  */
 public enum BirtDataType {
 
-    TYPE_ANY(0), //
-    TYPE_STRING(1), //
-    TYPE_FLOAT(2), //
-    TYPE_DECIMAL(3),//
-    TYPE_DATE_TIME(4), //
-    TYPE_BOOLEAN(5), //
-    TYPE_INTEGER(6), //
-    TYPE_DATE(7), //
-    TYPE_TIME(8);
+    TYPE_ANY(0, "text"), //
+    TYPE_STRING(1, "text"), //
+    TYPE_FLOAT(2, "number"), //
+    TYPE_DECIMAL(3, "number"),//
+    TYPE_DATE_TIME(4, "date"), //
+    TYPE_BOOLEAN(5, "checkbox"), //
+    TYPE_INTEGER(6, "number"), //
+    TYPE_DATE(7, "date"), //
+    TYPE_TIME(8, "time"); //
 
     private int dataType;
+    private String htmlFieldType;
 
-    BirtDataType(int dataType) {
+    private BirtDataType(int dataType, String htmlFieldType) {
         this.dataType = dataType;
+        this.htmlFieldType = htmlFieldType;
     }
 
     public static BirtDataType valueOf(int dataType) {
@@ -50,6 +52,10 @@ public enum BirtDataType {
 
         }
         throw new UnknownDataTypeException(dataType);
+    }
+
+    public String getHtmlFieldType() {
+        return htmlFieldType;
     }
 
     public int getType() {

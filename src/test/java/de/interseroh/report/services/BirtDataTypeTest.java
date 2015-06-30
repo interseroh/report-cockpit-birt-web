@@ -26,6 +26,7 @@ import static org.junit.Assert.assertThat;
 import de.interseroh.report.exception.UnknownDataTypeException;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.junit.Test;
+import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -38,7 +39,12 @@ public class BirtDataTypeTest {
 				is(IParameterDefn.TYPE_FLOAT));
 	}
 
-	@Test(expected = UnknownDataTypeException.class)
+    @Test
+    public void testHtmlType() throws Exception {
+        assertThat(BirtDataType.TYPE_DATE.getHtmlFieldType(), is("date"));
+    }
+
+    @Test(expected = UnknownDataTypeException.class)
 	public void testUnknownDataTypeException() throws Exception {
 		BirtDataType.valueOf(-1);
 	}

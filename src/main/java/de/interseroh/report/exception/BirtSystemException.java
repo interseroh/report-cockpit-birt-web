@@ -25,6 +25,8 @@ package de.interseroh.report.exception;
  */
 public class BirtSystemException extends SystemException {
 
+	private static final long serialVersionUID = 6711817917599935247L;
+
 	public BirtSystemException() {
 	}
 

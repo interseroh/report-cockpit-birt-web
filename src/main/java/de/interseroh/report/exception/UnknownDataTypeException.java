@@ -27,6 +27,8 @@ import de.interseroh.report.services.BirtDataType;
  */
 public class UnknownDataTypeException extends BirtSystemException {
 
+	private static final long serialVersionUID = -7749659286693414321L;
+
 	public UnknownDataTypeException(int dataType) {
 		super("The DataType with the id " + dataType
 				+ " is unknown. Please check " + BirtDataType.class.getName()

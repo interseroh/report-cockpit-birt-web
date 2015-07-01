@@ -321,6 +321,7 @@
                                 <copy file="src/main/resources/config.properties_example" tofile="src/main/resources/config.properties"/>
                                 <copy file="src/main/resources/log4j.properties_example" tofile="src/main/resources/log4j.properties"/>
                                 <copy file="src/main/resources/server.properties_example" tofile="src/main/resources/server.properties"/>
+                                <copy file="src/main/resources/report-config.properties_example" tofile="src/main/resources/report-config.properties"/>
                                 <copy file="src/test/resources/log4j.properties_example" tofile="src/test/resources/log4j.properties"/>
                             </target>
                         </configuration>

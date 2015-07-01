@@ -1,0 +1,4 @@
+report.base.image.url=/reportimages
+report.image.directory=/${java.io.tmpdir}/reportimages/
+report.image.contextpath=/report-cockpit-birt-web
+report.source.url=classpath:/reports/

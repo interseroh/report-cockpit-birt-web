@@ -321,6 +321,7 @@
                                 <copy file="src/main/resources/config.properties_example" tofile="src/main/resources/config.properties"/>
                                 <copy file="src/main/resources/log4j.properties_example" tofile="src/main/resources/log4j.properties"/>
                                 <copy file="src/main/resources/server.properties_example" tofile="src/main/resources/server.properties"/>
+                                <copy file="src/main/resources/report-config.properties_example" tofile="src/main/resources/report-config.properties"/>
                                 <copy file="src/test/resources/log4j.properties_example" tofile="src/test/resources/log4j.properties"/>
                             </target>
                         </configuration>
@@ -447,4 +448,36 @@
         	</plugins>
         </pluginManagement>
     </build>
+    
+    <profiles>
+		<profile>
+			<id>development</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.zeroturnaround</groupId>
+						<artifactId>jrebel-maven-plugin</artifactId>
+						<version>1.1.5</version>
+						<configuration>
+							<relativePath>.</relativePath>
+							<classpath>
+								<fallback>default</fallback>
+								<resources>
+								</resources>
+							</classpath>
+						</configuration>
+						<executions>
+							<execution>
+								<id>generate-rebel-xml</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

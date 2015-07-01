@@ -27,39 +27,39 @@ import de.interseroh.report.exception.UnknownDataTypeException;
  */
 public enum BirtDataType {
 
-    TYPE_ANY(0, "text"), //
-    TYPE_STRING(1, "text"), //
-    TYPE_FLOAT(2, "number"), //
-    TYPE_DECIMAL(3, "number"),//
-    TYPE_DATE_TIME(4, "date"), //
-    TYPE_BOOLEAN(5, "checkbox"), //
-    TYPE_INTEGER(6, "number"), //
-    TYPE_DATE(7, "date"), //
-    TYPE_TIME(8, "time"); //
+	TYPE_ANY(0, "text"), //
+	TYPE_STRING(1, "text"), //
+	TYPE_FLOAT(2, "number"), //
+	TYPE_DECIMAL(3, "number"), //
+	TYPE_DATE_TIME(4, "date"), //
+	TYPE_BOOLEAN(5, "checkbox"), //
+	TYPE_INTEGER(6, "number"), //
+	TYPE_DATE(7, "date"), //
+	TYPE_TIME(8, "time"); //
 
-    private int dataType;
-    private String htmlFieldType;
+	private int dataType;
+	private String htmlFieldType;
 
-    private BirtDataType(int dataType, String htmlFieldType) {
-        this.dataType = dataType;
-        this.htmlFieldType = htmlFieldType;
-    }
+	private BirtDataType(int dataType, String htmlFieldType) {
+		this.dataType = dataType;
+		this.htmlFieldType = htmlFieldType;
+	}
 
-    public static BirtDataType valueOf(int dataType) {
-        for (BirtDataType type : BirtDataType.values()) {
-            if (type.dataType == dataType)
-                return type;
+	public static BirtDataType valueOf(int dataType) {
+		for (BirtDataType type : BirtDataType.values()) {
+			if (type.dataType == dataType)
+				return type;
 
-        }
-        throw new UnknownDataTypeException(dataType);
-    }
+		}
+		throw new UnknownDataTypeException(dataType);
+	}
 
-    public String getHtmlFieldType() {
-        return htmlFieldType;
-    }
+	public String getHtmlFieldType() {
+		return htmlFieldType;
+	}
 
-    public int getType() {
-        return dataType;
-    }
+	public int getType() {
+		return dataType;
+	}
 
 }

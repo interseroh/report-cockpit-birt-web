@@ -20,12 +20,12 @@
  */
 package de.interseroh.report.exception;
 
-import de.interseroh.report.exception.ApplicationException;
-
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public class BirtReportException extends ApplicationException {
+
+	private static final long serialVersionUID = -5045020853457240520L;
 
 	public BirtReportException() {
 	}

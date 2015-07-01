@@ -20,12 +20,12 @@
  */
 package de.interseroh.report.exception;
 
-import de.interseroh.report.exception.SystemException;
-
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public class BirtSystemException extends SystemException {
+
+	private static final long serialVersionUID = 6711817917599935247L;
 
 	public BirtSystemException() {
 	}

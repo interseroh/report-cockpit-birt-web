@@ -23,10 +23,10 @@ package de.interseroh.report.services;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import de.interseroh.report.exception.UnknownDataTypeException;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.junit.Test;
-import org.osgi.framework.dto.BundleDTO;
+
+import de.interseroh.report.exception.UnknownDataTypeException;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -39,12 +39,12 @@ public class BirtDataTypeTest {
 				is(IParameterDefn.TYPE_FLOAT));
 	}
 
-    @Test
-    public void testHtmlType() throws Exception {
-        assertThat(BirtDataType.TYPE_DATE.getHtmlFieldType(), is("date"));
-    }
+	@Test
+	public void testHtmlType() throws Exception {
+		assertThat(BirtDataType.TYPE_DATE.getHtmlFieldType(), is("date"));
+	}
 
-    @Test(expected = UnknownDataTypeException.class)
+	@Test(expected = UnknownDataTypeException.class)
 	public void testUnknownDataTypeException() throws Exception {
 		BirtDataType.valueOf(-1);
 	}

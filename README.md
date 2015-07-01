@@ -12,22 +12,22 @@ This projects provides an easy to integrate and enhanced BIRT Web-Viewer based o
 
 ```
 report.base.image.url=/reportimages
-report.image.directory=${java.io.tmpdir}/reportimages/
-report.image.contextpath=/report-cockpit-birt
+report.image.directory=/${java.io.tmpdir}/reportimages/
+report.image.contextpath=/report-cockpit-birt-web
 report.source.url=classpath:/reports/
 ```
 
 ### Rest-API
 
-- Render Report with GET-Method: `/report-cockpit-birt/api/render/{reportName}/{format}`
+- Render Report with GET-Method: `/report-cockpit-birt-web/api/render/{reportName}/{format}`
 - For Instance:
- - for html: [http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/html](http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/html)
+ - for html: [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/html](http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/html)
  - for pdf:
- [http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/pdf](http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/pdf)
+ [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/pdf](http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/pdf)
  - for xls:
- [http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/xlsx](http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/xlsx)
+ [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xlsx](http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/xlsx)
  - for xlsx:
- [http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/xlsx](http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/xlsx)
+ [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xlsx](http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xlsx)
 
 
 - JSON to customize Reports

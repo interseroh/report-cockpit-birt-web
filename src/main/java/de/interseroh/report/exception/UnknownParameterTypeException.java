@@ -27,6 +27,8 @@ import de.interseroh.report.services.BirtParameterType;
  */
 public class UnknownParameterTypeException extends BirtSystemException {
 
+	private static final long serialVersionUID = -84859661520137757L;
+
 	public UnknownParameterTypeException(int parameterType) {
 		super("The Parameter with the id " + parameterType
 				+ " is unknown. Please check "

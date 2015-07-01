@@ -12,7 +12,7 @@ text.interseroh.reportcockpit=ENTW ReportingCockpit
 # LDAP or InMemory? Possible values "true" or "false"
 # Value true = Using LDAP
 # Value false = Using InMemory
-ldap.authentication=true
+ldap.authentication=false
 
 # Username and password for InMemory
 ldap.inmemory.user=lofidewanto

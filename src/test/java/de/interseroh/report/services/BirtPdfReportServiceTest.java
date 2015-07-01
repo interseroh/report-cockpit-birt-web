@@ -20,23 +20,19 @@
  */
 package de.interseroh.report.services;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.birt.report.engine.api.EngineException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.model.Parameter;
 import de.interseroh.report.webconfig.ReportConfig;
 
@@ -85,15 +81,15 @@ public class BirtPdfReportServiceTest {
 		renderPdfReport("staticcrosstable");
 	}
 
-    @Test
-    public void testCustomerOrdersFinal() throws Exception {
-        renderPdfReport("customer_orders_final");
-    }
+	@Test
+	public void testCustomerOrdersFinal() throws Exception {
+		renderPdfReport("customer_orders_final");
+	}
 
-    @Test
-    public void testCascadeParameters() throws Exception {
-        renderPdfReport("cascade_parameters");
-    }
+	@Test
+	public void testCascadeParameters() throws Exception {
+		renderPdfReport("cascade_parameters");
+	}
 
 	private void renderPdfReport(String reportName) throws Exception {
 		String outputFileName = "target/" + reportName + ".pdf";
@@ -105,11 +101,11 @@ public class BirtPdfReportServiceTest {
 			if ("OrderNumber".equals(parameter.getName()))
 				params.put("OrderNumber", 10110);
 		}
-        params.put("order",10298);
-        params.put("customer",112);
+		params.put("order", 10298);
+		params.put("customer", 112);
 		try (FileOutputStream fos = new FileOutputStream(outputFileName)) {
-            reportService.renderPDFReport(reportName, params, fos);
-        }
+			reportService.renderPDFReport(reportName, params, fos);
+		}
 	}
 
 }

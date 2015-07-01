@@ -25,6 +25,8 @@ package de.interseroh.report.exception;
  */
 public class ApplicationException extends Exception {
 
+	private static final long serialVersionUID = -3985522358118507292L;
+
 	public ApplicationException() {
 	}
 

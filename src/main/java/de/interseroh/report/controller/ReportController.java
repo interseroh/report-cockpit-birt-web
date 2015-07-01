@@ -25,11 +25,9 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.interseroh.report.model.ParameterForm;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.model.Parameter;
+import de.interseroh.report.model.ParameterForm;
 import de.interseroh.report.services.BirtReportService;
 
 @Controller
@@ -69,16 +68,15 @@ public class ReportController {
 		modelAndView.setViewName("/parameters");
 
 		modelAndView.addObject("reportName", reportName);
-        modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
-
+		modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
 
 		Collection<Parameter> parameters = reportService
 				.getParameterDefinitions(reportName);
 
-        ParameterForm form = new ParameterForm();
-        form.setParameters(new ArrayList<>(parameters));
+		ParameterForm form = new ParameterForm();
+		form.setParameters(new ArrayList<>(parameters));
 
-        modelAndView.addObject("parameterForm", form);
+		modelAndView.addObject("parameterForm", form);
 		modelAndView.addObject("parameters", parameters);
 
 		return modelAndView;

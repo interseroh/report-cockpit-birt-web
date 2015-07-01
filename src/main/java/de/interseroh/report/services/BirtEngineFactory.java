@@ -20,6 +20,8 @@
  */
 package de.interseroh.report.services;
 
+import java.util.logging.Logger;
+
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.core.framework.Platform;
 import org.eclipse.birt.report.engine.api.EngineConfig;
@@ -36,9 +38,6 @@ import org.springframework.stereotype.Component;
 
 import de.interseroh.report.exception.BirtSystemException;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * @author Ingo Düppe (Crowdcode)
  */
@@ -46,7 +45,7 @@ import java.util.logging.Logger;
 public class BirtEngineFactory implements FactoryBean, ApplicationContextAware,
 		DisposableBean {
 
-    private Logger logger = Logger.getLogger(BirtEngineFactory.class.getName());
+	private Logger logger = Logger.getLogger(BirtEngineFactory.class.getName());
 
 	public static final String SPRING_KEY = "spring";
 	private ApplicationContext applicationContext;
@@ -59,7 +58,7 @@ public class BirtEngineFactory implements FactoryBean, ApplicationContextAware,
 	@Override
 	public Object getObject() throws Exception {
 		try {
-            EngineConfig config = getEngineConfig();
+			EngineConfig config = getEngineConfig();
 
 			Platform.startup(config);
 			IReportEngineFactory factory = (IReportEngineFactory) Platform
@@ -73,16 +72,16 @@ public class BirtEngineFactory implements FactoryBean, ApplicationContextAware,
 
 	}
 
-    private EngineConfig getEngineConfig() {
-        EngineConfig config = new EngineConfig();
-        config.setTempDir(env.getProperty("java.io.tmpdir"));
-        config.getAppContext().put(SPRING_KEY, this.applicationContext);
-//        config.setLogConfig(".", Level.ALL);
-        config.setLogger(logger);
-        return config;
-    }
+	private EngineConfig getEngineConfig() {
+		EngineConfig config = new EngineConfig();
+		config.setTempDir(env.getProperty("java.io.tmpdir"));
+		config.getAppContext().put(SPRING_KEY, this.applicationContext);
+		// config.setLogConfig(".", Level.ALL);
+		config.setLogger(logger);
+		return config;
+	}
 
-    @Override
+	@Override
 	public Class<?> getObjectType() {
 		return IReportEngine.class;
 	}

@@ -6,9 +6,9 @@ package de.interseroh.report.services;
 public enum BirtOutputFormat {
 
 	HTML5("html", "text/html; charset=UTF-8"), //
-    PDF("pdf", "application/pdf"), //
-    EXCEL("xls", "application/vnd.ms-excel"), //
-    EXCEL2010("xlsx", "application/vnd.ms-excel");
+	PDF("pdf", "application/pdf"), //
+	EXCEL("xls", "application/vnd.ms-excel"), //
+	EXCEL2010("xlsx", "application/vnd.ms-excel");
 
 	private final String formatName;
 	private final String contentType;

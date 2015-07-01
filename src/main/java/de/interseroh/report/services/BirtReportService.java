@@ -38,8 +38,6 @@ import org.eclipse.birt.report.engine.api.IEngineTask;
 import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
 import org.eclipse.birt.report.engine.api.IParameterDefn;
 import org.eclipse.birt.report.engine.api.IParameterDefnBase;
-import org.eclipse.birt.report.engine.api.IParameterGroupDefn;
-import org.eclipse.birt.report.engine.api.IParameterSelectionChoice;
 import org.eclipse.birt.report.engine.api.IRenderOption;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
@@ -217,7 +215,7 @@ public class BirtReportService {
 		} catch (EngineException | IOException e) {
 			throw new RenderReportException("excel", reportName, e);
 		}
-		}
+	}
 
 	private String reportFileName(String reportName) {
 		return reportName + REPORT_FILE_SUFFIX;
@@ -258,29 +256,29 @@ public class BirtReportService {
 			IGetParameterDefinitionTask task) {
 		for (IParameterDefnBase definition : parameterDefinitions) {
 			PrintStream out = System.out;
-            out.println("----------------------------------------------");
+			out.println("----------------------------------------------");
 			out.println("Displayname: " + definition.getDisplayName());
 			out.println("Helptext: " + definition.getHelpText());
 			out.println("Name: " + definition.getName());
 			out.println("Typename: " + definition.getTypeName());
 			out.println("ParameterType: "
-					+ BirtParameterType.valueOf(definition
-							.getParameterType()));
+					+ BirtParameterType.valueOf(definition.getParameterType()));
 
 			if (definition instanceof IScalarParameterDefn) {
 				IScalarParameterDefn scalar = (IScalarParameterDefn) definition;
-                out.println("DataType: "
-                        + BirtDataType.valueOf(scalar.getDataType()));
-                out.println("PromptText: " + scalar.getPromptText());
-                out.println("Required: "+ scalar.isRequired());
+				out.println("DataType: "
+						+ BirtDataType.valueOf(scalar.getDataType()));
+				out.println("PromptText: " + scalar.getPromptText());
+				out.println("Required: " + scalar.isRequired());
 				out.println("AllowNewValues: " + scalar.allowNewValues());
-				out.println("DisplayInFixedOrder: " + scalar.displayInFixedOrder());
+				out.println("DisplayInFixedOrder: "
+						+ scalar.displayInFixedOrder());
 				out.println("IsValueConcealed: " + scalar.isValueConcealed());
 				out.println("DisplayFormat: " + scalar.getDisplayFormat());
 				out.println("ControlType: " + scalar.getControlType());
 				out.println("DefaultValue: " + scalar.getDefaultValue());
-				out.println("ScalarParameterType: " + scalar.getScalarParameterType());
-
+				out.println("ScalarParameterType: "
+						+ scalar.getScalarParameterType());
 
 			}
 		}

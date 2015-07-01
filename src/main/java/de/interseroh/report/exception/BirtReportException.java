@@ -20,8 +20,6 @@
  */
 package de.interseroh.report.exception;
 
-import de.interseroh.report.exception.ApplicationException;
-
 /**
  * @author Ingo Düppe (Crowdcode)
  */

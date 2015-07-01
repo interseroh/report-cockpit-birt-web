@@ -114,8 +114,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 				.addResourceLocations("/resources/");
 		registry.addResourceHandler("/images/**") //
 				.addResourceLocations("/images/");
-        registry.addResourceHandler("/webjars/**") //
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+		registry.addResourceHandler("/webjars/**") //
+				.addResourceLocations("classpath:/META-INF/resources/webjars/");
 
 		// FIXME idueppe - not dry.. see BirtReportService
 		String defaultDirectory = environment.getProperty("java.io.tmpdir");

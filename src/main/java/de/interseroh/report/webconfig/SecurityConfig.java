@@ -51,14 +51,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final Logger logger = Logger.getLogger(SecurityConfig.class);
 
-    @Autowired
-    private Environment env;
+	@Autowired
+	private Environment env;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/", "/index", "/resources/**", "/images/**",
-                        "/webjars/**") // white list of urls
+						"/webjars/**") // white list of urls
 				.permitAll() // allow anyone on these links
 				.anyRequest().authenticated() // all other urls need a
 												// authentication

@@ -25,12 +25,11 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.interseroh.report.model.ParameterForm;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,10 +37,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.model.Parameter;
+import de.interseroh.report.model.ParameterForm;
 import de.interseroh.report.services.BirtReportService;
 
 @Controller
-@PropertySource({ "classpath:config.properties", "classpath:version.properties" })
 public class ReportController {
 
 	private static final Logger logger = Logger
@@ -49,6 +48,12 @@ public class ReportController {
 
 	@Autowired
 	private BirtReportService reportService;
+
+	@ModelAttribute("parameterForm")
+	public ParameterForm provideParameterForm() {
+		logger.debug("Provide new ParameterForm");
+		return new ParameterForm();
+	}
 
 	@RequestMapping(value = "/report/{reportName}", method = RequestMethod.GET)
 	public ModelAndView reportView(
@@ -62,25 +67,69 @@ public class ReportController {
 
 	@RequestMapping(value = "/report/{reportName}/param", method = RequestMethod.GET)
 	public ModelAndView reportParameter(
-			@PathVariable("reportName") String reportName)
+			@PathVariable("reportName") String reportName,
+			@ModelAttribute("parameterForm") ParameterForm form,
+			ModelAndView modelAndView, BindingResult bindingResult)
 			throws BirtReportException {
 
-		ModelAndView modelAndView = new ModelAndView();
+		logger.debug("GET parameter dialog for " + reportName + " report.");
+
 		modelAndView.setViewName("/parameters");
 
 		modelAndView.addObject("reportName", reportName);
-        modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
-
+		modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
 
 		Collection<Parameter> parameters = reportService
 				.getParameterDefinitions(reportName);
 
-        ParameterForm form = new ParameterForm();
-        form.setParameters(new ArrayList<>(parameters));
+		form.setParameters(new ArrayList<>(parameters));
 
-        modelAndView.addObject("parameterForm", form);
+		modelAndView.addObject("parameterForm", form);
 		modelAndView.addObject("parameters", parameters);
 
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/form", method = { RequestMethod.POST })
+	public ModelAndView formPOST(
+			@ModelAttribute("parameterForm") ParameterForm form,
+			BindingResult bindingResult, ModelAndView modelAndView) throws BirtReportException {
+		logger.debug("executing posting form...");
+
+		if (form.getParameters().size() > 0) {
+			logger.info("Value: " + form.getParameters().iterator().next().getValue
+                    ());
+		} else {
+            form.setParameters(reportService.getParameterDefinitions
+                    ("salesinvoice"));
+		}
+		modelAndView.setViewName("/form");
+
+		return modelAndView;
+	}
+
+    @RequestMapping(value = "/form", method = { RequestMethod.GET })
+    public ModelAndView formGET(
+            @ModelAttribute("parameterForm") ParameterForm form,
+             ModelAndView modelAndView)
+            throws BirtReportException {
+        logger.debug("executing posting form...");
+
+        form.setParameters(reportService.getParameterDefinitions("salesinvoice"));
+        modelAndView.setViewName("/form");
+        modelAndView.addObject("parameterForm", form);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/report/{reportName}/param", method = RequestMethod.POST)
+	public ModelAndView postParameterForm(
+			@PathVariable("reportName") String reportName,
+			@ModelAttribute("parameterForm") ParameterForm form,
+			ModelAndView modelAndView, BindingResult bindingResult)
+			throws BirtReportException {
+		logger.debug("POST parameter dialog for " + reportName + " report.");
+
+		modelAndView.setViewName("/parameters");
 		return modelAndView;
 	}
 }

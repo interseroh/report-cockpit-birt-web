@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragments/headTag :: headTag">
+<head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Report Cockpit Birt</title>
 
-    <!-- Bootstrap -->
     <link href="../resources/bootstrap/css/bootstrap.css"
           th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
           rel="stylesheet"/>
@@ -18,23 +17,7 @@
 
 <body>
 
-<div th:include="/fragments/bodyHeader :: bodyHeader" th:remove="tag"></div>
-<div th:replace="/fragments/navbar :: defaultNavbar"></div>
-
 <div class="container-fluid main">
-    <div class="row">
-        <div class="col-md-4">
-            <div th:if="${error}" class="alert alert-danger" role="alert"
-                 th:text="${error}">ERROR
-            </div>
-
-            <div th:if="${msg}" class="alert alert-info" role="alert"
-                 th:text="${msg}">Message
-            </div>
-        </div>
-        <div class="col-md-4"></div>
-    </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="modal-dialog" style="margin-bottom: 0">
@@ -43,27 +26,23 @@
                         <h3 class="panel-title">Parameter</h3>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal render-partial"
-                              th:action="@{param}"
-                              th:form="${parameterForm}"
+                        <form class="" th:action="@{/form}"
                               th:object="${parameterForm}"
                               method="post">
                             <div class="control-group" style="padding-top:20px"
-                                 th:each="parameter : *{parameters}"
-                                 th:object="${parameter}">
+                                 th:each="param,rowStat : ${parameterForm.parameters}">
                                 <label class="control-label"
-                                       th:for="*{name}"
-                                       th:text="*{displayLabel}">
+                                       th:for="${param.name}"
+                                       th:text="${param.displayLabel}">
                                     DisplayLabel
                                 </label>
-                                <span th:text="*{name}">NAME</span>
-                                <div class="controls">
-                                    <input class="input-block-level"
-                                           value="to_be_replaced"
-                                           th:field="*{name}"
-                                           th:type="*{dataType}"
-                                           th:value="*{defaultValue}"/>
-                                </div>
+                                <span th:text="${param.defaultValue}">TEXT
+                                </span>
+                                <input class="input-block-level"
+                                       th:field="*{parameters[__${rowStat.index}__].value}"
+                                        th:type="*{parameters[__${rowStat.index}__].dataType}"
+                                        th:value="*{parameters[__${rowStat.index}__].defaultValue}"
+                                        />
                             </div>
 
                             <div class="control-group" style="padding-top:20px">
@@ -82,11 +61,7 @@
     </div>
 </div>
 
-<footer th:replace="/fragments/footerTag :: footerTag" class="container-fluid">
-    <span>Dummy</span>
-</footer>
-
-<div th:include="/fragments/bodyFooter :: bodyFooter" th:remove="tag">
+<div>
     <!-- JQuery for Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
             th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>

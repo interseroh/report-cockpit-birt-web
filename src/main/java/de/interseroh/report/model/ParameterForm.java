@@ -21,20 +21,20 @@
 package de.interseroh.report.model;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public class ParameterForm {
 
-	private List<Parameter> parameters = new ArrayList<>();
+	private Collection<Parameter> parameters = new ArrayList<>();
 
-	public List<Parameter> getParameters() {
+	public Collection<Parameter> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(List<Parameter> parameters) {
+	public void setParameters(Collection<Parameter> parameters) {
 		this.parameters = parameters;
 	}
 

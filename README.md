@@ -12,7 +12,7 @@ This projects provides an easy to integrate and enhanced BIRT Web-Viewer based o
 
 ```
 report.base.image.url=/reportimages
-report.image.directory=${java.io.tmpdir}/reportimages/
+report.image.directory=/${java.io.tmpdir}/reportimages/
 report.image.contextpath=/report-cockpit-birt
 report.source.url=classpath:/reports/
 ```

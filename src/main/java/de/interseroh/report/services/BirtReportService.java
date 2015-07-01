@@ -184,7 +184,7 @@ public class BirtReportService {
 			pdfOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);
 			pdfOptions.setOutputStream(out);
 			pdfOptions.setEmbededFont(true); // TODO idueppe - should be
-												// configurable from cockpit
+			// configurable from cockpit
 			pdfOptions.setImageHandler(new HTMLServerImageHandler());
 
 			runAndRenderTask(runAndRenderTask, pdfOptions);
@@ -217,7 +217,7 @@ public class BirtReportService {
 		} catch (EngineException | IOException e) {
 			throw new RenderReportException("excel", reportName, e);
 		}
-		}
+	}
 
 	private String reportFileName(String reportName) {
 		return reportName + REPORT_FILE_SUFFIX;
@@ -283,8 +283,49 @@ public class BirtReportService {
 
 
 			}
-		}
 
+            if (definition instanceof IParameterGroupDefn) {
+                IParameterGroupDefn group = (IParameterGroupDefn) definition;
+                printParameterDefinitions(group.getContents(), task);
+
+                Collection<IParameterSelectionChoice> cascadingGroup = task
+                        .getSelectionListForCascadingGroup
+                        (group.getName(), new Object[]{});
+                printSelectionChoices(cascadingGroup);
+
+                System.out.println(".......");
+                cascadingGroup = task.getSelectionListForCascadingGroup(group
+                        .getName(), new Object[]{103});
+                printSelectionChoices(cascadingGroup);
+            }
+
+            printSelectionList(definition,task);
+
+		}
 	}
+
+    private void printSelectionList(IParameterDefnBase paramDefn,
+                                    IGetParameterDefinitionTask task) {
+
+        Collection<IParameterSelectionChoice> selectionChoices = task
+                .getSelectionList
+                        (paramDefn.getName());
+
+        printSelectionChoices(selectionChoices);
+
+
+
+
+    }
+
+    private void printSelectionChoices(Collection<IParameterSelectionChoice> selectionChoices) {
+        System.out.println("---------- CHOICES");
+        if (selectionChoices != null) {
+            for (IParameterSelectionChoice selectionChoice : selectionChoices) {
+                System.out.print("Label: " + selectionChoice.getLabel());
+                System.out.println("/ Value: " + selectionChoice.getValue());
+            }
+        }
+    }
 
 }

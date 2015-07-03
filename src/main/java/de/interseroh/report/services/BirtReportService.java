@@ -12,11 +12,11 @@ import de.interseroh.report.model.Parameter;
  */
 public interface BirtReportService {
 
-	String REPORT_SOURCE_URL_KEY = "report.source.url";
-	String REPORT_BASE_IMAGE_URL_KEY = "report.base.image.url";
-	String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
-	String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
-	String REPORT_FILE_SUFFIX = ".rptdesign";
+	public static final String REPORT_SOURCE_URL_KEY = "report.source.url";
+    public static final String REPORT_BASE_IMAGE_URL_KEY = "report.base.image.url";
+    public static final String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
+    public static final String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
+    public static final String REPORT_FILE_SUFFIX = ".rptdesign";
 
 	public Collection<Parameter> getParameterDefinitions(String reportName)
 			throws BirtReportException;

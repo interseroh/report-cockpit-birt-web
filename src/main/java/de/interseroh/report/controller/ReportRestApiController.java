@@ -119,27 +119,45 @@ public class ReportRestApiController {
 				.getParameterDefinitions(reportName);
 		for (Parameter param : definitions) {
 			String paramName = param.getName();
-			String paramValueStr = requestParameters.get(paramName);
-			Object paramValue = null;
-			switch (param.getDataType()) {
-			case TYPE_DECIMAL:
-			case TYPE_TIME:
-			case TYPE_FLOAT:
-				paramValue = Double.valueOf(paramName);
-				break;
-			case TYPE_DATE_TIME:
-			case TYPE_DATE:
-				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-				paramValue = sdf.parse(paramValueStr);
-				break;
-			case TYPE_STRING:
-				paramValue = paramValueStr;
-				break;
+			if (requestParameters.containsKey(paramName)) {
+				String paramValueStr = requestParameters.get(paramName);
+
+				logger.debug("Trying to convert parameter " + "" + paramName
+						+ "=" + paramValueStr + " to " + param.getDataType());
+				Object paramValue = convert(param, paramValueStr);
+				params.put(paramName, paramValue);
+
 			}
-			params.put(paramName, paramValue);
 		}
 
 		return params;
+	}
+
+	private Object convert(Parameter param, String paramValueStr)
+			throws ParseException {
+		Object paramValue = null;
+
+		switch (param.getDataType()) {
+		case TYPE_FLOAT:
+		case TYPE_DECIMAL:
+			try {
+				paramValue = Double.valueOf(paramValueStr);
+			} catch (NumberFormatException nfe) {
+				paramValue = paramValueStr;
+			}
+			break;
+		case TYPE_TIME:
+		case TYPE_DATE_TIME:
+		case TYPE_DATE:
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+			paramValue = sdf.parse(paramValueStr);
+			break;
+		case TYPE_ANY:
+		case TYPE_STRING:
+			paramValue = paramValueStr;
+			break;
+		}
+		return paramValue;
 	}
 
 }

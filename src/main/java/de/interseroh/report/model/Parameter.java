@@ -72,7 +72,7 @@ public class Parameter {
 	}
 
 	private String valueOrDefault() {
-		return (value != null) ? value : defaultValue;
+		return (StringUtils.isNotBlank(value)) ? value : defaultValue;
 	}
 
 	public String getValue() {

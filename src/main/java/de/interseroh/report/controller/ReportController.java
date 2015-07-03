@@ -83,31 +83,6 @@ public class ReportController {
 
 		parameterForm.setParameters(new ArrayList<>(parameters));
 
-		// Parameter paramTextbox = new Parameter().withName("Textbox")
-		// .withDataType(BirtDataType.TYPE_STRING)
-		// .withDisplayLabel("Required Text").withRequired(true);
-		// parameterForm.getParameters().add(paramTextbox);
-		//
-		// Parameter paramTextboxTwo = new Parameter().withName("TextboxTwo")
-		// .withDataType(BirtDataType.TYPE_STRING)
-		// .withDisplayLabel("Text").withRequired(false);
-		// parameterForm.getParameters().add(paramTextboxTwo);
-		//
-		// Parameter paramPassword = new Parameter().withName("Password")
-		// .withDataType(BirtDataType.TYPE_STRING)
-		// .withDisplayLabel("Password").withRequired(false)
-		// .withConcealed(true);
-		// parameterForm.getParameters().add(paramPassword);
-		//
-		// Parameter paramCheckbox = new Parameter().withName("Checkbox")
-		// .withDataType(BirtDataType.TYPE_BOOLEAN)
-		// .withDisplayLabel("Checkbox").withDefaultValue("true");
-		// parameterForm.getParameters().add(paramCheckbox);
-		// Parameter paramDate = new Parameter()
-		// .withDataType(BirtDataType.TYPE_DATE)
-		// .withDisplayLabel("DateTime").withDefaultValue("true");
-		// parameterForm.getParameters().add(paramDate);
-
 		return parameterForm;
 	}
 
@@ -119,9 +94,11 @@ public class ReportController {
 		logger.debug("executing report view for " + reportName);
 
 		if (form.hasNoParameters()) {
+            // show report
 			modelAndView.setViewName("/report");
 			injectReportUri(form, modelAndView, reportName);
 		} else {
+            // show parameters
 			modelAndView.setViewName("/parameters");
 			modelAndView.addObject("parameterForm", form);
 		}

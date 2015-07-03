@@ -37,10 +37,6 @@ public enum BirtParameterType {
 		this.parameterType = parameterType;
 	}
 
-	public int getType() {
-		return parameterType;
-	}
-
 	public static BirtParameterType valueOf(int parameterType) {
 		for (BirtParameterType type : BirtParameterType.values()) {
 			if (type.parameterType == parameterType)
@@ -48,6 +44,10 @@ public enum BirtParameterType {
 
 		}
 		throw new UnknownParameterTypeException(parameterType);
+	}
+
+	public int getType() {
+		return parameterType;
 	}
 
 }

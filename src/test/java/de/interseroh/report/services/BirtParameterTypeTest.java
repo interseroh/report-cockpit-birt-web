@@ -23,9 +23,10 @@ package de.interseroh.report.services;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import de.interseroh.report.exception.UnknownParameterTypeException;
 import org.eclipse.birt.report.engine.api.IParameterDefnBase;
 import org.junit.Test;
+
+import de.interseroh.report.exception.UnknownParameterTypeException;
 
 /**
  * @author Ingo Düppe (Crowdcode)

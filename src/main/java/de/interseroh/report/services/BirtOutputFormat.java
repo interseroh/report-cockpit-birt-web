@@ -18,14 +18,6 @@ public enum BirtOutputFormat {
 		this.contentType = contentType;
 	}
 
-	public String getFormatName() {
-		return formatName;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
 	public static BirtOutputFormat from(String formatName) {
 		for (BirtOutputFormat format : BirtOutputFormat.values()) {
 			if (format.formatName.equals(formatName)) {
@@ -33,5 +25,13 @@ public enum BirtOutputFormat {
 			}
 		}
 		return HTML5; // default;
+	}
+
+	public String getFormatName() {
+		return formatName;
+	}
+
+	public String getContentType() {
+		return contentType;
 	}
 }

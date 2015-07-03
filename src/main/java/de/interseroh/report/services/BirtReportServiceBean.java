@@ -60,7 +60,7 @@ public class BirtReportServiceBean implements BirtReportService {
 	private static final Logger logger = Logger
 			.getLogger(BirtReportServiceBean.class);
 
-    @Autowired
+	@Autowired
 	private Environment environment;
 
 	@Autowired
@@ -88,8 +88,8 @@ public class BirtReportServiceBean implements BirtReportService {
 		logger.info("\tImageDirectory: " + imageDirectory);
 	}
 
-    @Override
-    public Collection<Parameter> getParameterDefinitions(String reportName)
+	@Override
+	public Collection<Parameter> getParameterDefinitions(String reportName)
 			throws BirtReportException {
 		try {
 			String reportFileName = absolutePathOf(reportFileName(reportName));
@@ -106,7 +106,8 @@ public class BirtReportServiceBean implements BirtReportService {
 			Collection<Parameter> params = extractParameters(task,
 					parameterDefinitions);
 
-			BirtReportUtil.printParameterDefinitions(parameterDefinitions, task);
+			BirtReportUtil
+					.printParameterDefinitions(parameterDefinitions, task);
 
 			return params;
 		} catch (EngineException | IOException e) {
@@ -126,7 +127,8 @@ public class BirtReportServiceBean implements BirtReportService {
 			parameter.setDisplayLabel(definition.getDisplayName());
 			if (definition instanceof IParameterDefn) {
 				IParameterDefn param = (IParameterDefn) definition;
-				parameter.setDataType(BirtDataType.valueOf(param.getDataType()));
+				parameter
+						.setDataType(BirtDataType.valueOf(param.getDataType()));
 				Object defaultValue = task.getDefaultValue(definition);
 				// TODO idueppe - convert default value to string
 				if (defaultValue != null)
@@ -140,8 +142,8 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
 	@Override
-    public void renderHtmlReport(String reportName,
-                                 Map<String, Object> parameters, OutputStream out)
+	public void renderHtmlReport(String reportName,
+			Map<String, Object> parameters, OutputStream out)
 			throws BirtReportException {
 		try {
 			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
@@ -164,8 +166,8 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
 	@Override
-    public void renderPDFReport(String reportName,
-                                Map<String, Object> parameters, OutputStream out)
+	public void renderPDFReport(String reportName,
+			Map<String, Object> parameters, OutputStream out)
 			throws BirtReportException {
 		try {
 			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
@@ -187,8 +189,8 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
 	@Override
-    public void renderExcelReport(String reportName,
-                                  Map<String, Object> parameters, OutputStream out)
+	public void renderExcelReport(String reportName,
+			Map<String, Object> parameters, OutputStream out)
 			throws BirtReportException {
 		try {
 			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);

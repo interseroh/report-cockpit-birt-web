@@ -30,32 +30,33 @@ public class ParameterForm {
 
 	private Collection<Parameter> parameters = new ArrayList<>();
 
-    /**
-     * Checks whether or not all parameters has either a value or a default
-     * value.
-     * @return false if not all required parameter has a value
-     */
-    public boolean isValid() {
-        boolean foundInvalid = false;
+	/**
+	 * Checks whether or not all parameters has either a value or a default
+	 * value.
+	 * 
+	 * @return false if not all required parameter has a value
+	 */
+	public boolean isValid() {
+		boolean foundInvalid = false;
 
-        for (Parameter parameter : parameters) {
-            foundInvalid = foundInvalid || parameter.isUnset();
-        }
+		for (Parameter parameter : parameters) {
+			foundInvalid = foundInvalid || parameter.isUnset();
+		}
 
-        return !foundInvalid;
-    }
+		return !foundInvalid;
+	}
 
-    public String buildRequestParams() {
-        StringBuilder builder = new StringBuilder();
-        for (Parameter parameter : parameters) {
-            if (builder.length() > 0) {
-                builder.append("&");
-            }
-            builder.append(parameter.requestURI());
-        }
+	public String buildRequestParams() {
+		StringBuilder builder = new StringBuilder();
+		for (Parameter parameter : parameters) {
+			if (builder.length() > 0) {
+				builder.append("&");
+			}
+			builder.append(parameter.requestURI());
+		}
 
-        return ((builder.length() > 0 ) ? "?": "") + builder.toString();
-    }
+		return ((builder.length() > 0) ? "?" : "") + builder.toString();
+	}
 
 	public Collection<Parameter> getParameters() {
 		return parameters;
@@ -65,14 +66,12 @@ public class ParameterForm {
 		this.parameters = parameters;
 	}
 
-    @Override
-    public String toString() {
-        return "ParameterForm{" +
-                "parameters=" + parameters +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "ParameterForm{" + "parameters=" + parameters + '}';
+	}
 
-    public boolean hasNoParameters() {
-        return parameters.size() == 0;
-    }
+	public boolean hasNoParameters() {
+		return parameters.size() == 0;
+	}
 }

@@ -88,7 +88,7 @@ public class BirtReportServiceBean implements BirtReportService {
 		logger.info("\tImageDirectory: " + imageDirectory);
 	}
 
-	@Override
+    @Override
     public Collection<Parameter> getParameterDefinitions(String reportName)
 			throws BirtReportException {
 		try {
@@ -126,8 +126,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			parameter.setDisplayLabel(definition.getDisplayName());
 			if (definition instanceof IParameterDefn) {
 				IParameterDefn param = (IParameterDefn) definition;
-				parameter.setDataType(BirtDataType.valueOf(param.getDataType())
-						.getHtmlFieldType());
+				parameter.setDataType(BirtDataType.valueOf(param.getDataType()));
 				Object defaultValue = task.getDefaultValue(definition);
 				// TODO idueppe - convert default value to string
 				if (defaultValue != null)

@@ -20,6 +20,11 @@
  */
 package de.interseroh.report.model;
 
+import org.apache.commons.lang.StringUtils;
+
+import de.interseroh.report.services.BirtControlType;
+import de.interseroh.report.services.BirtDataType;
+
 /**
  * @author Ingo Düppe (Crowdcode)
  */
@@ -28,8 +33,23 @@ public class Parameter {
 	private String name;
 	private String value;
 	private String defaultValue;
-	private String dataType;
 	private String displayLabel;
+
+	private BirtDataType dataType;
+	private BirtControlType controlType;
+
+	private boolean required;
+	private boolean concealed;
+
+	public boolean isUnset() {
+		return !(isValid());
+	}
+
+	public boolean isValid() {
+		return !required //
+                || StringUtils.isNotBlank(value)
+				|| StringUtils.isNotBlank(defaultValue);
+	}
 
 	public String getName() {
 		return name;
@@ -37,6 +57,22 @@ public class Parameter {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getHtmlFieldType() {
+		if (dataType == BirtDataType.TYPE_STRING && concealed) {
+			return "password";
+		} else {
+			return dataType.getHtmlFieldType();
+		}
+	}
+
+	public String requestURI() {
+		return name + "=" + valueOrDefault();
+	}
+
+	private String valueOrDefault() {
+		return (value != null) ? value : defaultValue;
 	}
 
 	public String getValue() {
@@ -55,11 +91,11 @@ public class Parameter {
 		this.defaultValue = defaultValue;
 	}
 
-	public String getDataType() {
+	public BirtDataType getDataType() {
 		return dataType;
 	}
 
-	public void setDataType(String dataType) {
+	public void setDataType(BirtDataType dataType) {
 		this.dataType = dataType;
 	}
 
@@ -70,4 +106,65 @@ public class Parameter {
 	public void setDisplayLabel(String displayLabel) {
 		this.displayLabel = displayLabel;
 	}
+
+	public Parameter withName(final String name) {
+		this.name = name;
+		return this;
+	}
+
+	public Parameter withValue(final String value) {
+		this.value = value;
+		return this;
+	}
+
+	public Parameter withDefaultValue(final String defaultValue) {
+		this.defaultValue = defaultValue;
+		return this;
+	}
+
+	public Parameter withDataType(final BirtDataType dataType) {
+		this.dataType = dataType;
+		return this;
+	}
+
+	public Parameter withDisplayLabel(final String displayLabel) {
+		this.displayLabel = displayLabel;
+		return this;
+	}
+
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	public boolean isConcealed() {
+		return concealed;
+	}
+
+	public void setConcealed(boolean concealed) {
+		this.concealed = concealed;
+	}
+
+	public Parameter withRequired(final boolean required) {
+		this.required = required;
+		return this;
+	}
+
+	public Parameter withConcealed(final boolean concealed) {
+		this.concealed = concealed;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "Parameter{" + "name='" + name + '\'' + ", value='" + value
+				+ '\'' + ", defaultValue='" + defaultValue + '\''
+				+ ", dataType='" + dataType + '\'' + ", displayLabel='"
+				+ displayLabel + '\'' + ", required=" + required
+				+ ", concealed=" + concealed + '}';
+	}
+
 }

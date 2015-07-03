@@ -17,7 +17,8 @@
 | specific language governing permissions and limitations
 | under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <!-- POM file generated with GWT webAppCreator -->
     <modelVersion>4.0.0</modelVersion>
@@ -30,17 +31,22 @@
     <description>Report Cockpit for BIRT</description>
 
     <scm>
-        <developerConnection>scm:git:git@github.com:interseroh/report-cockpit-birt-web.git</developerConnection>
+        <developerConnection>
+            scm:git:git@github.com:interseroh/report-cockpit-birt-web.git
+        </developerConnection>
     </scm>
 
     <properties>
-        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}
+        </webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <org.springframework.version>3.2.13.RELEASE</org.springframework.version>
+        <org.springframework.version>3.2.13.RELEASE
+        </org.springframework.version>
         <org.springweb.version>3.2.13.RELEASE</org.springweb.version>
         <org.springsecurity.version>3.2.7.RELEASE</org.springsecurity.version>
         <org.aspectj.aspectjrt.version>1.6.11</org.aspectj.aspectjrt.version>
-        <org.aspectj.aspectjweaver.version>1.6.4</org.aspectj.aspectjweaver.version>
+        <org.aspectj.aspectjweaver.version>1.6.4
+        </org.aspectj.aspectjweaver.version>
         <cxf.version>2.7.6</cxf.version>
         <jackson-version>2.0.2</jackson-version>
         <jstl.version>1.2</jstl.version>
@@ -281,8 +287,8 @@
     </dependencies>
 
     <build>
-    	<finalName>${project.artifactId}</finalName>
-    	
+        <finalName>${project.artifactId}</finalName>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -320,11 +326,16 @@
                         </goals>
                         <configuration>
                             <target>
-                                <copy file="src/main/resources/config.properties_example" tofile="src/main/resources/config.properties"/>
-                                <copy file="src/main/resources/log4j.properties_example" tofile="src/main/resources/log4j.properties"/>
-                                <copy file="src/main/resources/server.properties_example" tofile="src/main/resources/server.properties"/>
-                                <copy file="src/main/resources/report-config.properties_example" tofile="src/main/resources/report-config.properties"/>
-                                <copy file="src/test/resources/log4j.properties_example" tofile="src/test/resources/log4j.properties"/>
+                                <copy file="src/main/resources/config.properties_example"
+                                      tofile="src/main/resources/config.properties"/>
+                                <copy file="src/main/resources/log4j.properties_example"
+                                      tofile="src/main/resources/log4j.properties"/>
+                                <copy file="src/main/resources/server.properties_example"
+                                      tofile="src/main/resources/server.properties"/>
+                                <copy file="src/main/resources/report-config.properties_example"
+                                      tofile="src/main/resources/report-config.properties"/>
+                                <copy file="src/test/resources/log4j.properties_example"
+                                      tofile="src/test/resources/log4j.properties"/>
                             </target>
                         </configuration>
                     </execution>
@@ -354,7 +365,8 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>src/main/resources/server.properties</file>
+                                <file>src/main/resources/server.properties
+                                </file>
                             </files>
                         </configuration>
                     </execution>
@@ -394,92 +406,92 @@
             </plugin>
         </plugins>
         <pluginManagement>
-        	<plugins>
-        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        		<plugin>
-        			<groupId>org.eclipse.m2e</groupId>
-        			<artifactId>lifecycle-mapping</artifactId>
-        			<version>1.0.0</version>
-        			<configuration>
-        				<lifecycleMappingMetadata>
-        					<pluginExecutions>
-        						<pluginExecution>
-        							<pluginExecutionFilter>
-        								<groupId>
-        									org.apache.maven.plugins
-        								</groupId>
-        								<artifactId>
-        									maven-antrun-plugin
-        								</artifactId>
-        								<versionRange>
-        									[1.8,)
-        								</versionRange>
-        								<goals>
-        									<goal>run</goal>
-        								</goals>
-        							</pluginExecutionFilter>
-        							<action>
-        								<ignore></ignore>
-        							</action>
-        						</pluginExecution>
-        						<pluginExecution>
-        							<pluginExecutionFilter>
-        								<groupId>
-        									org.codehaus.mojo
-        								</groupId>
-        								<artifactId>
-        									properties-maven-plugin
-        								</artifactId>
-        								<versionRange>
-        									[1.0-alpha-2,)
-        								</versionRange>
-        								<goals>
-        									<goal>
-        										read-project-properties
-        									</goal>
-        								</goals>
-        							</pluginExecutionFilter>
-        							<action>
-        								<ignore></ignore>
-        							</action>
-        						</pluginExecution>
-        					</pluginExecutions>
-        				</lifecycleMappingMetadata>
-        			</configuration>
-        		</plugin>
-        	</plugins>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.apache.maven.plugins
+                                        </groupId>
+                                        <artifactId>
+                                            maven-antrun-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.8,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>run</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            properties-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.0-alpha-2,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>
+                                                read-project-properties
+                                            </goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
         </pluginManagement>
     </build>
-    
+
     <profiles>
-		<profile>
-			<id>development</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.zeroturnaround</groupId>
-						<artifactId>jrebel-maven-plugin</artifactId>
-						<version>1.1.5</version>
-						<configuration>
-							<relativePath>.</relativePath>
-							<classpath>
-								<fallback>default</fallback>
-								<resources>
-								</resources>
-							</classpath>
-						</configuration>
-						<executions>
-							<execution>
-								<id>generate-rebel-xml</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+        <profile>
+            <id>development</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.zeroturnaround</groupId>
+                        <artifactId>jrebel-maven-plugin</artifactId>
+                        <version>1.1.5</version>
+                        <configuration>
+                            <relativePath>.</relativePath>
+                            <classpath>
+                                <fallback>default</fallback>
+                                <resources>
+                                </resources>
+                            </classpath>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-rebel-xml</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

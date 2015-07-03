@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:fragment="headTag">
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -13,23 +13,26 @@
 
     <!-- TODO make the favicon configurable -->
     <link rel="icon"
-          href="http://www.interseroh.de/fileadmin/interseroh/system/templates/images/favicon.ico" type="image/x-icon"/>
+          href="http://www.interseroh.de/fileadmin/interseroh/system/templates/images/favicon.ico"
+          type="image/x-icon"/>
 
     <!-- Bootstrap -->
     <link href="../../resources/bootstrap/css/bootstrap.css"
           th:href="@{/resources/bootstrap/css/bootstrap.css}" rel="stylesheet"/>
 
     <!-- Bootstrap theme -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css"
+          rel="stylesheet"/>
 
-    <link href="/resources/css/report.css" th:href="@{/resources/css/report.css}" rel="stylesheet"/>
+    <link href="/resources/css/report.css"
+          th:href="@{/resources/css/report.css}" rel="stylesheet"/>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="jumbotron">
-            <span>Report Cockpit Birt :: HeadTag Fragment</span>
-        </div>
+<div class="container-fluid">
+    <div class="jumbotron">
+        <span>Report Cockpit Birt :: HeadTag Fragment</span>
     </div>
+</div>
 </body>
 </html>
 

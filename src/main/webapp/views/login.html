@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head th:replace="/fragments/headTag :: headTag">
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -8,10 +8,12 @@
 
     <!-- Bootstrap -->
     <link href="../resources/bootstrap/css/bootstrap.css"
-          th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet"/>
+          th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
+          rel="stylesheet"/>
 
     <!-- Bootstrap theme -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css"
+          rel="stylesheet"/>
 </head>
 
 <body onload="document.loginForm.username.focus();">
@@ -20,14 +22,17 @@
 <div th:replace="/fragments/navbar :: defaultNavbar"></div>
 
 
-
 <div class="container-fluid main">
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}">ERROR</div>
+            <div th:if="${error}" class="alert alert-danger" role="alert"
+                 th:text="${error}">ERROR
+            </div>
 
-            <div th:if="${msg}" class="alert alert-info" role="alert" th:text="${msg}">Message</div>
+            <div th:if="${msg}" class="alert alert-info" role="alert"
+                 th:text="${msg}">Message
+            </div>
         </div>
         <div class="col-md-4"></div>
     </div>
@@ -39,23 +44,29 @@
                     <h3 class="panel-title">Anmelden</h3>
                 </div>
                 <div class="panel-body">
-                    <form role="form" name="loginForm" th:action="@{/login}" method="POST">
+                    <form role="form" name="loginForm" th:action="@{/login}"
+                          method="POST">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Benutzername"
-                                       id="username" name="username" type="text" autofocus=""/>
+                                <input class="form-control"
+                                       placeholder="Benutzername"
+                                       id="username" name="username" type="text"
+                                       autofocus=""/>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Passwort"
-                                       id="password" name="password" type="password" value=""/>
+                                <input class="form-control"
+                                       placeholder="Passwort"
+                                       id="password" name="password"
+                                       type="password" value=""/>
                             </div>
                             <div>
-                                <input type="submit" class="btn btn-sm btn-success"
+                                <input type="submit"
+                                       class="btn btn-sm btn-success"
                                        value="Einloggen" name="submit"/>
                             </div>
 
                             <!--<input type="hidden" name="${_csrf.parameterName}"-->
-                                   <!--value="${_csrf.token}"/>-->
+                            <!--value="${_csrf.token}"/>-->
                         </fieldset>
                     </form>
                 </div>

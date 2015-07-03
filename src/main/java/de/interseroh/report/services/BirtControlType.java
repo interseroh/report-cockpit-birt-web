@@ -27,12 +27,11 @@ import de.interseroh.report.exception.UnknownDataTypeException;
  */
 public enum BirtControlType {
 
-
-    TEXT_BOX(0), //
-    LIST_BOX(1), //
-    RADIO_BUTTON(2), //
-    CHECK_BOX(3), //
-    AUTO_SUGGEST(4);
+	TEXT_BOX(0), //
+	LIST_BOX(1), //
+	RADIO_BUTTON(2), //
+	CHECK_BOX(3), //
+	AUTO_SUGGEST(4);
 
 	private int controlType;
 

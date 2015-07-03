@@ -1,5 +1,5 @@
 <Context>
-	<Loader className="org.apache.catalina.loader.VirtualWebappLoader"
-		virtualClasspath="/opt/reporting-cockpit-birt-data/report-cockpit-birt-web"
-		searchVirtualFirst="true" />
+    <Loader className="org.apache.catalina.loader.VirtualWebappLoader"
+            virtualClasspath="/opt/reporting-cockpit-birt-data/report-cockpit-birt-web"
+            searchVirtualFirst="true"/>
 </Context>

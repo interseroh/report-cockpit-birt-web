@@ -45,9 +45,8 @@ import de.interseroh.report.exception.BirtSystemException;
 public class BirtEngineFactory implements FactoryBean, ApplicationContextAware,
 		DisposableBean {
 
-	private Logger logger = Logger.getLogger(BirtEngineFactory.class.getName());
-
 	public static final String SPRING_KEY = "spring";
+	private Logger logger = Logger.getLogger(BirtEngineFactory.class.getName());
 	private ApplicationContext applicationContext;
 
 	private IReportEngine birtEngine;

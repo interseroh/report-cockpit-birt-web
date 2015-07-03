@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -11,7 +11,8 @@
           th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet"/>
 
     <!-- Bootstrap theme -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css"
+          rel="stylesheet"/>
 </head>
 <body>
 <div class="container-fluid">
@@ -24,7 +25,8 @@
     <div class="row">
         <div class="col-sm-12 pull-right">
             <small>
-                <span>Build by <a href="http://www.crowdcode.io">Crowdcode</a></span>
+                <span>Build by <a
+                        href="http://www.crowdcode.io">Crowdcode</a></span>
                 <span th:text="${version}">Version</span>
             </small>
         </div>

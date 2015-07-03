@@ -47,7 +47,7 @@ public class Parameter {
 
 	public boolean isValid() {
 		return !required //
-                || StringUtils.isNotBlank(value)
+				|| StringUtils.isNotBlank(value)
 				|| StringUtils.isNotBlank(defaultValue);
 	}
 

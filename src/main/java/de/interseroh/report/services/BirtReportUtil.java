@@ -23,6 +23,7 @@ package de.interseroh.report.services;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import org.eclipse.birt.report.engine.api.ICascadingParameterGroup;
 import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
 import org.eclipse.birt.report.engine.api.IParameterDefnBase;
 import org.eclipse.birt.report.engine.api.IParameterGroupDefn;
@@ -46,7 +47,7 @@ public class BirtReportUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-    public static void printSelectionList(IParameterDefnBase paramDefn,
+	public static void printSelectionList(IParameterDefnBase paramDefn,
 			IGetParameterDefinitionTask task) {
 
 		Collection<IParameterSelectionChoice> selectionChoices = task
@@ -62,64 +63,80 @@ public class BirtReportUtil {
 
 		for (IParameterDefnBase definition : parameterDefinitions) {
 			PrintStream out = System.out;
-
-            printParameter(definition, out);
-            printScalarParameter(definition, out);
-            printScalarParameterGroup(task, definition, out);
-            printSelectionList(definition, task);
+			out.println("-------------------------------------------------");
+			printInterfaces(definition, out);
+			out.println();
+			printParameter(definition, out);
+			printScalarParameter(definition, out);
+			printParameterGroup(task, definition, out);
+			printSelectionList(definition, task);
 
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-    public static void printParameter(IParameterDefnBase definition,
-                                      PrintStream out) {
-        out.println("----------------------------------------------");
-        out.println("Displayname: " + definition.getDisplayName());
-        out.println("Helptext: " + definition.getHelpText());
-        out.println("Name: " + definition.getName());
-        out.println("Typename: " + definition.getTypeName());
-        out.println("ParameterType: "
-                + BirtParameterType.valueOf(definition.getParameterType()));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void printScalarParameterGroup(IGetParameterDefinitionTask
-                                                     task, IParameterDefnBase definition, PrintStream out) {
-        if (definition instanceof IParameterGroupDefn) {
-            IParameterGroupDefn group = (IParameterGroupDefn) definition;
-            printParameterDefinitions(group.getContents(), task);
-
-            Collection<IParameterSelectionChoice> cascadingGroup = task
-                    .getSelectionListForCascadingGroup(group.getName(),
-                            new Object[]{});
-            printSelectionChoices(cascadingGroup);
-
-            out.println(".......");
-            cascadingGroup = task.getSelectionListForCascadingGroup(
-                    group.getName(), new Object[] { 103 });
-            printSelectionChoices(cascadingGroup);
-        }
-    }
+	private static void printInterfaces(IParameterDefnBase definition,
+			PrintStream out) {
+		out.println("Class:" + definition.getClass().getCanonicalName());
+		for (Class<?> anInterface : definition.getClass().getInterfaces()) {
+			out.println("\t" + anInterface);
+		}
+		out.println("");
+	}
 
 	@SuppressWarnings("unchecked")
-    public static void printScalarParameter(IParameterDefnBase definition,
-                                        PrintStream out) {
-        if (definition instanceof IScalarParameterDefn) {
-            IScalarParameterDefn scalar = (IScalarParameterDefn) definition;
-            out.println("DataType: "
-                    + BirtDataType.valueOf(scalar.getDataType()));
-            out.println("PromptText: " + scalar.getPromptText());
-            out.println("Required: " + scalar.isRequired());
-            out.println("AllowNewValues: " + scalar.allowNewValues());
-            out.println("DisplayInFixedOrder: "
-                    + scalar.displayInFixedOrder());
-            out.println("IsValueConcealed: " + scalar.isValueConcealed());
-            out.println("DisplayFormat: " + scalar.getDisplayFormat());
-            out.println("ControlType: " + scalar.getControlType());
-            out.println("DefaultValue: " + scalar.getDefaultValue());
-            out.println("ScalarParameterType: "
-                    + scalar.getScalarParameterType());
-        }
-    }
+	public static void printParameter(IParameterDefnBase definition,
+			PrintStream out) {
+		out.println("Displayname: " + definition.getDisplayName());
+		out.println("Helptext: " + definition.getHelpText());
+		out.println("Name: " + definition.getName());
+		out.println("Typename: " + definition.getTypeName());
+		out.println("ParameterType: "
+				+ BirtParameterType.valueOf(definition.getParameterType()));
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void printParameterGroup(IGetParameterDefinitionTask task,
+			IParameterDefnBase definition, PrintStream out) {
+		if (definition instanceof IParameterGroupDefn) {
+			IParameterGroupDefn group = (IParameterGroupDefn) definition;
+			printParameterDefinitions(group.getContents(), task);
+
+			Collection<IParameterSelectionChoice> selectionChoices = task
+					.getSelectionListForCascadingGroup(group.getName(),
+							new Object[] {});
+
+			if (definition instanceof ICascadingParameterGroup) {
+				ICascadingParameterGroup cascadingParameterGroup = (ICascadingParameterGroup) definition;
+				out.print("DataSet: " + cascadingParameterGroup.getDataSet());
+			}
+
+			// printSelectionChoices(selectionChoices);
+
+			out.println(".......");
+			// selectionChoices = task.getSelectionListForCascadingGroup(
+			// group.getName(), new Object[] { 103 });
+			// printSelectionChoices(selectionChoices);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void printScalarParameter(IParameterDefnBase definition,
+			PrintStream out) {
+		if (definition instanceof IScalarParameterDefn) {
+			IScalarParameterDefn scalar = (IScalarParameterDefn) definition;
+			out.println("DataType: "
+					+ BirtDataType.valueOf(scalar.getDataType()));
+			out.println("PromptText: " + scalar.getPromptText());
+			out.println("Required: " + scalar.isRequired());
+			out.println("AllowNewValues: " + scalar.allowNewValues());
+			out.println("DisplayInFixedOrder: " + scalar.displayInFixedOrder());
+			out.println("IsValueConcealed: " + scalar.isValueConcealed());
+			out.println("DisplayFormat: " + scalar.getDisplayFormat());
+			out.println("ControlType: "
+					+ BirtControlType.valueOf(scalar.getControlType()));
+			out.println("DefaultValue: " + scalar.getDefaultValue());
+			out.println("ScalarParameterType: "
+					+ scalar.getScalarParameterType());
+		}
+	}
 }

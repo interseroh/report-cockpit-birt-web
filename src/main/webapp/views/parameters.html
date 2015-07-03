@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head th:replace="/fragments/headTag :: headTag">
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -44,25 +44,26 @@
                     </div>
                     <div class="panel-body">
                         <form class="form-horizontal render-partial"
-                              th:action="@{param}"
-                              th:form="${parameterForm}"
+                              th:action="@{'/reports/'+${reportName}}"
                               th:object="${parameterForm}"
-                              method="post">
+                              method="post"
+                              novalidate="false">
                             <div class="control-group" style="padding-top:20px"
-                                 th:each="parameter : *{parameters}"
-                                 th:object="${parameter}">
+                                 th:each="param, rowStat : ${parameterForm.parameters}">
+
                                 <label class="control-label"
-                                       th:for="*{name}"
-                                       th:text="*{displayLabel}">
+                                       th:for="${param.name}"
+                                       th:text="${param.displayLabel}">
                                     DisplayLabel
                                 </label>
-                                <span th:text="*{name}">NAME</span>
+
                                 <div class="controls">
                                     <input class="input-block-level"
                                            value="to_be_replaced"
-                                           th:field="*{name}"
-                                           th:type="*{dataType}"
-                                           th:value="*{defaultValue}"/>
+                                           th:field="*{parameters[__${rowStat.index}__].value}"
+                                           th:type="*{parameters[__${rowStat.index}__].htmlFieldType}"
+                                           th:value="*{parameters[__${rowStat.index}__].value}"
+                                           th:placeholder="*{parameters[__${rowStat.index}__].defaultValue}"/>
                                 </div>
                             </div>
 

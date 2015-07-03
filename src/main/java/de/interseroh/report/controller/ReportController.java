@@ -20,20 +20,27 @@
  */
 package de.interseroh.report.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.model.Parameter;
@@ -41,6 +48,8 @@ import de.interseroh.report.model.ParameterForm;
 import de.interseroh.report.services.BirtReportService;
 
 @Controller
+@Scope(WebApplicationContext.SCOPE_REQUEST)
+@RequestMapping("/reports/{reportName}")
 public class ReportController {
 
 	private static final Logger logger = Logger
@@ -49,87 +58,104 @@ public class ReportController {
 	@Autowired
 	private BirtReportService reportService;
 
+	public ReportController() {
+		logger.info("Creating new instanz auf ReportController.");
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		logger.info("initializing WebDataBinder");
+
+		DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
+		CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, false);
+		binder.registerCustomEditor(Date.class, dateEditor);
+	}
+
 	@ModelAttribute("parameterForm")
-	public ParameterForm provideParameterForm() {
-		logger.debug("Provide new ParameterForm");
-		return new ParameterForm();
-	}
-
-	@RequestMapping(value = "/report/{reportName}", method = RequestMethod.GET)
-	public ModelAndView reportView(
-			@PathVariable("reportName") String reportName,
-			HttpServletResponse reponse) {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/report");
-		modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/report/{reportName}/param", method = RequestMethod.GET)
-	public ModelAndView reportParameter(
-			@PathVariable("reportName") String reportName,
-			@ModelAttribute("parameterForm") ParameterForm form,
-			ModelAndView modelAndView, BindingResult bindingResult)
+	public ParameterForm populateForm(
+			@PathVariable("reportName") String reportName)
 			throws BirtReportException {
-
-		logger.debug("GET parameter dialog for " + reportName + " report.");
-
-		modelAndView.setViewName("/parameters");
-
-		modelAndView.addObject("reportName", reportName);
-		modelAndView.addObject("reportApiUrl", "/api/render/" + reportName);
+		logger.debug("Populate new ParameterForm for Report " + reportName);
+		ParameterForm parameterForm = new ParameterForm();
 
 		Collection<Parameter> parameters = reportService
 				.getParameterDefinitions(reportName);
 
-		form.setParameters(new ArrayList<>(parameters));
+		parameterForm.setParameters(new ArrayList<>(parameters));
 
-		modelAndView.addObject("parameterForm", form);
-		modelAndView.addObject("parameters", parameters);
+		// Parameter paramTextbox = new Parameter().withName("Textbox")
+		// .withDataType(BirtDataType.TYPE_STRING)
+		// .withDisplayLabel("Required Text").withRequired(true);
+		// parameterForm.getParameters().add(paramTextbox);
+		//
+		// Parameter paramTextboxTwo = new Parameter().withName("TextboxTwo")
+		// .withDataType(BirtDataType.TYPE_STRING)
+		// .withDisplayLabel("Text").withRequired(false);
+		// parameterForm.getParameters().add(paramTextboxTwo);
+		//
+		// Parameter paramPassword = new Parameter().withName("Password")
+		// .withDataType(BirtDataType.TYPE_STRING)
+		// .withDisplayLabel("Password").withRequired(false)
+		// .withConcealed(true);
+		// parameterForm.getParameters().add(paramPassword);
+		//
+		// Parameter paramCheckbox = new Parameter().withName("Checkbox")
+		// .withDataType(BirtDataType.TYPE_BOOLEAN)
+		// .withDisplayLabel("Checkbox").withDefaultValue("true");
+		// parameterForm.getParameters().add(paramCheckbox);
+		// Parameter paramDate = new Parameter()
+		// .withDataType(BirtDataType.TYPE_DATE)
+		// .withDisplayLabel("DateTime").withDefaultValue("true");
+		// parameterForm.getParameters().add(paramDate);
 
-		return modelAndView;
+		return parameterForm;
 	}
 
-	@RequestMapping(value = "/form", method = { RequestMethod.POST })
-	public ModelAndView formPOST(
-			@ModelAttribute("parameterForm") ParameterForm form,
-			BindingResult bindingResult, ModelAndView modelAndView) throws BirtReportException {
-		logger.debug("executing posting form...");
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView reportView(@ModelAttribute ParameterForm form,
+			ModelAndView modelAndView,
+			@PathVariable("reportName") String reportName) {
 
-		if (form.getParameters().size() > 0) {
-			logger.info("Value: " + form.getParameters().iterator().next().getValue
-                    ());
+		logger.debug("executing report view for " + reportName);
+
+		if (form.hasNoParameters()) {
+			modelAndView.setViewName("/report");
+			injectReportUri(form, modelAndView, reportName);
 		} else {
-            form.setParameters(reportService.getParameterDefinitions
-                    ("salesinvoice"));
+			modelAndView.setViewName("/parameters");
+			modelAndView.addObject("parameterForm", form);
 		}
-		modelAndView.setViewName("/form");
 
 		return modelAndView;
 	}
 
-    @RequestMapping(value = "/form", method = { RequestMethod.GET })
-    public ModelAndView formGET(
-            @ModelAttribute("parameterForm") ParameterForm form,
-             ModelAndView modelAndView)
-            throws BirtReportException {
-        logger.debug("executing posting form...");
+	private void injectReportUri(@ModelAttribute ParameterForm form,
+			ModelAndView modelAndView,
+			@PathVariable("reportName") String reportName) {
+		modelAndView.addObject("reportName", reportName);
+		String url = "/api/render/" + reportName;
+		modelAndView.addObject("reportApiUrl", url);
+		modelAndView.addObject("reportParams", form.buildRequestParams());
+	}
 
-        form.setParameters(reportService.getParameterDefinitions("salesinvoice"));
-        modelAndView.setViewName("/form");
-        modelAndView.addObject("parameterForm", form);
-        return modelAndView;
-    }
+	@RequestMapping(method = { RequestMethod.POST })
+	public ModelAndView paramPOST(
+			@PathVariable("reportName") String reportName, //
+			@ModelAttribute("parameterForm") ParameterForm form, //
+			BindingResult bindingResult, //
+			RedirectAttributes redirectAttributes, //
+			ModelAndView modelAndView) throws BirtReportException {
 
-    @RequestMapping(value = "/report/{reportName}/param", method = RequestMethod.POST)
-	public ModelAndView postParameterForm(
-			@PathVariable("reportName") String reportName,
-			@ModelAttribute("parameterForm") ParameterForm form,
-			ModelAndView modelAndView, BindingResult bindingResult)
-			throws BirtReportException {
-		logger.debug("POST parameter dialog for " + reportName + " report.");
+		logger.debug("Executing POST of form for " + reportName);
 
-		modelAndView.setViewName("/parameters");
+		if (form.isValid()) {
+			modelAndView.setViewName("/report");
+			injectReportUri(form, modelAndView, reportName);
+		} else {
+			modelAndView.setViewName("/parameters");
+			modelAndView.addObject("parameterForm", form);
+		}
+
 		return modelAndView;
 	}
 }

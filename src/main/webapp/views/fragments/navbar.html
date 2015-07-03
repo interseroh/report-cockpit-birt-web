@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:fragment="headTag">
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -28,9 +28,9 @@
 <body>
 <!-- Navigation bar -->
 
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation"
-     th:fragment="defaultNavbar"
-     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<nav xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" class="navbar navbar-inverse navbar-fixed-top"
+     role="navigation"
+     th:fragment="defaultNavbar">
     <div class="container">
         <div class="navbar-header">
             <button type="button"
@@ -55,7 +55,8 @@
                     </a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a href="#print" th:href="@{${reportApiUrl} + '/pdf'}"
+                    <a href="#print"
+                       th:href="@{${reportApiUrl} + '/pdf' + ${reportParams}}"
                        target="_blank">
                         Print
                     </a>

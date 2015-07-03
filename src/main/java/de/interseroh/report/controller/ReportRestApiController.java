@@ -21,18 +21,25 @@
 package de.interseroh.report.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.model.Parameter;
 import de.interseroh.report.services.BirtOutputFormat;
 import de.interseroh.report.services.BirtReportService;
 
@@ -49,24 +56,33 @@ public class ReportRestApiController {
 	@Autowired
 	private BirtReportService reportService;
 
+	@Autowired
+	private ConversionService conversionService;
+
 	@RequestMapping(value = "/render/{reportName}", method = RequestMethod.GET)
 	public void renderReportInDefaultFormat(
 			@PathVariable("reportName") String reportName,
+			@RequestParam Map<String, String> parameters,
 			HttpServletResponse response) throws IOException,
-			BirtReportException {
+			BirtReportException, ParseException {
 		renderReport(reportName, BirtOutputFormat.HTML5.getFormatName(),
-				response);
+				parameters, response);
 	}
 
 	@RequestMapping(value = "/render/{reportName}/{format}", method = RequestMethod.GET)
-	public void renderReport(@PathVariable("reportName") String reportName,
-			@PathVariable("format") String format, HttpServletResponse response)
-			throws IOException, BirtReportException {
+	public void renderReport(
+			//
+			@PathVariable("reportName") String reportName, //
+			@PathVariable("format") String format, //
+			@RequestParam Map<String, String> requestParams,
+			HttpServletResponse response) throws IOException,
+			BirtReportException, ParseException {
 		logger.debug("Rendering " + reportName + " in " + format + ".");
+
 		BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
 		response.setContentType(outputFormat.getContentType());
 
-		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		Map<String, Object> parameters = convert(requestParams, reportName);
 
 		switch (outputFormat) {
 		case HTML5:
@@ -93,6 +109,37 @@ public class ReportRestApiController {
 		// TODO idueppe - need exception handling
 	}
 
-	// TODO idueppe - add report parameter controller
+	public Map<String, Object> convert(Map<String, String> requestParameters,
+			String reportName) throws BirtReportException, ParseException {
+
+		Map<String, Object> params = new HashMap<>();
+
+		// TODO idueppe - fix this poooor man converting
+		Collection<Parameter> definitions = reportService
+				.getParameterDefinitions(reportName);
+		for (Parameter param : definitions) {
+			String paramName = param.getName();
+			String paramValueStr = requestParameters.get(paramName);
+			Object paramValue = null;
+			switch (param.getDataType()) {
+			case TYPE_DECIMAL:
+			case TYPE_TIME:
+			case TYPE_FLOAT:
+				paramValue = Double.valueOf(paramName);
+				break;
+			case TYPE_DATE_TIME:
+			case TYPE_DATE:
+				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+				paramValue = sdf.parse(paramValueStr);
+				break;
+			case TYPE_STRING:
+				paramValue = paramValueStr;
+				break;
+			}
+			params.put(paramName, paramValue);
+		}
+
+		return params;
+	}
 
 }

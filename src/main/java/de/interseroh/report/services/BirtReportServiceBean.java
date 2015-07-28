@@ -44,6 +44,7 @@ import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
 import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -230,7 +231,10 @@ public class BirtReportServiceBean implements BirtReportService {
 		String reportFileName = absolutePathOf(reportFileName(reportName));
 		IReportRunnable iReportRunnable = reportEngine
 				.openReportDesign(reportFileName);
-		return reportEngine.createRunAndRenderTask(iReportRunnable);
+        IRunAndRenderTask task = reportEngine.createRunAndRenderTask(iReportRunnable);
+        logger.debug("==| Setting Locale to "+LocaleContextHolder.getLocale());
+        task.setLocale(LocaleContextHolder.getLocale());
+        return task;
 	}
 
 	private void injectParameters(Map<String, Object> parameters,

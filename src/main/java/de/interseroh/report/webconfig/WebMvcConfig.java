@@ -130,7 +130,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public LocaleResolver localeResolver() {
         Locale.setDefault(Locale.ENGLISH);
         CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setCookieName("speedauction-language");
+        cookieLocaleResolver.setCookieName("reportengine-language");
         return cookieLocaleResolver;
     }
 

@@ -232,7 +232,7 @@ public class BirtReportServiceBean implements BirtReportService {
 		IReportRunnable iReportRunnable = reportEngine
 				.openReportDesign(reportFileName);
         IRunAndRenderTask task = reportEngine.createRunAndRenderTask(iReportRunnable);
-        logger.debug("==| Setting Locale to "+LocaleContextHolder.getLocale());
+        logger.debug("Setting Locale to "+LocaleContextHolder.getLocale());
         task.setLocale(LocaleContextHolder.getLocale());
         return task;
 	}

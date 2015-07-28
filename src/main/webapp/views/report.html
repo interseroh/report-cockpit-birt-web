@@ -22,6 +22,14 @@
     <div th:replace="/fragments/navbar :: defaultNavbar"></div>
 
     <div class="row">
+        <style>
+            th,
+            td {
+                padding-left: 1px;
+                padding-right: 1px;
+            }
+
+        </style>
         <div class="col-lg-12 col-md-12 col-sm-12" id="report-content"
              th:attr="data-report-content-url=@{${reportApiUrl}+'/html'+${reportParams}}">
             <div class="progress">

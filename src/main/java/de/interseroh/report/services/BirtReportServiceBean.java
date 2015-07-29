@@ -28,7 +28,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
@@ -42,6 +41,8 @@ import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
 import org.eclipse.birt.report.engine.api.PDFRenderOption;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -58,7 +59,7 @@ import de.interseroh.report.model.Parameter;
 @PropertySource({ "classpath:report-config.properties" })
 public class BirtReportServiceBean implements BirtReportService {
 
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(BirtReportServiceBean.class);
 
 	@Autowired
@@ -107,14 +108,15 @@ public class BirtReportServiceBean implements BirtReportService {
 			Collection<Parameter> params = extractParameters(task,
 					parameterDefinitions);
 
-			BirtReportUtil
-					.printParameterDefinitions(parameterDefinitions, task);
+			BirtReportUtil.printParameterDefinitions(parameterDefinitions,
+					task);
 
 			return params;
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting parameter definition for "
-							+ reportName + ".", e);
+					"Error while getting parameter definition for " + reportName
+							+ ".",
+					e);
 		}
 	}
 
@@ -145,9 +147,10 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderHtmlReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -169,9 +172,10 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderPDFReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -192,9 +196,10 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderExcelReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -231,10 +236,11 @@ public class BirtReportServiceBean implements BirtReportService {
 		String reportFileName = absolutePathOf(reportFileName(reportName));
 		IReportRunnable iReportRunnable = reportEngine
 				.openReportDesign(reportFileName);
-        IRunAndRenderTask task = reportEngine.createRunAndRenderTask(iReportRunnable);
-        logger.debug("Setting Locale to "+LocaleContextHolder.getLocale());
-        task.setLocale(LocaleContextHolder.getLocale());
-        return task;
+		IRunAndRenderTask task = reportEngine
+				.createRunAndRenderTask(iReportRunnable);
+		logger.debug("Setting Locale to " + LocaleContextHolder.getLocale());
+		task.setLocale(LocaleContextHolder.getLocale());
+		return task;
 	}
 
 	private void injectParameters(Map<String, Object> parameters,

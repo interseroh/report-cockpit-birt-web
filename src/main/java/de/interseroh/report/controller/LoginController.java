@@ -23,7 +23,8 @@ package de.interseroh.report.controller;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -40,7 +41,7 @@ import org.springframework.web.servlet.ModelAndView;
 @PropertySource({ "classpath:config.properties", "classpath:version.properties" })
 public class LoginController {
 
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(ReportController.class);
 
 	@Autowired

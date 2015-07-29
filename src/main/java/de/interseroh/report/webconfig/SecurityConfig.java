@@ -20,9 +20,8 @@
  */
 package de.interseroh.report.webconfig;
 
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -49,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String USER_SEARCH_FILTER = "(&(objectCategory=Person)(sAMAccountName={0}))";
 
-	private static final Logger logger = Logger.getLogger(SecurityConfig.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(SecurityConfig.class);
 
 	@Autowired
 	private Environment env;
@@ -57,8 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/", "/index", "/resources/**", "/images/**",
-						"/webjars/**") // white list of urls
+				.antMatchers("/", "/index", "/resources/**", "/images/**") // white
+																			// list
+																			// of
+																			// urls
 				.permitAll() // allow anyone on these links
 				.anyRequest().authenticated() // all other urls need a
 												// authentication
@@ -77,9 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 									// disabling security headers.
 	}
 
-	@Inject
-	public void configureGlobal(AuthenticationManagerBuilder auth)
-			throws Exception {
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		logger.debug("configureGlobal: mapping login to LDAP");
 
 		// LDAP or InMemory

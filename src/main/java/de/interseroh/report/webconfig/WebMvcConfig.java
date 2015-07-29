@@ -25,7 +25,8 @@ import java.util.Locale;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -44,9 +45,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.thymeleaf.dialect.IDialect;
-import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring3.SpringTemplateEngine;
-import org.thymeleaf.spring3.view.ThymeleafViewResolver;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import de.interseroh.report.services.BirtReportService;
@@ -59,7 +60,7 @@ import de.interseroh.report.services.BirtReportService;
 @Import({ ReportConfig.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-	private static Logger logger = Logger.getLogger(WebMvcConfig.class);
+	private static Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);
 
 	@Autowired
 	private Environment environment;
@@ -113,28 +114,26 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		return templateResolver;
 	}
 
-    @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("language");
-        return localeChangeInterceptor;
-    }
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+		localeChangeInterceptor.setParamName("language");
+		return localeChangeInterceptor;
+	}
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        super.addInterceptors(registry);
-        registry.addInterceptor(localeChangeInterceptor());
-    }
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		super.addInterceptors(registry);
+		registry.addInterceptor(localeChangeInterceptor());
+	}
 
-    @Bean
-    public LocaleResolver localeResolver() {
-        Locale.setDefault(Locale.ENGLISH);
-        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setCookieName("reportengine-language");
-        return cookieLocaleResolver;
-    }
-
-
+	@Bean
+	public LocaleResolver localeResolver() {
+		Locale.setDefault(Locale.ENGLISH);
+		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+		cookieLocaleResolver.setCookieName("reportengine-language");
+		return cookieLocaleResolver;
+	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -142,28 +141,25 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 				.addResourceLocations("/resources/");
 		registry.addResourceHandler("/images/**") //
 				.addResourceLocations("/images/");
-		registry.addResourceHandler("/webjars/**") //
-				.addResourceLocations("classpath:/META-INF/resources/webjars/");
 
 		// FIXME idueppe - not dry.. see BirtReportService
 		String defaultDirectory = environment.getProperty("java.io.tmpdir");
 		String baseImageURL = environment
 				.getProperty(BirtReportService.REPORT_BASE_IMAGE_URL_KEY);
-		String imageDirectory = "file://"
-				+ environment.getProperty(
-						BirtReportService.REPORT_IMAGE_DIRECTORY_KEY,
-						defaultDirectory);
+		String imageDirectory = "file://" + environment.getProperty(
+				BirtReportService.REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
 
 		logger.info("\tBaseImageUrl:   " + baseImageURL);
-		logger.info("\tImageDirectory: "
-				+ ensureTrailingSeparator(imageDirectory));
+		logger.info(
+				"\tImageDirectory: " + ensureTrailingSeparator(imageDirectory));
 
-		registry.addResourceHandler(baseImageURL + "/**").addResourceLocations(
-				ensureTrailingSeparator(imageDirectory));
+		registry.addResourceHandler(baseImageURL + "/**")
+				.addResourceLocations(ensureTrailingSeparator(imageDirectory));
 	}
 
 	private String ensureTrailingSeparator(String imageDirectory) {
-		if (imageDirectory.charAt(imageDirectory.length() - 1) != File.separatorChar) {
+		if (imageDirectory
+				.charAt(imageDirectory.length() - 1) != File.separatorChar) {
 			imageDirectory = imageDirectory + "/";
 		}
 		return imageDirectory;

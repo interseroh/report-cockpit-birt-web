@@ -30,10 +30,11 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,7 +50,8 @@ public class LdapServerTest {
 
 	private static final String PASSWORD_LDAP = "test";
 	private static final String USER_LDAP = "test";
-	private static final Logger logger = Logger.getLogger(LdapServerTest.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(LdapServerTest.class);
 
 	@Before
 	public void setUp() throws Exception {
@@ -83,7 +85,7 @@ public class LdapServerTest {
 
 		DirContextOperations user = authenticator.authenticate(bob);
 
-		logger.info(user);
+		logger.info("User: {}", user);
 	}
 
 	@Test

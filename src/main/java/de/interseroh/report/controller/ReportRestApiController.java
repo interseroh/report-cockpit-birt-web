@@ -29,7 +29,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
@@ -50,7 +51,7 @@ import de.interseroh.report.services.BirtReportService;
 @RequestMapping("/api")
 public class ReportRestApiController {
 
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(ReportRestApiController.class);
 
 	@Autowired

@@ -27,7 +27,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
@@ -40,7 +41,7 @@ import de.interseroh.report.webconfig.WebMvcConfig;
 
 public class UiWebAppInitializer implements WebApplicationInitializer {
 
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(UiWebAppInitializer.class);
 
 	private static final String VIEWS_BASE = "/";

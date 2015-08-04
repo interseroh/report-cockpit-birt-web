@@ -57,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/", "/index", "/resources/**", "/images/**",
-						"/webjars/**") // white list of urls
+				.antMatchers("/", "/index", "/imprint", "/resources/**",
+						"/images/**", "/webjars/**") // white list of urls
 				.permitAll() // allow anyone on these links
 				.anyRequest().authenticated() // all other urls need a
 												// authentication

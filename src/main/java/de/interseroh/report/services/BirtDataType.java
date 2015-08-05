@@ -31,7 +31,7 @@ public enum BirtDataType {
 	TYPE_STRING(1, "text"), //
 	TYPE_FLOAT(2, "number"), //
 	TYPE_DECIMAL(3, "number"), //
-	TYPE_DATE_TIME(4, "date"), //
+	TYPE_DATE_TIME(4, "datetime"), //
 	TYPE_BOOLEAN(5, "checkbox"), //
 	TYPE_INTEGER(6, "number"), //
 	TYPE_DATE(7, "date"), //
@@ -40,7 +40,7 @@ public enum BirtDataType {
 	private int dataType;
 	private String htmlFieldType;
 
-	private BirtDataType(int dataType, String htmlFieldType) {
+	BirtDataType(int dataType, String htmlFieldType) {
 		this.dataType = dataType;
 		this.htmlFieldType = htmlFieldType;
 	}

@@ -18,38 +18,27 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.services;
+package de.interseroh.report.controller;
 
-import de.interseroh.report.exception.UnknownDataTypeException;
+import java.text.ParseException;
+import java.util.Locale;
+
+import org.springframework.format.Formatter;
+
+import de.interseroh.report.model.SelectionOption;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public enum BirtControlType {
+public class SelectionOptionFormatter implements Formatter<SelectionOption> {
 
-	TEXT_BOX(0), //
-	SELECTION(1), //
-	RADIO_BUTTON(2), //
-	CHECK_BOX(3), //
-	AUTO_SUGGEST(4);
-
-	private int controlType;
-
-    BirtControlType(int controlType) {
-		this.controlType = controlType;
+	@Override
+	public SelectionOption parse(String text, Locale locale) throws ParseException {
+		return new SelectionOption().withValue(text);
 	}
 
-	public static BirtControlType valueOf(int controlType) {
-		for (BirtControlType type : BirtControlType.values()) {
-			if (type.controlType == controlType)
-				return type;
-
-		}
-		throw new UnknownDataTypeException(controlType);
-	}
-
-	public int getControlType() {
-		return controlType;
-	}
-
+    @Override
+    public String print(SelectionOption option, Locale locale) {
+        return option.getValue();
+    }
 }

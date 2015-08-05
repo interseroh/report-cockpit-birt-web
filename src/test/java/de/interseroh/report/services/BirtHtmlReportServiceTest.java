@@ -37,7 +37,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.Parameter;
+import de.interseroh.report.model.GroupParameter;
+import de.interseroh.report.model.ScalarParameter;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
@@ -59,34 +60,35 @@ public class BirtHtmlReportServiceTest {
 	}
 
 	@Test
-	public void testHelloWorldReport() throws EngineException,
-			FileNotFoundException, BirtReportException {
+	public void testHelloWorldReport()
+			throws EngineException, FileNotFoundException, BirtReportException {
 		renderHtmlReport("hello_world");
 	}
 
 	@Test
-	public void testSalesInvoiceReport() throws EngineException,
-			FileNotFoundException, BirtReportException {
+	public void testSalesInvoiceReport()
+			throws EngineException, FileNotFoundException, BirtReportException {
 		renderHtmlReport("salesinvoice");
 	}
 
 	@Test
-	public void testProductCatalogReport() throws EngineException,
-			FileNotFoundException, BirtReportException {
+	public void testProductCatalogReport()
+			throws EngineException, FileNotFoundException, BirtReportException {
 		renderHtmlReport("productcatalog");
 	}
 
-	private void renderHtmlReport(String reportName) throws EngineException,
-			FileNotFoundException, BirtReportException {
+	private void renderHtmlReport(String reportName)
+			throws EngineException, FileNotFoundException, BirtReportException {
 		String outputFileName = "target/" + reportName + ".html";
 
-		Collection<Parameter> parameters = reportService
-				.getParameterDefinitions(reportName);
+		Collection<GroupParameter> groups = reportService
+				.getParameterGroups(reportName);
 		Map<String, Object> params = new HashMap<>();
-		for (Parameter definition : parameters) {
-			if ("OrderNumber".equals(definition.getName()))
-				params.put("OrderNumber", 10110);
-		}
+		for (GroupParameter group : groups)
+			for (ScalarParameter definition : group.getParameters()) {
+				if ("OrderNumber".equals(definition.getName()))
+					params.put("OrderNumber", 10110);
+			}
 		FileOutputStream fos = new FileOutputStream(outputFileName);
 		reportService.renderHtmlReport(reportName, params, fos);
 	}

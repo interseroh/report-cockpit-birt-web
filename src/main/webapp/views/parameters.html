@@ -41,34 +41,82 @@
                         <h3 class="panel-title">Parameter</h3>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal render-partial"
+                        <form id="parameters" class="form-horizontal render-partial"
                               th:action="@{'/reports/'+${reportName}}"
                               th:object="${parameterForm}"
                               method="post"
                               novalidate="false">
-                            <div class="control-group" style="padding-top:20px"
-                                 th:each="param, rowStat : ${parameterForm.parameters}">
+                            <th:block th:each="group, groupStat : ${parameterForm.groups}">
+                                <div th:id="${group.name}"
+                                     th:attr="data-cascading-group=${group.cascading}">
 
-                                <label class="control-label"
-                                       th:for="${param.name}"
-                                       th:text="${param.displayLabel}">
-                                    DisplayLabel
-                                </label>
+                                    <legend th:if="${not group.invisible}"
+                                            th:text="${group.displayLabel}"
+                                            class="grouplegend">Group Legend
+                                    </legend>
 
-                                <div class="controls">
-                                    <input class="input-block-level"
-                                           value="to_be_replaced"
-                                           th:field="*{parameters[__${rowStat.index}__].value}"
-                                           th:type="*{parameters[__${rowStat.index}__].htmlFieldType}"
-                                           th:value="*{parameters[__${rowStat.index}__].value}"
-                                           th:placeholder="*{parameters[__${rowStat.index}__].defaultValue}"/>
+                                    <th:block th:each="scalar, scalarStat : ${group.parameters}">
+                                        <div class="control-group">
+                                            <label class="control-label"
+                                                   th:for="${scalar.name}"
+                                                   th:text="${scalar.displayLabel}">
+                                                DisplayLabel
+                                            </label>
+
+                                            <div class="controls">
+                                                <th:block th:switch="${scalar.parameterType}">
+                                                    <th:block th:case="'MULTISELECT'">
+                                                        <select th:id="*{params[__${scalar.name}__].value}"
+                                                                th:field="*{params[__${scalar.name}__].value}"
+                                                                th:size="${scalar.rowCount}"
+                                                                multiple="multiple"
+                                                                class="form-control">
+                                                            <option th:each="option : ${scalar.options}"
+                                                                    th:value="${{option}}"
+                                                                    th:text="${option.displayName}">
+                                                                DISPLAYNAME
+                                                            </option>
+                                                        </select>
+                                                    </th:block>
+                                                    <th:block th:case="'SINGLESELECT'">
+                                                        <select th:id="*{params[__${scalar.name}__].value}"
+                                                                th:field="*{params[__${scalar.name}__].value}"
+                                                                class="form-control">
+                                                            <option th:each="option : ${scalar.options}"
+                                                                    th:value="${{option}}"
+                                                                    th:text="${option.displayName}">
+                                                                DISPLAYNAME
+                                                            </option>
+                                                        </select>
+                                                    </th:block>
+                                                    <th:block th:case="RADIOSELECT">
+                                                        <div th:each="option : ${scalar.options}">
+                                                            <label th:for="${#ids.next('parameters'+__${scalarStat.index}__+'.value')}"
+                                                                   th:inline="text">
+                                                                <input type="radio"
+                                                                       th:field="*{params[__${scalar.name}__].value}"
+                                                                       th:value="${{option}}"/>
+                                                                [[${option.displayName}]]
+                                                            </label>
+                                                        </div>
+                                                    </th:block>
+                                                    <th:block th:case="*">
+                                                        <input class="input-block-level"
+                                                               value="to_be_replaced"
+                                                               th:field="*{params[__${scalar.name}__].value}"
+                                                               th:type="${scalar.htmlFieldType}"
+                                                               th:value="${scalar.value}"
+                                                               th:placeholder="${scalar.tooltip}"/>
+                                                    </th:block>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </th:block>
                                 </div>
-                            </div>
-
+                            </th:block>
                             <div class="control-group" style="padding-top:20px">
                                 <div class="controls">
-                                    <button type="submit"
-                                            class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary">
                                         Ok
                                     </button>
                                 </div>
@@ -87,12 +135,41 @@
 
 <div th:include="/fragments/bodyFooter :: bodyFooter" th:remove="tag">
     <!-- JQuery for Bootstrap -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-            th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>
+    <script src="https//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Bootstrap JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
-            th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </div>
+
+<script>
+    /*<![CDATA[*/
+
+    var reloadChoicesOfCascadingGroup = function () {
+        var cascadingGroup = $(this).closest("div[data-cascading-group='true']");
+        var groupName = $(cascadingGroup).attr("id");
+        var url = $(this).closest("form#parameters").attr("action");
+
+        url = url + "/cascade/" + groupName;
+
+        var params = [];
+        $(cascadingGroup).find("select").each(function () {
+            var paramName = $(this).attr("name");
+            var selected = $(this).find("option:selected");
+            var paramValue = $(selected).val();
+            params.push({name: paramName, value: paramValue});
+        });
+
+        url = url + '?' + $.param(params) + " div#" + groupName;
+
+        $(cascadingGroup).load(url, function () {
+            $("div#" + groupName).find("select").change(reloadChoicesOfCascadingGroup);
+        });
+    };
+
+    $(document).ready(function () {
+        $("div[data-cascading-group='true']").find("select").change(reloadChoicesOfCascadingGroup);
+    });
+    /*]]>*/
+</script>
 
 </body>
 </html>

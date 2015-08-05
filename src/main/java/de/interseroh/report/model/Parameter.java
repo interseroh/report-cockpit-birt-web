@@ -1,170 +1,85 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements. See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership. The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- *
- * (c) 2015 - Interseroh
- */
 package de.interseroh.report.model;
 
-import org.apache.commons.lang.StringUtils;
+import de.interseroh.report.common.Visitable;
 
-import de.interseroh.report.services.BirtControlType;
-import de.interseroh.report.services.BirtDataType;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class Parameter {
+public interface Parameter extends Visitable<ParameterVisitor> {
+	/**
+	 * A string that unique identify the parameter type within the parameter
+	 * hierarchy
+	 * 
+	 * @return String identifying the concrete parameter type
+	 */
+	String getParameterType();
 
-	private String name;
-	private String value;
-	private String defaultValue;
-	private String displayLabel;
+	/**
+	 * <b>Unique</b> name of the parameter in the scope of a report.
+	 * 
+	 * @return unique name.
+	 */
+	String getName();
 
-	private BirtDataType dataType;
-	private BirtControlType controlType;
+	/**
+	 * <b>Unique</b> name of the parameter in the scope of a report
+	 * 
+	 * @param unique
+	 *            name.
+	 */
+	void setName(String name);
 
-	private boolean required;
-	private boolean concealed;
+	/**
+	 *
+	 * @return String or null if no display label is configured
+	 */
+	String getDisplayLabel();
 
-	public boolean isUnset() {
-		return !(isValid());
-	}
+	/**
+	 *
+	 * @param displayLabel
+	 */
+	void setDisplayLabel(String displayLabel);
 
-	public boolean isValid() {
-		return !required //
-				|| StringUtils.isNotBlank(value)
-				|| StringUtils.isNotBlank(defaultValue);
-	}
+	/**
+	 * A helpttext to be presented as a tooltip.
+	 * 
+	 * @return String or null if no helptext is defined.
+	 */
+	String getTooltip();
 
-	public String getName() {
-		return name;
-	}
+	/**
+	 *
+	 * @param tooltip
+	 *            or null if no helptext is defined.
+	 */
+	void setTooltip(String tooltip);
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	/**
+	 *
+	 * @return true if this parameter and all sub parameters are unset.
+	 */
+	boolean isUnset();
 
-	public String getHtmlFieldType() {
-		if (dataType == BirtDataType.TYPE_STRING && concealed) {
-			return "password";
-		} else {
-			return dataType.getHtmlFieldType();
-		}
-	}
+	/**
+	 * Checks whether the constrains are fulfilled. if a value is required and
+	 * no default value is defined a valid value must be assigned.
+	 * 
+	 * @return true if the parameter is valid
+	 */
+	boolean isValid();
 
-	public String requestURI() {
-		return name + "=" + valueOrDefault();
-	}
+    /**
+     * @return List of "key=value" strings as request parameter
+     */
+    List<String> asRequestParameter();
 
-	private String valueOrDefault() {
-		return (StringUtils.isNotBlank(value)) ? value : defaultValue;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public String getDefaultValue() {
-		return defaultValue;
-	}
-
-	public void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
-	public BirtDataType getDataType() {
-		return dataType;
-	}
-
-	public void setDataType(BirtDataType dataType) {
-		this.dataType = dataType;
-	}
-
-	public String getDisplayLabel() {
-		return displayLabel;
-	}
-
-	public void setDisplayLabel(String displayLabel) {
-		this.displayLabel = displayLabel;
-	}
-
-	public Parameter withName(final String name) {
-		this.name = name;
-		return this;
-	}
-
-	public Parameter withValue(final String value) {
-		this.value = value;
-		return this;
-	}
-
-	public Parameter withDefaultValue(final String defaultValue) {
-		this.defaultValue = defaultValue;
-		return this;
-	}
-
-	public Parameter withDataType(final BirtDataType dataType) {
-		this.dataType = dataType;
-		return this;
-	}
-
-	public Parameter withDisplayLabel(final String displayLabel) {
-		this.displayLabel = displayLabel;
-		return this;
-	}
-
-	public boolean isRequired() {
-		return required;
-	}
-
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
-
-	public boolean isConcealed() {
-		return concealed;
-	}
-
-	public void setConcealed(boolean concealed) {
-		this.concealed = concealed;
-	}
-
-	public Parameter withRequired(final boolean required) {
-		this.required = required;
-		return this;
-	}
-
-	public Parameter withConcealed(final boolean concealed) {
-		this.concealed = concealed;
-		return this;
-	}
-
-	@Override
-	public String toString() {
-		return "Parameter{" + "name='" + name + '\'' + ", value='" + value
-				+ '\'' + ", defaultValue='" + defaultValue + '\''
-				+ ", dataType='" + dataType + '\'' + ", displayLabel='"
-				+ displayLabel + '\'' + ", required=" + required
-				+ ", concealed=" + concealed + '}';
-	}
+    /**
+     * @return Map of parameter name and values
+     */
+    Map<String, Object> asReportParameter();
 
 }

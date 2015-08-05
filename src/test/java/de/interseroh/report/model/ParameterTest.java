@@ -32,13 +32,13 @@ public class ParameterTest {
 
 	@Test
 	public void testEmptyParameter() throws Exception {
-		Parameter parameter = new Parameter();
+		StringParameter parameter = new StringParameter();
 		assertThat(parameter.isUnset(), is(false));
 	}
 
 	@Test
 	public void testParameterWithDefaultValue() throws Exception {
-		Parameter parameter = new Parameter().withRequired(true)
+		StringParameter parameter = new StringParameter().withRequired(true)
 				.withDefaultValue("1000");
 
 		assertThat(parameter.isUnset(), is(false));
@@ -46,24 +46,35 @@ public class ParameterTest {
 
 	@Test
 	public void testParameterWithValue() throws Exception {
-		Parameter parameter = new Parameter().withRequired(true).withValue(
-				"1000");
+		StringParameter parameter = new StringParameter().withRequired(true)
+				.withValue("1000");
 
 		assertThat(parameter.isUnset(), is(false));
 	}
 
 	@Test
 	public void testParameterNotRequired() throws Exception {
-		Parameter parameter = new Parameter().withRequired(false)
+		StringParameter parameter = new StringParameter().withRequired(false)
 				.withDefaultValue("1000").withValue("1000");
 		assertThat(parameter.isUnset(), is(false));
 	}
 
 	@Test
 	public void testParameters() throws Exception {
-		ParameterForm form = new ParameterForm();
-		form.getParameters().add(
-				new Parameter().withRequired(true).withValue("1000"));
+		ParameterForm form = new ParameterForm()
+				.addGroupParameter(new DefaultGroupParameter()
+						.addScalarParameter(new StringParameter()
+								.withRequired(true).withValue("1000")));
 		assertThat(form.isValid(), is(true));
+	}
+
+	@Test
+	public void testAsRequestParameter() throws Exception {
+		ParameterForm form = new ParameterForm().addGroupParameter(new DefaultGroupParameter()
+				.addScalarParameter(new SingleSelectParameter<Long>()
+						.withName("customer").withValue(123l))
+				.addScalarParameter(new SingleSelectParameter<Long>()
+						.withName("order").withValue(321l)));
+        assertThat(form.asRequestParams(),is("?params[customer]=123&params[order]=321"));
 	}
 }

@@ -34,6 +34,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -50,6 +51,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import de.interseroh.report.controller.SelectionOptionFormatter;
 import de.interseroh.report.services.BirtReportService;
 
 @Configuration
@@ -155,6 +157,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 		registry.addResourceHandler(baseImageURL + "/**")
 				.addResourceLocations(ensureTrailingSeparator(imageDirectory));
+	}
+
+	@Override
+	public void addFormatters(FormatterRegistry registry) {
+		super.addFormatters(registry);
+		registry.addFormatter(new SelectionOptionFormatter());
 	}
 
 	private String ensureTrailingSeparator(String imageDirectory) {

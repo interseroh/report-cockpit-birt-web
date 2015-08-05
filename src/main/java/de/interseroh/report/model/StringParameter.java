@@ -18,38 +18,29 @@
  *
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report.services;
+package de.interseroh.report.model;
 
-import de.interseroh.report.exception.UnknownDataTypeException;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public enum BirtControlType {
+public class StringParameter extends AbstractScalarParameter<StringParameter, String> {
 
-	TEXT_BOX(0), //
-	SELECTION(1), //
-	RADIO_BUTTON(2), //
-	CHECK_BOX(3), //
-	AUTO_SUGGEST(4);
+    @Override
+    public void accept(ParameterVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	private int controlType;
-
-    BirtControlType(int controlType) {
-		this.controlType = controlType;
+	@Override
+    public boolean isValid() {
+		return !isRequired() //
+				|| StringUtils.isNotBlank(getValue())
+				|| StringUtils.isNotBlank(getDefaultValue());
 	}
 
-	public static BirtControlType valueOf(int controlType) {
-		for (BirtControlType type : BirtControlType.values()) {
-			if (type.controlType == controlType)
-				return type;
-
-		}
-		throw new UnknownDataTypeException(controlType);
-	}
-
-	public int getControlType() {
-		return controlType;
+	public String requestURI() {
+		return getName() + "=" + valueOrDefault();
 	}
 
 }

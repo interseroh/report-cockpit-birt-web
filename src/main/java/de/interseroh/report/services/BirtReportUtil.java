@@ -37,11 +37,11 @@ public class BirtReportUtil {
 
 	public static void printSelectionChoices(
 			Collection<IParameterSelectionChoice> selectionChoices) {
-		System.out.println("---------- CHOICES");
+		System.out.println("---------- CHOICES:");
 		if (selectionChoices != null) {
 			for (IParameterSelectionChoice selectionChoice : selectionChoices) {
 				System.out.print("Label: " + selectionChoice.getLabel());
-				System.out.println("/ Value: " + selectionChoice.getValue());
+				System.out.println(" |  Value: " + selectionChoice.getValue());
 			}
 		}
 	}
@@ -49,6 +49,7 @@ public class BirtReportUtil {
 	@SuppressWarnings("unchecked")
 	public static void printSelectionList(IParameterDefnBase paramDefn,
 			IGetParameterDefinitionTask task) {
+
 
 		Collection<IParameterSelectionChoice> selectionChoices = task
 				.getSelectionList(paramDefn.getName());
@@ -137,6 +138,7 @@ public class BirtReportUtil {
 			out.println("DefaultValue: " + scalar.getDefaultValue());
 			out.println("ScalarParameterType: "
 					+ scalar.getScalarParameterType());
+            out.println("SelectionListType: "+ scalar.getSelectionListType());
 		}
 	}
 }

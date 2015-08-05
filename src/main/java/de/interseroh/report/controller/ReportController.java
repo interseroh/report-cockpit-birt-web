@@ -22,8 +22,6 @@ package de.interseroh.report.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -44,8 +42,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.model.GroupParameter;
 import de.interseroh.report.model.Parameter;
 import de.interseroh.report.model.ParameterForm;
+import de.interseroh.report.model.ParameterLogVisitor;
 import de.interseroh.report.services.BirtReportService;
 
 @Controller
@@ -75,16 +75,12 @@ public class ReportController {
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
-			throws BirtReportException {
-		logger.debug("Populate new ParameterForm for Report " + reportName);
-		ParameterForm parameterForm = new ParameterForm();
-
-		Collection<Parameter> parameters = reportService
-				.getParameterDefinitions(reportName);
-
-		parameterForm.setParameters(new ArrayList<>(parameters));
-
-		return parameterForm;
+					throws BirtReportException {
+		logger.debug("New ParameterForm for Report {}. ", reportName);
+		return new ParameterForm() //
+				.withReportName(reportName) //
+				.withGroupParameters(
+						reportService.getParameterGroups(reportName));
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -95,16 +91,36 @@ public class ReportController {
 		logger.debug("executing report view for " + reportName);
 
 		if (form.hasNoParameters()) {
-            // show report
+			// show report
 			modelAndView.setViewName("/report");
 			injectReportUri(form, modelAndView, reportName);
 		} else {
-            // show parameters
+			// show parameters
 			modelAndView.setViewName("/parameters");
 			modelAndView.addObject("parameterForm", form);
 		}
 
 		return modelAndView;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/cascade/{groupName}")
+	public String cascadingGroup(@PathVariable("reportName") String reportName,
+			@PathVariable("groupName") String groupName,
+			@ModelAttribute ParameterForm form, ModelAndView modelAndView) throws BirtReportException {
+
+        // filter by cascading group name
+		Parameter parameter = form.getParams().get(groupName);
+
+		if (parameter instanceof GroupParameter) {
+            GroupParameter group = (GroupParameter) parameter;
+            reportService.loadOptionsForCascadingGroup(reportName, group);
+            form.resetParams();
+		}
+
+        new ParameterLogVisitor().printParameters(form.getGroups());
+
+
+        return "/parameters :: form#parameters";
 	}
 
 	private void injectReportUri(@ModelAttribute ParameterForm form,
@@ -113,20 +129,21 @@ public class ReportController {
 		modelAndView.addObject("reportName", reportName);
 		String url = "/api/render/" + reportName;
 		modelAndView.addObject("reportApiUrl", url);
-		modelAndView.addObject("reportParams", form.buildRequestParams());
+		modelAndView.addObject("reportParams", form.asRequestParams());
 	}
 
 	@RequestMapping(method = { RequestMethod.POST })
-	public ModelAndView paramPOST(
-			@PathVariable("reportName") String reportName, //
+	public ModelAndView paramPOST(@PathVariable("reportName") String reportName, //
 			@ModelAttribute("parameterForm") ParameterForm form, //
 			BindingResult bindingResult, //
 			RedirectAttributes redirectAttributes, //
 			ModelAndView modelAndView) throws BirtReportException {
 
-		logger.debug("Executing POST of form for " + reportName);
+		logger.debug("Executing POST of form for {} ", reportName);
 
-		if (form.isValid()) {
+		new ParameterLogVisitor().printParameters(form.getGroups());
+
+		if (form.isValid() && !bindingResult.hasErrors()) {
 			modelAndView.setViewName("/report");
 			injectReportUri(form, modelAndView, reportName);
 		} else {

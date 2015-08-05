@@ -85,7 +85,7 @@ public class BirtExcelReportServiceTest {
 		String reportOutputName = OUTPUT_PREFIX + reportName + OUTPUT_SUFFIX;
 
 		// just for printing
-		reportService.getParameterDefinitions(reportName);
+		reportService.getParameterGroups(reportName);
 
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("OrderNumber", 10110);

@@ -23,5 +23,6 @@ ldap.url=ldap://ldap.xxx:389/OU=xxx
 ldap.managerDn=xxx
 ldap.managerPassword=xxx
 
-# Start page
-login.successful.startpage=/index
+# Login and Logout page
+login.successful.page=/index
+logout.successful.page=/index?logout

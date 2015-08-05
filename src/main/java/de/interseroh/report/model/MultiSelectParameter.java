@@ -37,7 +37,7 @@ public class MultiSelectParameter<T>
 		if (!isUnset()) {
 			List<String> params = new ArrayList<>(getValue().size());
 			for (T value : getValue()) {
-				params.add(getName() + '=' + urlEncode(getValueAsString()));
+				params.add("params["+getName() + "].value=" + urlEncode(getValueAsString()));
 			}
 			return params;
 		} else {

@@ -257,7 +257,7 @@
                                 <copy file="src/main/resources/report-config.properties_example"
                                       tofile="src/main/resources/report-config.properties"/>
                                 <copy file="src/test/resources/logback-test.xml_example"
-                                      tofile="src/test/resources/logback-text.xml"/>
+                                      tofile="src/test/resources/logback-test.xml"/>
                             </target>
                         </configuration>
                     </execution>

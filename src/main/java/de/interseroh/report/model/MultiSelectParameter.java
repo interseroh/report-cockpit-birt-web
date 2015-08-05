@@ -35,7 +35,7 @@ public class MultiSelectParameter<T>
 	@Override
 	public List<String> asRequestParameter() {
 		if (!isUnset()) {
-			List<String> params = new ArrayList<>(getValue().size());
+			List<String> params = new ArrayList<>(4);
 			for (T value : getValue()) {
 				params.add("params["+getName() + "].value=" + urlEncode(getValueAsString()));
 			}

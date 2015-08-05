@@ -12,8 +12,7 @@ public class ParameterToMapVisitor implements ParameterVisitor {
 	private final Collection<? extends Parameter> parameters;
 	private Map<String, Parameter> parameterMap = new HashMap<>();
 
-	public ParameterToMapVisitor(
-			Collection<? extends Parameter> parameters) {
+	public ParameterToMapVisitor(Collection<? extends Parameter> parameters) {
 		this.parameters = parameters;
 	}
 
@@ -35,23 +34,23 @@ public class ParameterToMapVisitor implements ParameterVisitor {
 
 	@Override
 	public void visit(DefaultGroupParameter group) {
-        if (group.isCascading()) {
-            parameterMap.put(group.getName(), group);
-        }
+		if (group.isCascading()) {
+			parameterMap.put(group.getName(), group);
+		}
 		acceptParameters(group.getParameters());
 	}
 
-    @Override
+	@Override
 	public void visit(StringParameter parameter) {
 		addScalarParameter(parameter);
 	}
 
-    @Override
-    public void visit(BooleanParameter parameter) {
-        addScalarParameter(parameter);
-    }
+	@Override
+	public void visit(BooleanParameter parameter) {
+		addScalarParameter(parameter);
+	}
 
-    @Override
+	@Override
 	public void visit(SingleSelectParameter parameter) {
 		addScalarParameter(parameter);
 	}

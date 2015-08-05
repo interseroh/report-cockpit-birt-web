@@ -25,8 +25,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.interseroh.report.model.GroupParameter;
-import de.interseroh.report.model.ScalarParameter;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +33,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.model.GroupParameter;
+import de.interseroh.report.model.ScalarParameter;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
@@ -95,14 +95,14 @@ public class BirtPdfReportServiceTest {
 	private void renderPdfReport(String reportName) throws Exception {
 		String outputFileName = "target/" + reportName + ".pdf";
 
-        Collection<GroupParameter> groups = reportService
-                .getParameterGroups(reportName);
-        Map<String, Object> params = new HashMap<>();
-        for (GroupParameter group : groups)
-            for (ScalarParameter definition : group.getParameters()) {
-                if ("OrderNumber".equals(definition.getName()))
-                    params.put("OrderNumber", 10110);
-            }
+		Collection<GroupParameter> groups = reportService
+				.getParameterGroups(reportName);
+		Map<String, Object> params = new HashMap<>();
+		for (GroupParameter group : groups)
+			for (ScalarParameter definition : group.getParameters()) {
+				if ("OrderNumber".equals(definition.getName()))
+					params.put("OrderNumber", 10110);
+			}
 
 		params.put("order", 10298);
 		params.put("customer", 112);

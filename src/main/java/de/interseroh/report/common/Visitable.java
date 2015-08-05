@@ -7,9 +7,10 @@ package de.interseroh.report.common;
  */
 public interface Visitable<T> {
 
-    /**
-     * Visitor pattern accept method that should every subclass implement
-     * @param visitor
-     */
-    void accept(T visitor);
+	/**
+	 * Visitor pattern accept method that should every subclass implement
+	 * 
+	 * @param visitor
+	 */
+	void accept(T visitor);
 }

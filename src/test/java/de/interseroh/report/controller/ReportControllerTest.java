@@ -27,10 +27,9 @@ import de.interseroh.report.webconfig.WebMvcConfig;
 @WebAppConfiguration
 public class ReportControllerTest {
 
+	protected MockMvc mockMvc;
 	@Autowired
 	private WebApplicationContext wac;
-
-	protected MockMvc mockMvc;
 
 	@Before
 	public void setup() {
@@ -46,11 +45,12 @@ public class ReportControllerTest {
 				.andDo(print());
 	}
 
-    @Test
-    public void testCascadingParameterView() throws Exception {
-        this.mockMvc.perform(get("/reports/cascade_parameters/cascade/customerorders?params[customer].value=278")) //
-                .andExpect(status().isOk()) //
-                .andDo(print());
-    }
+	@Test
+	public void testCascadingParameterView() throws Exception {
+		this.mockMvc.perform(get(
+				"/reports/cascade_parameters/cascade/customerorders?params[customer].value=278")) //
+				.andExpect(status().isOk()) //
+				.andDo(print());
+	}
 
 }

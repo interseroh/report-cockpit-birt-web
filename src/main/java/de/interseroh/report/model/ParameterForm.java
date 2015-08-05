@@ -20,7 +20,6 @@
  */
 package de.interseroh.report.model;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,7 +40,7 @@ public class ParameterForm {
 
 	private String reportName;
 	private Collection<GroupParameter> groups;
-    private Map<String, Parameter> parameterMap;
+	private Map<String, Parameter> parameterMap;
 
 	/**
 	 * Checks whether or not all parameters has either a value or a default
@@ -60,11 +59,11 @@ public class ParameterForm {
 	}
 
 	public String asRequestParams() {
-       List<String> params = new ArrayList<>();
+		List<String> params = new ArrayList<>();
 
-        for (GroupParameter group : groups) {
-            params.addAll(group.asRequestParameter());
-        }
+		for (GroupParameter group : groups) {
+			params.addAll(group.asRequestParameter());
+		}
 
 		StringBuilder builder = new StringBuilder();
 		for (String param : params) {
@@ -74,51 +73,52 @@ public class ParameterForm {
 			builder.append(param);
 		}
 
-		return (builder.length() > 0) ? "?"+builder.toString() : "";
+		return (builder.length() > 0) ? "?" + builder.toString() : "";
 	}
 
-    /**
-     * Builds a map for all scalar parameter based on parameter name and value.
-     * Not multi-value and adhoc scalar parameter will be transformed to an array of values.
-     * For instance, <code>name={value1, value2}</code>
-     * @return
-     */
-    public Map<String, Object> asReportParameters() {
-        Map<String, Object> parameters = new HashMap<>();
-        for (GroupParameter group : groups) {
-            parameters.putAll(group.asReportParameter());
-        }
-        return parameters;
-    }
+	/**
+	 * Builds a map for all scalar parameter based on parameter name and value.
+	 * Not multi-value and adhoc scalar parameter will be transformed to an
+	 * array of values. For instance, <code>name={value1, value2}</code>
+	 * 
+	 * @return
+	 */
+	public Map<String, Object> asReportParameters() {
+		Map<String, Object> parameters = new HashMap<>();
+		for (GroupParameter group : groups) {
+			parameters.putAll(group.asReportParameter());
+		}
+		return parameters;
+	}
 
-
-    /**
-     * Returns a map of all cascading group and scalar parameters of the ParameterForm.
-     * The map do not contain synthetic and simple groups.
-     *
-     * @return Map<String, Parameter>
-     */
+	/**
+	 * Returns a map of all cascading group and scalar parameters of the
+	 * ParameterForm. The map do not contain synthetic and simple groups.
+	 *
+	 * @return Map<String, Parameter>
+	 */
 	public Map<String, Parameter> getParams() {
-        if (parameterMap == null) {
-            parameterMap = new ParameterToMapVisitor(groups).build();
-        }
+		if (parameterMap == null) {
+			parameterMap = new ParameterToMapVisitor(groups).build();
+		}
 		return Collections.synchronizedMap(parameterMap);
 	}
-
-    /**
-     * This will clear the cached map between parameter names and objects.
-     * The map will be rebuild lazy on the next request
-     * @see ParameterForm#getParams()
-     * @return same instance of ParameterForm
-     */
-    public ParameterForm resetParams() {
-        parameterMap = null;
-        return this;
-    }
 
 	public void setParams(Map<String, ScalarParameter> params) {
 		logger.info("Got:{}", params);
 		// nothing to do read only
+	}
+
+	/**
+	 * This will clear the cached map between parameter names and objects. The
+	 * map will be rebuild lazy on the next request
+	 *
+	 * @see ParameterForm#getParams()
+	 * @return same instance of ParameterForm
+	 */
+	public ParameterForm resetParams() {
+		parameterMap = null;
+		return this;
 	}
 
 	public ParameterForm withReportName(final String reportName) {
@@ -132,10 +132,10 @@ public class ParameterForm {
 		return this;
 	}
 
-    public ParameterForm addGroupParameter(GroupParameter group) {
-        getGroups().add(group);
-        return this;
-    }
+	public ParameterForm addGroupParameter(GroupParameter group) {
+		getGroups().add(group);
+		return this;
+	}
 
 	public boolean hasNoParameters() {
 		return groups.size() == 0;

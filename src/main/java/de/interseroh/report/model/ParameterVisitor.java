@@ -5,15 +5,15 @@ package de.interseroh.report.model;
  */
 public interface ParameterVisitor {
 
-    void visit(DefaultGroupParameter parameter);
+	void visit(DefaultGroupParameter parameter);
 
-    void visit(SingleSelectParameter parameter);
+	void visit(SingleSelectParameter parameter);
 
-    void visit(RadioSelectParameter parameter);
+	void visit(RadioSelectParameter parameter);
 
-    void visit(MultiSelectParameter parameter);
+	void visit(MultiSelectParameter parameter);
 
 	void visit(StringParameter parameter);
 
-    void visit(BooleanParameter parameter);
+	void visit(BooleanParameter parameter);
 }

@@ -6,7 +6,6 @@ import java.util.Map;
 
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.model.GroupParameter;
-import de.interseroh.report.model.Parameter;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -22,7 +21,8 @@ public interface BirtReportService {
 	Collection<GroupParameter> getParameterGroups(String reportName)
 			throws BirtReportException;
 
-    void loadOptionsForCascadingGroup(String reportName, GroupParameter group) throws BirtReportException;
+	void loadOptionsForCascadingGroup(String reportName, GroupParameter group)
+			throws BirtReportException;
 
 	void renderHtmlReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;

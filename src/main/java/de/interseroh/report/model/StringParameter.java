@@ -25,15 +25,16 @@ import org.apache.commons.lang.StringUtils;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class StringParameter extends AbstractScalarParameter<StringParameter, String> {
-
-    @Override
-    public void accept(ParameterVisitor visitor) {
-        visitor.visit(this);
-    }
+public class StringParameter
+		extends AbstractScalarParameter<StringParameter, String> {
 
 	@Override
-    public boolean isValid() {
+	public void accept(ParameterVisitor visitor) {
+		visitor.visit(this);
+	}
+
+	@Override
+	public boolean isValid() {
 		return !isRequired() //
 				|| StringUtils.isNotBlank(getValue())
 				|| StringUtils.isNotBlank(getDefaultValue());

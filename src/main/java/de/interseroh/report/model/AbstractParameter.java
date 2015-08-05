@@ -6,13 +6,14 @@ import java.util.List;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public abstract class AbstractParameter<SUB extends AbstractParameter<SUB>> implements Parameter {
+public abstract class AbstractParameter<SUB extends AbstractParameter<SUB>>
+		implements Parameter {
 
 	private String name;
-    private String displayLabel;
-    private String tooltip;
+	private String displayLabel;
+	private String tooltip;
 
-    @Override
+	@Override
 	public String getParameterType() {
 		return "TEXTBOX";
 	}
@@ -31,9 +32,13 @@ public abstract class AbstractParameter<SUB extends AbstractParameter<SUB>> impl
 		return (SUB) this;
 	}
 
-    public String getDisplayLabel() {
-        return displayLabel;
-    }
+	public String getDisplayLabel() {
+		return displayLabel;
+	}
+
+	public void setDisplayLabel(String displayLabel) {
+		this.displayLabel = displayLabel;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -54,31 +59,27 @@ public abstract class AbstractParameter<SUB extends AbstractParameter<SUB>> impl
 		return getName() != null ? getName().hashCode() : 0;
 	}
 
-    public void setDisplayLabel(String displayLabel) {
-        this.displayLabel = displayLabel;
-    }
+	public SUB withDisplayLabel(final String displayLabel) {
+		this.displayLabel = displayLabel;
+		return (SUB) this;
+	}
 
-    public SUB withDisplayLabel(final String displayLabel) {
-        this.displayLabel = displayLabel;
-        return (SUB) this;
-    }
+	@Override
+	public String getTooltip() {
+		return tooltip;
+	}
 
-    @Override
-    public String getTooltip() {
-        return tooltip;
-    }
+	public void setTooltip(String toolTip) {
+		this.tooltip = toolTip;
+	}
 
-    public void setTooltip(String toolTip) {
-        this.tooltip = toolTip;
-    }
+	public SUB withTooltip(final String toolTip) {
+		this.tooltip = toolTip;
+		return (SUB) this;
+	}
 
-    public SUB withTooltip(final String toolTip) {
-        this.tooltip = toolTip;
-        return (SUB) this;
-    }
-
-    @Override
-    public List<String> asRequestParameter() {
-        return Collections.emptyList();
-    }
+	@Override
+	public List<String> asRequestParameter() {
+		return Collections.emptyList();
+	}
 }

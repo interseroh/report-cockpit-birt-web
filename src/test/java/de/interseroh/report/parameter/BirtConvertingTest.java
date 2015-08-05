@@ -23,7 +23,6 @@ package de.interseroh.report.parameter;
 import java.math.BigDecimal;
 import java.util.Collection;
 
-import de.interseroh.report.model.GroupParameter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.model.GroupParameter;
 import de.interseroh.report.services.BirtReportService;
 import de.interseroh.report.webconfig.WebMvcConfig;
 

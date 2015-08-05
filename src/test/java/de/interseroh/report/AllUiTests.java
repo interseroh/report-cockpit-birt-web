@@ -36,14 +36,14 @@ import de.interseroh.report.webconfig.SecurityConfigTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ //
-SecurityConfigTest.class, //
+		SecurityConfigTest.class, //
 		SecurityConfigAuthTest.class, //
 		BirtReportGenerateTest.class, //
 		BirtPdfReportServiceTest.class, //
 		BirtHtmlReportServiceTest.class, //
 		BirtExcelReportServiceTest.class, //
 		BirtDataTypeTest.class, //
-		BirtParameterTypeTest.class,//
+		BirtParameterTypeTest.class, //
 		BirtOutputFormatTest.class //
 })
 public class AllUiTests {

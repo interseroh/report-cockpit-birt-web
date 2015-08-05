@@ -106,21 +106,21 @@ public class ReportController {
 	@RequestMapping(method = RequestMethod.GET, value = "/cascade/{groupName}")
 	public String cascadingGroup(@PathVariable("reportName") String reportName,
 			@PathVariable("groupName") String groupName,
-			@ModelAttribute ParameterForm form, ModelAndView modelAndView) throws BirtReportException {
+			@ModelAttribute ParameterForm form, ModelAndView modelAndView)
+					throws BirtReportException {
 
-        // filter by cascading group name
+		// filter by cascading group name
 		Parameter parameter = form.getParams().get(groupName);
 
 		if (parameter instanceof GroupParameter) {
-            GroupParameter group = (GroupParameter) parameter;
-            reportService.loadOptionsForCascadingGroup(reportName, group);
-            form.resetParams();
+			GroupParameter group = (GroupParameter) parameter;
+			reportService.loadOptionsForCascadingGroup(reportName, group);
+			form.resetParams();
 		}
 
-        new ParameterLogVisitor().printParameters(form.getGroups());
+		new ParameterLogVisitor().printParameters(form.getGroups());
 
-
-        return "/parameters :: form#parameters";
+		return "/parameters :: form#parameters";
 	}
 
 	private void injectReportUri(@ModelAttribute ParameterForm form,

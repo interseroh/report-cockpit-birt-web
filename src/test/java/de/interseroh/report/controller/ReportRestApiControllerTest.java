@@ -1,9 +1,7 @@
 package de.interseroh.report.controller;
 
-import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -27,21 +25,21 @@ import de.interseroh.report.webconfig.WebMvcConfig;
 @WebAppConfiguration
 public class ReportRestApiControllerTest {
 
+	protected MockMvc mockMvc;
 	@Autowired
 	private WebApplicationContext wac;
-
-	protected MockMvc mockMvc;
 
 	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	}
 
-    @Test
-    public void testCascadingParameterView() throws Exception {
-        this.mockMvc.perform(get("/api/render/cascade_parameters/html?params[customer].value=112&params[order].value=10124")) //
-                .andExpect(status().isOk()) //
-                .andDo(print());
-    }
+	@Test
+	public void testCascadingParameterView() throws Exception {
+		this.mockMvc.perform(get(
+				"/api/render/cascade_parameters/html?params[customer].value=112&params[order].value=10124")) //
+				.andExpect(status().isOk()) //
+				.andDo(print());
+	}
 
 }

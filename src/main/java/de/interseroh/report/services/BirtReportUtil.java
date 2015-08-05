@@ -50,7 +50,6 @@ public class BirtReportUtil {
 	public static void printSelectionList(IParameterDefnBase paramDefn,
 			IGetParameterDefinitionTask task) {
 
-
 		Collection<IParameterSelectionChoice> selectionChoices = task
 				.getSelectionList(paramDefn.getName());
 
@@ -125,8 +124,8 @@ public class BirtReportUtil {
 			PrintStream out) {
 		if (definition instanceof IScalarParameterDefn) {
 			IScalarParameterDefn scalar = (IScalarParameterDefn) definition;
-			out.println("DataType: "
-					+ BirtDataType.valueOf(scalar.getDataType()));
+			out.println(
+					"DataType: " + BirtDataType.valueOf(scalar.getDataType()));
 			out.println("PromptText: " + scalar.getPromptText());
 			out.println("Required: " + scalar.isRequired());
 			out.println("AllowNewValues: " + scalar.allowNewValues());
@@ -136,9 +135,9 @@ public class BirtReportUtil {
 			out.println("ControlType: "
 					+ BirtControlType.valueOf(scalar.getControlType()));
 			out.println("DefaultValue: " + scalar.getDefaultValue());
-			out.println("ScalarParameterType: "
-					+ scalar.getScalarParameterType());
-            out.println("SelectionListType: "+ scalar.getSelectionListType());
+			out.println(
+					"ScalarParameterType: " + scalar.getScalarParameterType());
+			out.println("SelectionListType: " + scalar.getSelectionListType());
 		}
 	}
 }

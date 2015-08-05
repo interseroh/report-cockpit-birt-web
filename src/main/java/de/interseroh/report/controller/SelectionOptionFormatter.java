@@ -33,12 +33,13 @@ import de.interseroh.report.model.SelectionOption;
 public class SelectionOptionFormatter implements Formatter<SelectionOption> {
 
 	@Override
-	public SelectionOption parse(String text, Locale locale) throws ParseException {
+	public SelectionOption parse(String text, Locale locale)
+			throws ParseException {
 		return new SelectionOption().withValue(text);
 	}
 
-    @Override
-    public String print(SelectionOption option, Locale locale) {
-        return option.getValue();
-    }
+	@Override
+	public String print(SelectionOption option, Locale locale) {
+		return option.getValue();
+	}
 }

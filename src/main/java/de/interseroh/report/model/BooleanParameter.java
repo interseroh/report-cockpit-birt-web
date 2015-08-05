@@ -20,16 +20,15 @@
  */
 package de.interseroh.report.model;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class BooleanParameter extends AbstractScalarParameter<BooleanParameter, Boolean> {
+public class BooleanParameter
+		extends AbstractScalarParameter<BooleanParameter, Boolean> {
 
-    @Override
-    public void accept(ParameterVisitor visitor) {
-        visitor.visit(this);
-    }
+	@Override
+	public void accept(ParameterVisitor visitor) {
+		visitor.visit(this);
+	}
 
 }

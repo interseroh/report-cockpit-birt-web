@@ -1,9 +1,9 @@
 package de.interseroh.report.model;
 
-import de.interseroh.report.common.Visitable;
-
 import java.util.List;
 import java.util.Map;
+
+import de.interseroh.report.common.Visitable;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -72,14 +72,14 @@ public interface Parameter extends Visitable<ParameterVisitor> {
 	 */
 	boolean isValid();
 
-    /**
-     * @return List of "key=value" strings as request parameter
-     */
-    List<String> asRequestParameter();
+	/**
+	 * @return List of "key=value" strings as request parameter
+	 */
+	List<String> asRequestParameter();
 
-    /**
-     * @return Map of parameter name and values
-     */
-    Map<String, Object> asReportParameter();
+	/**
+	 * @return Map of parameter name and values
+	 */
+	Map<String, Object> asReportParameter();
 
 }

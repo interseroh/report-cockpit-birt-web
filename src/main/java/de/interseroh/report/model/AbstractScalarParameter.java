@@ -110,11 +110,11 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 
 		switch (getDataType()) {
 		case TYPE_INTEGER:
-            try {
-                paramValue = Integer.valueOf(getValueAsString());
-            } catch (NumberFormatException nfe) {
-                paramValue = getValueAsString();
-            }
+			try {
+				paramValue = Integer.valueOf(getValueAsString());
+			} catch (NumberFormatException nfe) {
+				paramValue = getValueAsString();
+			}
 			break;
 		case TYPE_FLOAT:
 		case TYPE_DECIMAL:

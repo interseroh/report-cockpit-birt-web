@@ -29,8 +29,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.interseroh.report.model.ParameterForm;
-import de.interseroh.report.model.ParameterLogVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +43,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.ScalarParameter;
+import de.interseroh.report.model.ParameterForm;
+import de.interseroh.report.model.ParameterLogVisitor;
 import de.interseroh.report.services.BirtOutputFormat;
 import de.interseroh.report.services.BirtReportService;
 
@@ -65,29 +64,29 @@ public class ReportRestApiController {
 	@Autowired
 	private ConversionService conversionService;
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        logger.info("initializing WebDataBinder");
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		logger.info("initializing WebDataBinder");
 
-        DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-        CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, false);
-        binder.registerCustomEditor(Date.class, dateEditor);
-    }
+		DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
+		CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, false);
+		binder.registerCustomEditor(Date.class, dateEditor);
+	}
 
-    @ModelAttribute("parameterForm")
-    public ParameterForm populateForm(
-            @PathVariable("reportName") String reportName)
-            throws BirtReportException {
-        logger.debug("New ParameterForm for Report {}. ", reportName);
-        ParameterForm form = new ParameterForm() //
-                .withReportName(reportName) //
-                .withGroupParameters(
-                        reportService.getParameterGroups(reportName));
+	@ModelAttribute("parameterForm")
+	public ParameterForm populateForm(
+			@PathVariable("reportName") String reportName)
+					throws BirtReportException {
+		logger.debug("New ParameterForm for Report {}. ", reportName);
+		ParameterForm form = new ParameterForm() //
+				.withReportName(reportName) //
+				.withGroupParameters(
+						reportService.getParameterGroups(reportName));
 
-        new ParameterLogVisitor().printParameters(form.getGroups());
-        return form;
+		new ParameterLogVisitor().printParameters(form.getGroups());
+		return form;
 
-    }
+	}
 
 	@RequestMapping(value = "/render/{reportName}", method = RequestMethod.GET)
 	public void renderReportInDefaultFormat(
@@ -95,15 +94,16 @@ public class ReportRestApiController {
 			@PathVariable("reportName") String reportName,
 			HttpServletResponse response)
 					throws IOException, BirtReportException, ParseException {
-		renderReport(parameterForm, reportName, BirtOutputFormat.HTML5.getFormatName(), response);
+		renderReport(parameterForm, reportName,
+				BirtOutputFormat.HTML5.getFormatName(), response);
 	}
 
-    @RequestMapping(value = "/render/{reportName}/{format}", method = RequestMethod.GET)
+	@RequestMapping(value = "/render/{reportName}/{format}", method = RequestMethod.GET)
 	public void renderReport(
 			@ModelAttribute("parameterForm") ParameterForm parameterForm,
 			@PathVariable("reportName") String reportName, //
 			@PathVariable("format") String format, //
-            HttpServletResponse response)
+			HttpServletResponse response)
 					throws IOException, BirtReportException, ParseException {
 		logger.debug("Rendering " + reportName + " in " + format + ".");
 
@@ -112,7 +112,7 @@ public class ReportRestApiController {
 
 		Map<String, Object> parameters = parameterForm.asReportParameters();
 
-        logger.debug("ParameterMap {}", parameters);
+		logger.debug("ParameterMap {}", parameters);
 
 		switch (outputFormat) {
 		case HTML5:
@@ -138,7 +138,5 @@ public class ReportRestApiController {
 		}
 		// TODO idueppe - need exception handling
 	}
-
-
 
 }

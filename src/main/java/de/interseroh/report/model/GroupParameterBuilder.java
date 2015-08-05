@@ -30,7 +30,7 @@ public class GroupParameterBuilder {
 	private GroupParameter group;
 
 	public GroupParameterBuilder(IGetParameterDefinitionTask task,
-                                 Collection<IParameterDefnBase> definitions) {
+			Collection<IParameterDefnBase> definitions) {
 		this.task = task;
 		this.definitions = definitions;
 	}
@@ -57,8 +57,8 @@ public class GroupParameterBuilder {
 		return groups;
 	}
 
-	private GroupParameter buildWrapperGroup(
-            GroupParameter wrapperGroup, List<GroupParameter> groups) {
+	private GroupParameter buildWrapperGroup(GroupParameter wrapperGroup,
+			List<GroupParameter> groups) {
 		if (wrapperGroup == null) {
 			wrapperGroup = new DefaultGroupParameter();
 			groups.add(wrapperGroup);
@@ -67,11 +67,10 @@ public class GroupParameterBuilder {
 	}
 
 	public GroupParameter buildGroup(IParameterGroupDefn definition) {
-		return new DefaultGroupParameter()
-                .withName(definition.getName())
+		return new DefaultGroupParameter().withName(definition.getName())
 				.withDisplayLabel(orNull(definition.getDisplayName(),
 						definition.getPromptText()))
-                .withCascading(definition instanceof ICascadingParameterGroup)
+				.withCascading(definition instanceof ICascadingParameterGroup)
 				.withParameters(buildScalarParameters(
 						(Collection<IParameterDefnBase>) definition
 								.getContents()));
@@ -121,8 +120,9 @@ public class GroupParameterBuilder {
 				definition.getPromptText(), definition.getName()));
 		parameter.setTooltip(definition.getHelpText());
 
-        parameter.setSimpleValue("simple".equals(definition.getScalarParameterType()));
-        parameter.setDataType(BirtDataType.valueOf(definition.getDataType()));
+		parameter.setSimpleValue(
+				"simple".equals(definition.getScalarParameterType()));
+		parameter.setDataType(BirtDataType.valueOf(definition.getDataType()));
 
 		return parameter;
 	}

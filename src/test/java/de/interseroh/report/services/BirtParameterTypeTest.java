@@ -35,9 +35,9 @@ public class BirtParameterTypeTest {
 
 	@Test
 	public void testGetType() throws Exception {
-		assertThat(
-				BirtParameterType.valueOf(IParameterDefnBase.SCALAR_PARAMETER)
-						.getType(), is(IParameterDefnBase.SCALAR_PARAMETER));
+		assertThat(BirtParameterType
+				.valueOf(IParameterDefnBase.SCALAR_PARAMETER).getType(),
+				is(IParameterDefnBase.SCALAR_PARAMETER));
 	}
 
 	@Test(expected = UnknownParameterTypeException.class)

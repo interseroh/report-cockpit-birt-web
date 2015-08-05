@@ -70,11 +70,13 @@ public class ParameterTest {
 
 	@Test
 	public void testAsRequestParameter() throws Exception {
-		ParameterForm form = new ParameterForm().addGroupParameter(new DefaultGroupParameter()
-				.addScalarParameter(new SingleSelectParameter<Long>()
-						.withName("customer").withValue(123l))
-				.addScalarParameter(new SingleSelectParameter<Long>()
-						.withName("order").withValue(321l)));
-        assertThat(form.asRequestParams(),is("?params[customer]=123&params[order]=321"));
+		ParameterForm form = new ParameterForm()
+				.addGroupParameter(new DefaultGroupParameter()
+						.addScalarParameter(new SingleSelectParameter<Long>()
+								.withName("customer").withValue(123l))
+						.addScalarParameter(new SingleSelectParameter<Long>()
+								.withName("order").withValue(321l)));
+		assertThat(form.asRequestParams(),
+				is("?params[customer]=123&params[order]=321"));
 	}
 }

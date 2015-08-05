@@ -68,8 +68,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testHelloWorldReport() throws EngineException,
-			FileNotFoundException {
+	public void testHelloWorldReport()
+			throws EngineException, FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/hello_world.rptdesign";
@@ -80,8 +80,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testSalesInvoiceReport() throws EngineException,
-			FileNotFoundException {
+	public void testSalesInvoiceReport()
+			throws EngineException, FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/salesinvoice.rptdesign";
@@ -91,8 +91,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testProductCatalogReport() throws EngineException,
-			FileNotFoundException {
+	public void testProductCatalogReport()
+			throws EngineException, FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/productcatalog.rptdesign";
@@ -119,9 +119,8 @@ public class BirtReportGenerateTest {
 			System.out.println("Helptext: " + parameterDefn.getHelpText());
 			System.out.println("Name: " + parameterDefn.getName());
 			System.out.println("Typename: " + parameterDefn.getTypeName());
-			System.out.println("ParameterType: "
-					+ BirtParameterType.valueOf(parameterDefn
-							.getParameterType()));
+			System.out.println("ParameterType: " + BirtParameterType
+					.valueOf(parameterDefn.getParameterType()));
 			System.out.println("PromptText: " + parameterDefn.getPromptText());
 			System.out.println("DefaultValue: "
 					+ parameterDefinitionTask.getDefaultValue(parameterDefn));

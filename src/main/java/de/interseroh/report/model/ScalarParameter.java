@@ -22,33 +22,33 @@ public interface ScalarParameter<T> extends Parameter {
 	 */
 	void setValue(T value);
 
-    /**
-     * String representation of value
-     * @return String or empty
-     */
-    String getValueAsString();
+	/**
+	 * String representation of value
+	 * 
+	 * @return String or empty
+	 */
+	String getValueAsString();
 
-    /**
+	/**
 	 * The default value
 	 * 
 	 * @return default value or null if no default value is defined
 	 */
 	T getDefaultValue();
 
-    /**
-     *
-     * @return Html Input Type or null
-     */
+	/**
+	 *
+	 * @return Html Input Type or null
+	 */
 	String getHtmlFieldType();
 
-
-    /**
-     *
-     * @return BirtDataType
-     */
+	/**
+	 *
+	 * @return BirtDataType
+	 */
 	BirtDataType getDataType();
 
-    void setDataType(BirtDataType dataType);
+	void setDataType(BirtDataType dataType);
 
 	/**
 	 * True if a value is needed
@@ -63,14 +63,13 @@ public interface ScalarParameter<T> extends Parameter {
 	 */
 	boolean isConcealed();
 
+	/**
+	 * Not simple parameters must be wrapped as an array when calling a report.
+	 * 
+	 * @return true if it is a simple parameter type.
+	 */
+	boolean isSimpleValue();
 
-    /**
-     * Not simple parameters must be wrapped as an array when calling a report.
-     * @return true if it is a simple parameter type.
-     */
-    boolean isSimpleValue();
-
-    void setSimpleValue(boolean simple);
-
+	void setSimpleValue(boolean simple);
 
 }

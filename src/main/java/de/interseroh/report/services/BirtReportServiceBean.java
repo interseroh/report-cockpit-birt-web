@@ -29,9 +29,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import de.interseroh.report.model.Parameter;
-import de.interseroh.report.model.ScalarParameter;
-import de.interseroh.report.model.SelectionParameter;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
@@ -60,208 +57,219 @@ import de.interseroh.report.exception.RenderReportException;
 import de.interseroh.report.model.GroupParameter;
 import de.interseroh.report.model.GroupParameterBuilder;
 import de.interseroh.report.model.ParameterLogVisitor;
+import de.interseroh.report.model.ScalarParameter;
+import de.interseroh.report.model.SelectionParameter;
 
 @Service
-@PropertySource({"classpath:report-config.properties"})
+@PropertySource({ "classpath:report-config.properties" })
 public class BirtReportServiceBean implements BirtReportService {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(BirtReportServiceBean.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(BirtReportServiceBean.class);
 
-    @Autowired
-    private Environment environment;
+	@Autowired
+	private Environment environment;
 
-    @Autowired
-    private ResourceLoader resourceLoader;
+	@Autowired
+	private ResourceLoader resourceLoader;
 
-    @Autowired
-    private IReportEngine reportEngine;
+	@Autowired
+	private IReportEngine reportEngine;
 
-    private String baseImageURL;
-    private String imageDirectory;
+	private String baseImageURL;
+	private String imageDirectory;
 
-    @PostConstruct
-    public void init() {
-        logger.info("Initializing Birt Report Service URLs");
+	@PostConstruct
+	public void init() {
+		logger.info("Initializing Birt Report Service URLs");
 
-        String baseImageContextPath = environment.getProperty(
-                REPORT_BASE_IMAGE_CONTEXT_PATH_KEY, "/report-cockpit-birt");
-        baseImageURL = baseImageContextPath
-                + environment.getProperty(REPORT_BASE_IMAGE_URL_KEY);
-        String defaultDirectory = environment.getProperty("java.io.tmpdir");
-        imageDirectory = environment.getProperty(REPORT_IMAGE_DIRECTORY_KEY,
-                defaultDirectory);
+		String baseImageContextPath = environment.getProperty(
+				REPORT_BASE_IMAGE_CONTEXT_PATH_KEY, "/report-cockpit-birt");
+		baseImageURL = baseImageContextPath
+				+ environment.getProperty(REPORT_BASE_IMAGE_URL_KEY);
+		String defaultDirectory = environment.getProperty("java.io.tmpdir");
+		imageDirectory = environment.getProperty(REPORT_IMAGE_DIRECTORY_KEY,
+				defaultDirectory);
 
-        logger.info("\tBaseImageUrl:   " + baseImageURL);
-        logger.info("\tImageDirectory: " + imageDirectory);
-    }
+		logger.info("\tBaseImageUrl:   " + baseImageURL);
+		logger.info("\tImageDirectory: " + imageDirectory);
+	}
 
-    @Override
-    public Collection<GroupParameter> getParameterGroups(String reportName)
-            throws BirtReportException {
-        try {
-            String reportFileName = absolutePathOf(reportFileName(reportName));
+	@Override
+	public Collection<GroupParameter> getParameterGroups(String reportName)
+			throws BirtReportException {
+		try {
+			String reportFileName = absolutePathOf(reportFileName(reportName));
 
-            IReportRunnable iReportRunnable = reportEngine
-                    .openReportDesign(reportFileName);
-            IGetParameterDefinitionTask task = reportEngine
-                    .createGetParameterDefinitionTask(iReportRunnable);
+			IReportRunnable iReportRunnable = reportEngine
+					.openReportDesign(reportFileName);
+			IGetParameterDefinitionTask task = reportEngine
+					.createGetParameterDefinitionTask(iReportRunnable);
 
-            boolean includeParameterGroups = true;
-            Collection<IParameterDefnBase> definitions = task
-                    .getParameterDefns(includeParameterGroups);
-            BirtReportUtil.printParameterDefinitions(definitions, task);
+			boolean includeParameterGroups = true;
+			Collection<IParameterDefnBase> definitions = task
+					.getParameterDefns(includeParameterGroups);
+			BirtReportUtil.printParameterDefinitions(definitions, task);
 
-            Collection<GroupParameter> groups = new GroupParameterBuilder(task,
-                    definitions).build();
-            new ParameterLogVisitor().printParameters(groups);
+			Collection<GroupParameter> groups = new GroupParameterBuilder(task,
+					definitions).build();
+			new ParameterLogVisitor().printParameters(groups);
 
-            return groups;
-        } catch (EngineException | IOException e) {
-            throw new BirtReportException(
-                    "Error while getting parameter definition for " + reportName
-                            + ".",
-                    e);
-        }
-    }
+			return groups;
+		} catch (EngineException | IOException e) {
+			throw new BirtReportException(
+					"Error while getting parameter definition for " + reportName
+							+ ".",
+					e);
+		}
+	}
 
-    @Override
-    public void loadOptionsForCascadingGroup(String reportName, GroupParameter group) throws BirtReportException {
-        try {
-            String reportFileName = absolutePathOf(reportFileName(reportName));
+	@Override
+	public void loadOptionsForCascadingGroup(String reportName,
+			GroupParameter group) throws BirtReportException {
+		try {
+			String reportFileName = absolutePathOf(reportFileName(reportName));
 
-            IReportRunnable iReportRunnable = reportEngine.openReportDesign(reportFileName);
-            IGetParameterDefinitionTask task = reportEngine.createGetParameterDefinitionTask(iReportRunnable);
+			IReportRunnable iReportRunnable = reportEngine
+					.openReportDesign(reportFileName);
+			IGetParameterDefinitionTask task = reportEngine
+					.createGetParameterDefinitionTask(iReportRunnable);
 
-            GroupParameterBuilder builder = new GroupParameterBuilder(null,null);
+			GroupParameterBuilder builder = new GroupParameterBuilder(null,
+					null);
 
-            List params = new ArrayList();
+			List params = new ArrayList();
 
-            for (ScalarParameter parameter : group.getParameters()) {
-                if (parameter instanceof SelectionParameter) {
-                    SelectionParameter selection = (SelectionParameter) parameter;
-                    Collection<IParameterSelectionChoice> choices = task.getSelectionListForCascadingGroup(group.getName(), params.toArray());
-                    selection.setOptions(builder.toOptions(choices));
-                    params.add(selection.getValue());
-                }
-            }
-        } catch (EngineException | IOException e) {
-            throw new BirtReportException("Error while getting cascading parameters for " + reportName + ".", e);
-        }
-    }
+			for (ScalarParameter parameter : group.getParameters()) {
+				if (parameter instanceof SelectionParameter) {
+					SelectionParameter selection = (SelectionParameter) parameter;
+					Collection<IParameterSelectionChoice> choices = task
+							.getSelectionListForCascadingGroup(group.getName(),
+									params.toArray());
+					selection.setOptions(builder.toOptions(choices));
+					params.add(selection.getValue());
+				}
+			}
+		} catch (EngineException | IOException e) {
+			throw new BirtReportException(
+					"Error while getting cascading parameters for " + reportName
+							+ ".",
+					e);
+		}
+	}
 
-    @Override
-    public void renderHtmlReport(String reportName,
-                                 Map<String, Object> parameters, OutputStream out)
-            throws BirtReportException {
-        try {
-            IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
-                    reportName);
+	@Override
+	public void renderHtmlReport(String reportName,
+			Map<String, Object> parameters, OutputStream out)
+					throws BirtReportException {
+		try {
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
-            injectParameters(parameters, runAndRenderTask);
+			injectParameters(parameters, runAndRenderTask);
 
-            HTMLRenderOption htmlOptions = new HTMLRenderOption();
-            htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
-            htmlOptions.setOutputStream(out);
-            htmlOptions.setImageHandler(new HTMLServerImageHandler());
-            htmlOptions.setEmbeddable(true);
+			HTMLRenderOption htmlOptions = new HTMLRenderOption();
+			htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
+			htmlOptions.setOutputStream(out);
+			htmlOptions.setImageHandler(new HTMLServerImageHandler());
+			htmlOptions.setEmbeddable(true);
 
-            htmlOptions.setBaseImageURL(baseImageURL);
-            htmlOptions.setImageDirectory(imageDirectory);
+			htmlOptions.setBaseImageURL(baseImageURL);
+			htmlOptions.setImageDirectory(imageDirectory);
 
-            runAndRenderTask(runAndRenderTask, htmlOptions);
-        } catch (EngineException | IOException e) {
-            throw new RenderReportException("html", reportName, e);
-        }
-    }
+			runAndRenderTask(runAndRenderTask, htmlOptions);
+		} catch (EngineException | IOException e) {
+			throw new RenderReportException("html", reportName, e);
+		}
+	}
 
-    @Override
-    public void renderPDFReport(String reportName,
-                                Map<String, Object> parameters, OutputStream out)
-            throws BirtReportException {
-        try {
-            IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
-                    reportName);
+	@Override
+	public void renderPDFReport(String reportName,
+			Map<String, Object> parameters, OutputStream out)
+					throws BirtReportException {
+		try {
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
-            injectParameters(parameters, runAndRenderTask);
+			injectParameters(parameters, runAndRenderTask);
 
-            PDFRenderOption pdfOptions = new PDFRenderOption();
-            pdfOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);
-            pdfOptions.setOutputStream(out);
-            pdfOptions.setEmbededFont(true); // TODO idueppe - should be
-            // configurable from cockpit
-            pdfOptions.setImageHandler(new HTMLServerImageHandler());
+			PDFRenderOption pdfOptions = new PDFRenderOption();
+			pdfOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_PDF);
+			pdfOptions.setOutputStream(out);
+			pdfOptions.setEmbededFont(true); // TODO idueppe - should be
+			// configurable from cockpit
+			pdfOptions.setImageHandler(new HTMLServerImageHandler());
 
-            runAndRenderTask(runAndRenderTask, pdfOptions);
+			runAndRenderTask(runAndRenderTask, pdfOptions);
 
-        } catch (EngineException | IOException e) {
-            throw new RenderReportException("pdf", reportName, e);
-        }
-    }
+		} catch (EngineException | IOException e) {
+			throw new RenderReportException("pdf", reportName, e);
+		}
+	}
 
-    @Override
-    public void renderExcelReport(String reportName,
-                                  Map<String, Object> parameters, OutputStream out)
-            throws BirtReportException {
-        try {
-            IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
-                    reportName);
+	@Override
+	public void renderExcelReport(String reportName,
+			Map<String, Object> parameters, OutputStream out)
+					throws BirtReportException {
+		try {
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
-            injectParameters(parameters, runAndRenderTask);
+			injectParameters(parameters, runAndRenderTask);
 
-            EXCELRenderOption excelRenderOptions = new EXCELRenderOption();
-            excelRenderOptions.setOutputFormat("xlsx");
-            excelRenderOptions.setOutputStream(out);
-            excelRenderOptions.setEnableMultipleSheet(true);
-            // TODO idueppe - should be configurable from cockpit
-            excelRenderOptions.setHideGridlines(true);
-            // TODO idueppe - should be configurable from cockpit
-            // excelRenderOptions.setOfficeVersion();
-            // TODO idueppe - should be configurable from cockpit
-            excelRenderOptions.setImageHandler(new HTMLServerImageHandler());
+			EXCELRenderOption excelRenderOptions = new EXCELRenderOption();
+			excelRenderOptions.setOutputFormat("xlsx");
+			excelRenderOptions.setOutputStream(out);
+			excelRenderOptions.setEnableMultipleSheet(true);
+			// TODO idueppe - should be configurable from cockpit
+			excelRenderOptions.setHideGridlines(true);
+			// TODO idueppe - should be configurable from cockpit
+			// excelRenderOptions.setOfficeVersion();
+			// TODO idueppe - should be configurable from cockpit
+			excelRenderOptions.setImageHandler(new HTMLServerImageHandler());
 
-            runAndRenderTask(runAndRenderTask, excelRenderOptions);
-        } catch (EngineException | IOException e) {
-            throw new RenderReportException("excel", reportName, e);
-        }
-    }
+			runAndRenderTask(runAndRenderTask, excelRenderOptions);
+		} catch (EngineException | IOException e) {
+			throw new RenderReportException("excel", reportName, e);
+		}
+	}
 
-    private String reportFileName(String reportName) {
-        return reportName + REPORT_FILE_SUFFIX;
-    }
+	private String reportFileName(String reportName) {
+		return reportName + REPORT_FILE_SUFFIX;
+	}
 
-    private void runAndRenderTask(IRunAndRenderTask runAndRenderTask,
-                                  IRenderOption renderOptions) throws EngineException {
-        runAndRenderTask.setRenderOption(renderOptions);
-        runAndRenderTask.run();
-        runAndRenderTask.close();
-    }
+	private void runAndRenderTask(IRunAndRenderTask runAndRenderTask,
+			IRenderOption renderOptions) throws EngineException {
+		runAndRenderTask.setRenderOption(renderOptions);
+		runAndRenderTask.run();
+		runAndRenderTask.close();
+	}
 
-    private IRunAndRenderTask createRunAndRenderTask(String reportName)
-            throws EngineException, IOException {
-        String reportFileName = absolutePathOf(reportFileName(reportName));
-        IReportRunnable iReportRunnable = reportEngine
-                .openReportDesign(reportFileName);
-        IRunAndRenderTask task = reportEngine
-                .createRunAndRenderTask(iReportRunnable);
-        logger.debug("Setting Locale to " + LocaleContextHolder.getLocale());
-        task.setLocale(LocaleContextHolder.getLocale());
-        return task;
-    }
+	private IRunAndRenderTask createRunAndRenderTask(String reportName)
+			throws EngineException, IOException {
+		String reportFileName = absolutePathOf(reportFileName(reportName));
+		IReportRunnable iReportRunnable = reportEngine
+				.openReportDesign(reportFileName);
+		IRunAndRenderTask task = reportEngine
+				.createRunAndRenderTask(iReportRunnable);
+		logger.debug("Setting Locale to " + LocaleContextHolder.getLocale());
+		task.setLocale(LocaleContextHolder.getLocale());
+		return task;
+	}
 
-    private void injectParameters(Map<String, Object> parameters,
-                                  IEngineTask runAndRenderTask) {
-        for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-            runAndRenderTask.setParameterValue(parameter.getKey(),
-                    parameter.getValue());
-        }
-    }
+	private void injectParameters(Map<String, Object> parameters,
+			IEngineTask runAndRenderTask) {
+		for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
+			runAndRenderTask.setParameterValue(parameter.getKey(),
+					parameter.getValue());
+		}
+	}
 
-    private String absolutePathOf(String reportFileName) throws IOException {
-        String location = environment.getProperty(REPORT_SOURCE_URL_KEY) + "/"
-                + reportFileName;
-        Resource resource = resourceLoader.getResource(location);
-        return resource.getFile().getAbsolutePath();
-    }
+	private String absolutePathOf(String reportFileName) throws IOException {
+		String location = environment.getProperty(REPORT_SOURCE_URL_KEY) + "/"
+				+ reportFileName;
+		Resource resource = resourceLoader.getResource(location);
+		return resource.getFile().getAbsolutePath();
+	}
 
 }

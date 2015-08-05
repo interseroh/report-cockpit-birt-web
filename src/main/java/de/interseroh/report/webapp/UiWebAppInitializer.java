@@ -70,17 +70,20 @@ public class UiWebAppInitializer implements WebApplicationInitializer {
 		context.register(WebMvcConfig.class);
 
 		DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
-		ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
-				DISPATCHER_SERVLET_NAME, dispatcherServlet);
+		ServletRegistration.Dynamic dispatcher = servletContext
+				.addServlet(DISPATCHER_SERVLET_NAME, dispatcherServlet);
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping(VIEWS_BASE);
 	}
 
 	private void addSecurityFilter(ServletContext servletContext) {
-		servletContext.addFilter(SPRING_SECURITY_FILTER_NAME,
-				DelegatingFilterProxy.class).addMappingForUrlPatterns(
-				EnumSet.<DispatcherType> of(DispatcherType.REQUEST,
-						DispatcherType.FORWARD), false, "/*");
+		servletContext
+				.addFilter(SPRING_SECURITY_FILTER_NAME,
+						DelegatingFilterProxy.class)
+				.addMappingForUrlPatterns(
+						EnumSet.<DispatcherType> of(DispatcherType.REQUEST,
+								DispatcherType.FORWARD),
+						false, "/*");
 	}
 
 	private AnnotationConfigWebApplicationContext getRootContext() {

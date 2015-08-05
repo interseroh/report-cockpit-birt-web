@@ -35,7 +35,7 @@ public enum BirtControlType {
 
 	private int controlType;
 
-    BirtControlType(int controlType) {
+	BirtControlType(int controlType) {
 		this.controlType = controlType;
 	}
 

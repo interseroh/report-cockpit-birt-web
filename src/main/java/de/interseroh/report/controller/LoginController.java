@@ -38,7 +38,8 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Ingo Düppe (Crowdcode)
  */
 @Controller
-@PropertySource({ "classpath:config.properties", "classpath:version.properties" })
+@PropertySource({ "classpath:config.properties",
+		"classpath:version.properties" })
 public class LoginController {
 
 	private static final Logger logger = LoggerFactory

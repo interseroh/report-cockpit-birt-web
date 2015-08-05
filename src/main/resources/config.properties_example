@@ -22,3 +22,6 @@ ldap.inmemory.password=lofidewanto
 ldap.url=ldap://ldap.xxx:389/OU=xxx
 ldap.managerDn=xxx
 ldap.managerPassword=xxx
+
+# Start page
+login.successful.startpage=/index

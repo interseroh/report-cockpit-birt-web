@@ -36,6 +36,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private static final String SUCCESSFUL_START_PAGE = "/index";
+
 	private static final String MANAGER_PASSWORD = "xxx";
 
 	private static final String MANAGER_DN = "xxx";
@@ -56,8 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		String successfulStartPage = env
+				.getProperty("login.successful.startpage");
+		if (successfulStartPage == null || successfulStartPage.equals("")) {
+			successfulStartPage = SUCCESSFUL_START_PAGE;
+		}
+
 		http.authorizeRequests()
-				.antMatchers("/", "/index", "/resources/**", "/imprint",
+				.antMatchers("/", SUCCESSFUL_START_PAGE, "/resources/**", "/imprint",
 						"/images/**") // white
 				// list
 				// of
@@ -68,7 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().formLogin() // configure the login
 				.loginPage("/login") // this is the loginPage
 				.failureUrl("/login?error") // redirect to this page on failure
-				.defaultSuccessUrl("/index") // redirect to this page on success
+				.defaultSuccessUrl(successfulStartPage) // redirect to this page
+														// on success
 				.permitAll() // permit any user to access the login page
 				.and().logout() // logout config
 				.logoutUrl("/logout") // url to trigger logout

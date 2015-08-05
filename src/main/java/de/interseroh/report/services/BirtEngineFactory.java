@@ -42,11 +42,12 @@ import de.interseroh.report.exception.BirtSystemException;
  * @author Ingo Düppe (Crowdcode)
  */
 @Component
-public class BirtEngineFactory
-		implements FactoryBean, ApplicationContextAware, DisposableBean {
+public class BirtEngineFactory implements FactoryBean<IReportEngine>,
+		ApplicationContextAware, DisposableBean {
 
 	public static final String SPRING_KEY = "spring";
-	private Logger logger = Logger.getLogger(BirtEngineFactory.class.getName());
+	private final Logger logger = Logger.getLogger(BirtEngineFactory.class
+			.getName());
 	private ApplicationContext applicationContext;
 
 	private IReportEngine birtEngine;
@@ -55,14 +56,13 @@ public class BirtEngineFactory
 	private Environment env;
 
 	@Override
-	public Object getObject() throws Exception {
+	public IReportEngine getObject() throws Exception {
 		try {
 			EngineConfig config = getEngineConfig();
 
 			Platform.startup(config);
 			IReportEngineFactory factory = (IReportEngineFactory) Platform
-					.createFactoryObject(
-							IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
+					.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
 			birtEngine = factory.createReportEngine(config);
 
 			return birtEngine;
@@ -72,6 +72,7 @@ public class BirtEngineFactory
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private EngineConfig getEngineConfig() {
 		EngineConfig config = new EngineConfig();
 		config.setTempDir(env.getProperty("java.io.tmpdir"));

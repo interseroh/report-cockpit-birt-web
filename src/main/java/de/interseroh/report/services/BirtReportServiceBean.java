@@ -95,6 +95,7 @@ public class BirtReportServiceBean implements BirtReportService {
 		logger.info("\tImageDirectory: " + imageDirectory);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<GroupParameter> getParameterGroups(String reportName)
 			throws BirtReportException {
@@ -109,7 +110,10 @@ public class BirtReportServiceBean implements BirtReportService {
 			boolean includeParameterGroups = true;
 			Collection<IParameterDefnBase> definitions = task
 					.getParameterDefns(includeParameterGroups);
-			BirtReportUtil.printParameterDefinitions(definitions, task);
+
+			if (logger.isDebugEnabled()) {
+				BirtReportUtil.printParameterDefinitions(definitions, task);
+			}
 
 			Collection<GroupParameter> groups = new GroupParameterBuilder(task,
 					definitions).build();
@@ -118,12 +122,12 @@ public class BirtReportServiceBean implements BirtReportService {
 			return groups;
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting parameter definition for " + reportName
-							+ ".",
-					e);
+					"Error while getting parameter definition for "
+							+ reportName + ".", e);
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void loadOptionsForCascadingGroup(String reportName,
 			GroupParameter group) throws BirtReportException {
@@ -152,19 +156,17 @@ public class BirtReportServiceBean implements BirtReportService {
 			}
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting cascading parameters for " + reportName
-							+ ".",
-					e);
+					"Error while getting cascading parameters for "
+							+ reportName + ".", e);
 		}
 	}
 
 	@Override
 	public void renderHtmlReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-					throws BirtReportException {
+			throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
-					reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -186,10 +188,9 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderPDFReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-					throws BirtReportException {
+			throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
-					reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -210,10 +211,9 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderExcelReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-					throws BirtReportException {
+			throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
-					reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 

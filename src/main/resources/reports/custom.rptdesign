@@ -5,6 +5,19 @@
     <property name="units">in</property>
     <property name="layoutPreference">auto layout</property>
     <parameters>
+        <scalar-parameter name="FIRST" id="89">
+            <text-property name="helpText">FIRST</text-property>
+            <text-property name="promptText">FIRST</text-property>
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
         <cascading-parameter-group name="customerorders" id="7">
             <property name="dataSetMode">multiple</property>
             <parameters>
@@ -35,140 +48,71 @@
                 </scalar-parameter>
             </parameters>
         </cascading-parameter-group>
-        <scalar-parameter name="Bestellwert" id="61">
-            <text-property name="helpText">HELPTEXT</text-property>
-            <text-property name="promptText">Prompttext/LABEL</text-property>
-            <property name="valueType">static</property>
-            <property name="dataType">decimal</property>
-            <property name="distinct">true</property>
-            <list-property name="selectionList">
-                <structure>
-                    <property name="value">1</property>
-                    <property name="label">A</property>
-                </structure>
-                <structure>
-                    <property name="value">2</property>
-                    <property name="label">B</property>
-                </structure>
-            </list-property>
-            <property name="paramType">multi-value</property>
-            <property name="controlType">list-box</property>
-            <property name="mustMatch">true</property>
-            <property name="fixedOrder">true</property>
-            <structure name="format">
-                <property name="category">Currency</property>
-                <property name="pattern">#,##0.00 €{RoundingMode=HALF_EVEN}</property>
-            </structure>
-        </scalar-parameter>
-        <scalar-parameter name="COMBO" id="63">
-            <text-property name="helpText">COMBO</text-property>
-            <text-property name="promptText">COMBO</text-property>
-            <property name="valueType">dynamic</property>
-            <property name="isRequired">true</property>
-            <property name="dataSetName">customers</property>
-            <expression name="valueExpr" type="javascript">dataSetRow["CUSTOMERNUMBER"]</expression>
-            <expression name="labelExpr" type="javascript">dataSetRow["CUSTOMERNAME"]</expression>
-            <expression name="sortByColumn">dataSetRow["CUSTOMERNAME"]</expression>
-            <property name="sortDirection">desc</property>
-            <property name="dataType">integer</property>
-            <property name="distinct">true</property>
-            <list-property name="selectionList"/>
-            <property name="paramType">simple</property>
-            <property name="controlType">list-box</property>
-            <property name="mustMatch">true</property>
-            <property name="fixedOrder">false</property>
-            <structure name="format">
-                <property name="category">Unformatted</property>
-            </structure>
-        </scalar-parameter>
-        <scalar-parameter name="LISTBOX_MULTI" id="64">
-            <text-property name="helpText">LISTBOXHELP_MULTI</text-property>
-            <text-property name="promptText">LISTBOX_MULTI</text-property>
-            <property name="valueType">dynamic</property>
-            <property name="dataSetName">customers</property>
-            <expression name="valueExpr" type="javascript">dataSetRow["CUSTOMERNAME"]</expression>
-            <expression name="labelExpr" type="javascript">dataSetRow["CUSTOMERNUMBER"]</expression>
-            <expression name="sortByColumn">dataSetRow["CUSTOMERNUMBER"]</expression>
-            <property name="sortDirection">asc</property>
-            <property name="dataType">string</property>
-            <property name="distinct">true</property>
-            <list-property name="selectionList"/>
-            <property name="paramType">multi-value</property>
-            <property name="controlType">list-box</property>
-            <property name="mustMatch">true</property>
-            <property name="fixedOrder">false</property>
-            <structure name="format">
-                <property name="category">Unformatted</property>
-            </structure>
-        </scalar-parameter>
-        <scalar-parameter name="LISTBOX" id="70">
-            <text-property name="helpText">LISTBOX</text-property>
-            <text-property name="promptText">LISTBOX</text-property>
-            <property name="valueType">dynamic</property>
-            <property name="isRequired">false</property>
-            <property name="dataSetName">customers</property>
-            <expression name="valueExpr" type="javascript">dataSetRow["CUSTOMERNAME"]</expression>
-            <expression name="labelExpr" type="javascript">dataSetRow["CUSTOMERNUMBER"]</expression>
-            <expression name="sortByColumn">dataSetRow["CUSTOMERNUMBER"]</expression>
-            <property name="sortDirection">asc</property>
-            <property name="dataType">string</property>
-            <property name="distinct">true</property>
-            <list-property name="selectionList"/>
-            <property name="paramType">simple</property>
-            <property name="controlType">list-box</property>
-            <property name="mustMatch">true</property>
-            <property name="fixedOrder">false</property>
-            <structure name="format">
-                <property name="category">Unformatted</property>
-            </structure>
-        </scalar-parameter>
-        <scalar-parameter name="RADIO" id="69">
-            <text-property name="helpText">RADIO</text-property>
-            <text-property name="promptText">RADIO</text-property>
-            <property name="valueType">static</property>
-            <property name="isRequired">false</property>
-            <property name="dataType">string</property>
-            <property name="distinct">true</property>
-            <list-property name="selectionList">
-                <structure>
-                    <property name="value">a</property>
-                    <property name="label">A</property>
-                </structure>
-                <structure>
-                    <property name="value">b</property>
-                    <property name="label">B</property>
-                </structure>
-                <structure>
-                    <property name="value">c</property>
-                    <property name="label">C</property>
-                </structure>
-                <structure>
-                    <property name="value">D</property>
-                    <property name="label">d</property>
-                </structure>
-            </list-property>
-            <property name="paramType">simple</property>
-            <property name="controlType">radio-button</property>
-            <property name="fixedOrder">true</property>
-            <structure name="format">
-                <property name="category">Unformatted</property>
-            </structure>
-        </scalar-parameter>
-        <scalar-parameter name="BOOLEAN" id="75">
-            <text-property name="helpText">BOOLEAN</text-property>
-            <text-property name="promptText">BOOLEAN</text-property>
-            <property name="valueType">static</property>
-            <property name="isRequired">false</property>
-            <property name="dataType">boolean</property>
-            <property name="distinct">true</property>
-            <simple-property-list name="defaultValue">
-                <value type="constant">True</value>
-            </simple-property-list>
-            <list-property name="selectionList"/>
-            <property name="paramType">simple</property>
-            <property name="controlType">check-box</property>
-            <structure name="format"/>
-        </scalar-parameter>
+        <parameter-group name="Commons" id="84">
+            <text-property name="displayName">Commons</text-property>
+            <parameters>
+                <scalar-parameter name="RADIO" id="69">
+                    <text-property name="helpText">RADIO</text-property>
+                    <text-property name="promptText">RADIO</text-property>
+                    <property name="valueType">static</property>
+                    <property name="isRequired">false</property>
+                    <property name="dataType">string</property>
+                    <property name="distinct">true</property>
+                    <list-property name="selectionList">
+                        <structure>
+                            <property name="value">a</property>
+                            <property name="label">A</property>
+                        </structure>
+                        <structure>
+                            <property name="value">b</property>
+                            <property name="label">B</property>
+                        </structure>
+                        <structure>
+                            <property name="value">c</property>
+                            <property name="label">C</property>
+                        </structure>
+                        <structure>
+                            <property name="value">D</property>
+                            <property name="label">d</property>
+                        </structure>
+                    </list-property>
+                    <property name="paramType">simple</property>
+                    <property name="controlType">radio-button</property>
+                    <property name="fixedOrder">true</property>
+                    <structure name="format">
+                        <property name="category">Unformatted</property>
+                    </structure>
+                </scalar-parameter>
+                <scalar-parameter name="BOOLEAN" id="75">
+                    <text-property name="helpText">BOOLEAN</text-property>
+                    <text-property name="promptText">BOOLEAN</text-property>
+                    <property name="valueType">static</property>
+                    <property name="isRequired">false</property>
+                    <property name="dataType">boolean</property>
+                    <property name="distinct">true</property>
+                    <simple-property-list name="defaultValue">
+                        <value type="constant">True</value>
+                    </simple-property-list>
+                    <list-property name="selectionList"/>
+                    <property name="paramType">simple</property>
+                    <property name="controlType">check-box</property>
+                    <structure name="format"/>
+                </scalar-parameter>
+                <scalar-parameter name="TEXTBOX_MULTI" id="83">
+                    <text-property name="helpText">TEXTBOX_MULTI</text-property>
+                    <text-property name="promptText">TEXTBOX_MULTI</text-property>
+                    <property name="dataType">dateTime</property>
+                    <property name="distinct">true</property>
+                    <list-property name="selectionList"/>
+                    <property name="paramType">simple</property>
+                    <property name="concealValue">true</property>
+                    <property name="controlType">text-box</property>
+                    <structure name="format">
+                        <property name="category">Unformatted</property>
+                    </structure>
+                </scalar-parameter>
+            </parameters>
+        </parameter-group>
         <parameter-group name="DateTimeGroup" id="80">
             <text-property name="displayName">Date &amp; Time</text-property>
             <parameters>
@@ -216,6 +160,149 @@
                 </scalar-parameter>
             </parameters>
         </parameter-group>
+        <scalar-parameter name="BETWEEN" id="91">
+            <text-property name="helpText">BETWEEN</text-property>
+            <text-property name="promptText">BETWEEN</text-property>
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <parameter-group name="MultiSelect" id="87">
+            <text-property name="displayName">MultiSelect</text-property>
+            <parameters>
+                <scalar-parameter name="LISTBOX_MULTI_REQUERIED" id="61">
+                    <text-property name="helpText">HELPTEXT</text-property>
+                    <text-property name="promptText">Prompttext/LABEL</text-property>
+                    <property name="valueType">static</property>
+                    <property name="dataType">decimal</property>
+                    <property name="distinct">true</property>
+                    <list-property name="selectionList">
+                        <structure>
+                            <property name="value">1</property>
+                            <property name="label">A</property>
+                        </structure>
+                        <structure>
+                            <property name="value">2</property>
+                            <property name="label">B</property>
+                        </structure>
+                    </list-property>
+                    <property name="paramType">multi-value</property>
+                    <property name="controlType">list-box</property>
+                    <property name="mustMatch">true</property>
+                    <property name="fixedOrder">true</property>
+                    <structure name="format">
+                        <property name="category">Currency</property>
+                        <property name="pattern">#,##0.00 €{RoundingMode=HALF_EVEN}</property>
+                    </structure>
+                </scalar-parameter>
+                <scalar-parameter name="COMBO" id="63">
+                    <text-property name="helpText">COMBO</text-property>
+                    <text-property name="promptText">COMBO</text-property>
+                    <property name="valueType">dynamic</property>
+                    <property name="isRequired">true</property>
+                    <property name="dataSetName">customers</property>
+                    <expression name="valueExpr" type="javascript">dataSetRow["CUSTOMERNUMBER"]</expression>
+                    <expression name="labelExpr" type="javascript">dataSetRow["CUSTOMERNAME"]</expression>
+                    <expression name="sortByColumn">dataSetRow["CUSTOMERNAME"]</expression>
+                    <property name="sortDirection">desc</property>
+                    <property name="dataType">integer</property>
+                    <property name="distinct">true</property>
+                    <list-property name="selectionList"/>
+                    <property name="paramType">simple</property>
+                    <property name="controlType">list-box</property>
+                    <property name="mustMatch">true</property>
+                    <property name="fixedOrder">false</property>
+                    <structure name="format">
+                        <property name="category">Unformatted</property>
+                    </structure>
+                </scalar-parameter>
+                <scalar-parameter name="LISTBOX_MULTI" id="64">
+                    <text-property name="helpText">LISTBOXHELP_MULTI</text-property>
+                    <text-property name="promptText">LISTBOX_MULTI</text-property>
+                    <property name="valueType">dynamic</property>
+                    <property name="dataSetName">customers</property>
+                    <expression name="valueExpr" type="javascript">dataSetRow["CUSTOMERNAME"]</expression>
+                    <expression name="labelExpr" type="javascript">dataSetRow["CUSTOMERNUMBER"]</expression>
+                    <expression name="sortByColumn">dataSetRow["CUSTOMERNUMBER"]</expression>
+                    <property name="sortDirection">asc</property>
+                    <property name="dataType">string</property>
+                    <property name="distinct">true</property>
+                    <list-property name="selectionList"/>
+                    <property name="paramType">multi-value</property>
+                    <property name="controlType">list-box</property>
+                    <property name="mustMatch">true</property>
+                    <property name="fixedOrder">false</property>
+                    <structure name="format">
+                        <property name="category">Unformatted</property>
+                    </structure>
+                </scalar-parameter>
+                <scalar-parameter name="LISTBOX" id="70">
+                    <text-property name="helpText">LISTBOX</text-property>
+                    <text-property name="promptText">LISTBOX</text-property>
+                    <property name="valueType">dynamic</property>
+                    <property name="isRequired">false</property>
+                    <property name="dataSetName">customers</property>
+                    <expression name="valueExpr" type="javascript">dataSetRow["CUSTOMERNAME"]</expression>
+                    <expression name="labelExpr" type="javascript">dataSetRow["CUSTOMERNUMBER"]</expression>
+                    <expression name="sortByColumn">dataSetRow["CUSTOMERNUMBER"]</expression>
+                    <property name="sortDirection">asc</property>
+                    <property name="dataType">string</property>
+                    <property name="distinct">true</property>
+                    <list-property name="selectionList"/>
+                    <property name="paramType">simple</property>
+                    <property name="controlType">list-box</property>
+                    <property name="mustMatch">true</property>
+                    <property name="fixedOrder">false</property>
+                    <structure name="format">
+                        <property name="category">Unformatted</property>
+                    </structure>
+                </scalar-parameter>
+                <scalar-parameter name="LISTBOX_MULTI_REQUERIED1" id="88">
+                    <text-property name="helpText">HELPTEXT</text-property>
+                    <text-property name="promptText">Prompttext/LABEL</text-property>
+                    <property name="valueType">static</property>
+                    <property name="dataType">decimal</property>
+                    <property name="distinct">true</property>
+                    <list-property name="selectionList">
+                        <structure>
+                            <property name="value">1</property>
+                            <property name="label">A</property>
+                        </structure>
+                        <structure>
+                            <property name="value">2</property>
+                            <property name="label">B</property>
+                        </structure>
+                    </list-property>
+                    <property name="paramType">multi-value</property>
+                    <property name="controlType">list-box</property>
+                    <property name="mustMatch">true</property>
+                    <property name="fixedOrder">true</property>
+                    <structure name="format">
+                        <property name="category">Currency</property>
+                        <property name="pattern">#,##0.00 €{RoundingMode=HALF_EVEN}</property>
+                    </structure>
+                </scalar-parameter>
+            </parameters>
+        </parameter-group>
+        <scalar-parameter name="LAST" id="90">
+            <text-property name="helpText">LAST</text-property>
+            <text-property name="promptText">LAST</text-property>
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
     </parameters>
     <data-sources>
         <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source" id="4">
@@ -1149,7 +1236,7 @@ from CLASSICMODELS.CUSTOMERS</design:queryText>
     </page-setup>
     <body>
         <table id="11">
-            <property name="width">100%</property>
+            <property name="width">6.527777777777778in</property>
             <property name="dataSet">orderdetails</property>
             <list-property name="boundDataColumns">
                 <structure>
@@ -1282,6 +1369,14 @@ from CLASSICMODELS.CUSTOMERS</design:queryText>
         </text>
         <text-data id="78">
             <expression name="valueExpr">params["BOOLEAN"].value</expression>
+            <property name="contentType">html</property>
+        </text-data>
+        <text id="86">
+            <property name="contentType">auto</property>
+            <text-property name="content"><![CDATA[Commons:]]></text-property>
+        </text>
+        <text-data id="85">
+            <expression name="valueExpr">params["TEXTBOX_MULTI"].value</expression>
             <property name="contentType">html</property>
         </text-data>
     </body>

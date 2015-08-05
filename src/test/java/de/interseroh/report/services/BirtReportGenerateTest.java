@@ -41,12 +41,15 @@ import org.eclipse.birt.report.engine.api.RenderOption;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.parameter.BirtConvertingTest;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
@@ -56,6 +59,9 @@ import de.interseroh.report.webconfig.ReportConfig;
 @ContextConfiguration(classes = ReportConfig.class)
 @PropertySource("classpath:config.properties")
 public class BirtReportGenerateTest {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(BirtConvertingTest.class);
 
 	@Autowired
 	ApplicationContext applicationContext;
@@ -68,20 +74,19 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testHelloWorldReport()
-			throws EngineException, FileNotFoundException {
+	public void testHelloWorldReport() throws EngineException,
+			FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/hello_world.rptdesign";
 		String outputFile = "target/hello_world.html";
 
 		renderHtmlReport(outputFile, reportName);
-
 	}
 
 	@Test
-	public void testSalesInvoiceReport()
-			throws EngineException, FileNotFoundException {
+	public void testSalesInvoiceReport() throws EngineException,
+			FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/salesinvoice.rptdesign";
@@ -91,8 +96,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testProductCatalogReport()
-			throws EngineException, FileNotFoundException {
+	public void testProductCatalogReport() throws EngineException,
+			FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/productcatalog.rptdesign";
@@ -116,15 +121,16 @@ public class BirtReportGenerateTest {
 		for (IParameterDefnBase parameterDefn : parameterDefns) {
 			System.out
 					.println("Displayname: " + parameterDefn.getDisplayName());
-			System.out.println("Helptext: " + parameterDefn.getHelpText());
-			System.out.println("Name: " + parameterDefn.getName());
-			System.out.println("Typename: " + parameterDefn.getTypeName());
-			System.out.println("ParameterType: " + BirtParameterType
-					.valueOf(parameterDefn.getParameterType()));
-			System.out.println("PromptText: " + parameterDefn.getPromptText());
-			System.out.println("DefaultValue: "
+			logger.info("Helptext: " + parameterDefn.getHelpText());
+			logger.info("Name: " + parameterDefn.getName());
+			logger.info("Typename: " + parameterDefn.getTypeName());
+			logger.info("ParameterType: "
+					+ BirtParameterType.valueOf(parameterDefn
+							.getParameterType()));
+			logger.info("PromptText: " + parameterDefn.getPromptText());
+			logger.info("DefaultValue: "
 					+ parameterDefinitionTask.getDefaultValue(parameterDefn));
-			System.out.println("Required: " + parameterDefn.getHandle());
+			logger.info("Required: " + parameterDefn.getHandle());
 
 			runAndRenderTask.setParameterValue(parameterDefn.getName(), 10101);
 		}

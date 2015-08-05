@@ -25,6 +25,8 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.ConversionService;
@@ -42,6 +44,9 @@ import de.interseroh.report.webconfig.WebMvcConfig;
 @ContextConfiguration(classes = WebMvcConfig.class)
 @PropertySource("classpath:config.properties")
 public class BirtConvertingTest {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(BirtConvertingTest.class);
 
 	@Autowired
 	private BirtReportService reportService;
@@ -63,7 +68,7 @@ public class BirtConvertingTest {
 		BigDecimal convert = conversionService.convert("12312",
 				BigDecimal.class);
 
-		System.out.println((" " + convert));
+		logger.info((" " + convert));
 	}
 
 	private void renderPdfReport(String reportName) throws Exception {

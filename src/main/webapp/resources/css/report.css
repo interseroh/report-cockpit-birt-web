@@ -1,3 +1,8 @@
 body {
     padding-top: 85px;
 }
+
+.grouplegend {
+    margin-top: 10px;
+    margin-bottom: 5px !important;
+}

@@ -20,6 +20,11 @@
  */
 package de.interseroh.report;
 
+import de.interseroh.report.controller.ReportControllerTest;
+import de.interseroh.report.controller.ReportRestApiControllerTest;
+import de.interseroh.report.model.ParameterTest;
+import de.interseroh.report.model.ParameterToMapVisitorTest;
+import de.interseroh.report.services.BirtReportServiceBeanTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -44,7 +49,14 @@ import de.interseroh.report.webconfig.SecurityConfigTest;
 		BirtExcelReportServiceTest.class, //
 		BirtDataTypeTest.class, //
 		BirtParameterTypeTest.class, //
-		BirtOutputFormatTest.class //
+		BirtOutputFormatTest.class, //
+        ParameterTest.class, //
+        ParameterToMapVisitorTest.class, //
+        BirtReportServiceBeanTest.class, //
+        ReportControllerTest.class, //
+        ReportRestApiControllerTest.class //
+
+
 })
 public class AllUiTests {
 }

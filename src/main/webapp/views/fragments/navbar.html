@@ -58,7 +58,7 @@
                 <li><a href="#start" th:href="@{/index}">Start</a></li>
                 <li sec:authorize="isAuthenticated()">
                     <a href="#param"
-                       th:href="@{${reportName}}">
+                       th:href="@{${reportName} + ${reportParams}}">
                         Parameter
                     </a>
                 </li>

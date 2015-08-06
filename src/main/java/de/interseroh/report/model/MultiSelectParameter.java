@@ -63,6 +63,14 @@ public class MultiSelectParameter<T>
 		}
 	}
 
+    @Override
+    public List<T> getValue() {
+        if (super.getValue() == null) {
+            setValue(new ArrayList<T>());
+        }
+        return super.getValue();
+    }
+
     /**
      * Just a workaround until we have a generic converter solution
      * @param value

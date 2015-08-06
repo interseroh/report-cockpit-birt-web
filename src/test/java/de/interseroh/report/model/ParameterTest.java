@@ -90,4 +90,13 @@ public class ParameterTest {
 
         assertThat(form.asRequestParams(), is("?params[multi].value=A&params[multi].value=B"));
     }
+
+    @Test
+    public void testAsRequestParameterWithMultiSelectAndNoSelection() throws Exception {
+        ParameterForm form = new ParameterForm()
+                .addGroupParameter(new DefaultGroupParameter()
+                        .addScalarParameter(new MultiSelectParameter<String>().withName("multi")));
+
+        assertThat(form.asRequestParams(), is(""));
+    }
 }

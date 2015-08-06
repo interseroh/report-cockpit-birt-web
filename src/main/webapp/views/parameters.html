@@ -146,16 +146,17 @@
     var reloadChoicesOfCascadingGroup = function () {
         var cascadingGroup = $(this).closest("div[data-cascading-group='true']");
         var groupName = $(cascadingGroup).attr("id");
-        var url = $(this).closest("form#parameters").attr("action");
-
-        url = url + "/cascade/" + groupName;
+        var url = $(this).closest("form#parameters").attr("action") + "/cascade/" + groupName;
 
         var params = [];
         $(cascadingGroup).find("select").each(function () {
             var paramName = $(this).attr("name");
             var selected = $(this).find("option:selected");
-            var paramValue = $(selected).val();
-            params.push({name: paramName, value: paramValue});
+
+            $(this).find("option:selected").each(function () {
+                var paramValue = $(this).val();
+                params.push({name: paramName, value: paramValue});
+            });
         });
 
         url = url + '?' + $.param(params) + " div#" + groupName + " > *";

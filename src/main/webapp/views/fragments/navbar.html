@@ -72,9 +72,9 @@
 							th:href="@{${reportApiUrl} + '/pdf' + ${reportParams}}"
 							target="_blank">PDF</a></li>
 						<li sec:authorize="isAuthenticated()"><a href="#print"
-							th:href="@{${reportApiUrl} + '/xlsx'}">Excel (xlsx)</a></li>
+							th:href="@{${reportApiUrl} + '/xlsx' + ${reportParams}}">Excel (xlsx)</a></li>
 						<li sec:authorize="isAuthenticated()"><a href="#print"
-							th:href="@{${reportApiUrl} + '/xls'}">Excel (xls)</a></li>
+							th:href="@{${reportApiUrl} + '/xls' + ${reportParams}}">Excel (xls)</a></li>
 					</ul>
 				</li>
             </ul>

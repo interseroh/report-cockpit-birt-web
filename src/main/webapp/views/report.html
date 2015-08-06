@@ -39,7 +39,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -60,6 +59,18 @@
 <script>
     var reportContentUrl = $("#report-content").attr("data-report-content-url");
     $("#report-content").load(reportContentUrl);
+    
+    var progress = setInterval(function () {
+        var $bar = $('.progress-bar');
+        var $progress = $('.progress');
+        if ($bar.width() >= $progress.width()) {
+            clearInterval(progress);
+            $('.progress-bar').removeClass('active');
+        } else {
+            $bar.width($bar.width() + 40);
+        }
+        $bar.text($bar.width() / 4 + "%");
+    }, 800);
 </script>
 </body>
 </html>

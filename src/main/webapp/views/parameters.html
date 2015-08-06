@@ -158,7 +158,7 @@
             params.push({name: paramName, value: paramValue});
         });
 
-        url = url + '?' + $.param(params) + " div#" + groupName;
+        url = url + '?' + $.param(params) + " div#" + groupName + " > *";
 
         $(cascadingGroup).load(url, function () {
             $("div#" + groupName).find("select").change(reloadChoicesOfCascadingGroup);

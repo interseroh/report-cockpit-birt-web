@@ -63,12 +63,12 @@
                     </a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a href="#print" th:href="@{${reportApiUrl} + '/xlsx'}">
+                    <a href="#print" th:href="@{${reportApiUrl} + '/xlsx'  + ${reportParams}}">
                         Excel (xlsx)
                     </a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a href="#print" th:href="@{${reportApiUrl} + '/xls'}">
+                    <a href="#print" th:href="@{${reportApiUrl} + '/xls'  + ${reportParams}}">
                         Excel (xls)
                     </a>
                 </li>

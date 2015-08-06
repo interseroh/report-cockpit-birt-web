@@ -37,7 +37,8 @@ public class MultiSelectParameter<T>
 		if (!isUnset()) {
 			List<String> params = new ArrayList<>(4);
 			for (T value : getValue()) {
-				params.add("params["+getName() + "].value=" + urlEncode(getValueAsString()));
+				params.add("params[" + getName() + "].value="
+						+ urlEncode(asString(value)));
 			}
 			return params;
 		} else {
@@ -48,14 +49,27 @@ public class MultiSelectParameter<T>
 	@Override
 	public Map<String, Object> asReportParameter() {
 		if (!isUnset()) {
+            final List values = new ArrayList();
+            for (T value : getValue()) {
+                values.add(asObject(asString(value)));
+            }
 			return new HashMap<String, Object>() {
 				{
-					put(getName(), getValue().toArray());
+					put(getName(), values.toArray());
 				}
 			};
 		} else {
 			return super.asReportParameter();
 		}
+	}
+
+    /**
+     * Just a workaround until we have a generic converter solution
+     * @param value
+     * @return
+     */
+	private String asString(T value) {
+		return (value != null) ? value.toString() : "";
 	}
 
 }

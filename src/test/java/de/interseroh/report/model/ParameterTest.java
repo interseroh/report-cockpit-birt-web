@@ -25,6 +25,8 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * @author Ingo Düppe (Crowdcode)
  */
@@ -77,6 +79,15 @@ public class ParameterTest {
 						.addScalarParameter(new SingleSelectParameter<Long>()
 								.withName("order").withValue(321l)));
 		assertThat(form.asRequestParams(),
-				is("?params[customer]=123&params[order]=321"));
+				is("?params[customer].value=123&params[order].value=321"));
 	}
+
+    @Test
+    public void testAsRequestParameterWithMultiSelect() throws Exception {
+        ParameterForm form = new ParameterForm()
+                .addGroupParameter(new DefaultGroupParameter()
+                    .addScalarParameter(new MultiSelectParameter<String>().withName("multi").withValue(Arrays.asList("A","B"))));
+
+        assertThat(form.asRequestParams(), is("?params[multi].value=A&params[multi].value=B"));
+    }
 }

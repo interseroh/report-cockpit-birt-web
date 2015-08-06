@@ -66,8 +66,8 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 	public Map<String, Object> asReportParameter() {
 		if (!isUnset()) {
 			Map<String, Object> param = new HashMap<>();
-			param.put(getName(), (simple) ? getValueAsObject()
-					: new Object[] { getValueAsObject() });
+			param.put(getName(), (simple) ? asObject(getValueAsString())
+					: new Object[] { asObject(getValueAsString()) });
 			return param;
 		} else {
 			return Collections.emptyMap();
@@ -105,13 +105,13 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		return (value == null) ? "" : value.toString();
 	}
 
-	public Object getValueAsObject() {
+	protected Object asObject(String valueAsString) {
 		Object paramValue = null;
 
 		switch (getDataType()) {
 		case TYPE_INTEGER:
 			try {
-				paramValue = Integer.valueOf(getValueAsString());
+				paramValue = Integer.valueOf(valueAsString);
 			} catch (NumberFormatException nfe) {
 				paramValue = getValueAsString();
 			}
@@ -119,7 +119,7 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		case TYPE_FLOAT:
 		case TYPE_DECIMAL:
 			try {
-				paramValue = Double.valueOf(getValueAsString());
+				paramValue = Double.valueOf(valueAsString);
 			} catch (NumberFormatException nfe) {
 				paramValue = getValueAsString();
 			}
@@ -129,14 +129,14 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		case TYPE_DATE:
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 			try {
-				paramValue = sdf.parse(getValueAsString());
+				paramValue = sdf.parse(valueAsString);
 			} catch (ParseException e) {
 				paramValue = getValueAsString();
 			}
 			break;
 		case TYPE_ANY:
 		case TYPE_STRING:
-			paramValue = getValueAsString();
+			paramValue = valueAsString;
 			break;
 		}
 		return paramValue;

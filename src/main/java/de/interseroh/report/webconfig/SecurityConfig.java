@@ -60,15 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		String successfulLoginPage = env.getProperty("login.successful.page");
-		if (successfulLoginPage == null || successfulLoginPage.equals("")) {
-			successfulLoginPage = SUCCESSFUL_LOGIN_PAGE;
-		}
-
-		String successfulLogoutPage = env.getProperty("logout.successful.page");
-		if (successfulLogoutPage == null || successfulLogoutPage.equals("")) {
-			successfulLogoutPage = SUCCESSFUL_LOGOUT_PAGE;
-		}
+		String successfulLoginPage = env.getProperty("login.successful.page",
+				SUCCESSFUL_LOGIN_PAGE);
+		String successfulLogoutPage = env.getProperty("logout.successful.page",
+				SUCCESSFUL_LOGOUT_PAGE);
 
 		http.authorizeRequests()
 				.antMatchers("/", SUCCESSFUL_LOGIN_PAGE, "/resources/**",

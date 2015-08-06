@@ -59,6 +59,9 @@ public class ReportController {
 	@Autowired
 	private BirtReportService reportService;
 
+	@Autowired
+	private ConfigSetter configSetter;
+
 	public ReportController() {
 		logger.info("Creating new instanz auf ReportController.");
 	}
@@ -75,7 +78,7 @@ public class ReportController {
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
-					throws BirtReportException {
+			throws BirtReportException {
 		logger.debug("New ParameterForm for Report {}. ", reportName);
 		return new ParameterForm() //
 				.withReportName(reportName) //
@@ -100,6 +103,9 @@ public class ReportController {
 			modelAndView.addObject("parameterForm", form);
 		}
 
+		configSetter.setBranding(modelAndView);
+		configSetter.setVersion(modelAndView);
+
 		return modelAndView;
 	}
 
@@ -107,7 +113,7 @@ public class ReportController {
 	public String cascadingGroup(@PathVariable("reportName") String reportName,
 			@PathVariable("groupName") String groupName,
 			@ModelAttribute ParameterForm form, ModelAndView modelAndView)
-					throws BirtReportException {
+			throws BirtReportException {
 
 		// filter by cascading group name
 		Parameter parameter = form.getParams().get(groupName);
@@ -133,7 +139,8 @@ public class ReportController {
 	}
 
 	@RequestMapping(method = { RequestMethod.POST })
-	public ModelAndView paramPOST(@PathVariable("reportName") String reportName, //
+	public ModelAndView paramPOST(
+			@PathVariable("reportName") String reportName, //
 			@ModelAttribute("parameterForm") ParameterForm form, //
 			BindingResult bindingResult, //
 			RedirectAttributes redirectAttributes, //
@@ -150,6 +157,9 @@ public class ReportController {
 			modelAndView.setViewName("/parameters");
 			modelAndView.addObject("parameterForm", form);
 		}
+
+		configSetter.setBranding(modelAndView);
+		configSetter.setVersion(modelAndView);
 
 		return modelAndView;
 	}

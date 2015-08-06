@@ -26,8 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,15 +36,13 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Ingo Düppe (Crowdcode)
  */
 @Controller
-@PropertySource({ "classpath:config.properties",
-		"classpath:version.properties" })
 public class LoginController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReportController.class);
 
 	@Autowired
-	private Environment env;
+	private ConfigSetter configSetter;
 
 	@RequestMapping(value = { "/index" }, method = RequestMethod.GET)
 	public ModelAndView index() {
@@ -54,14 +50,8 @@ public class LoginController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/index");
-
-		// TODO idueppe - use messaging instead.
-		String brandingText = env.getProperty("text.branding",
-				"Report Cockpit for Birt");
-		modelAndView.addObject("text.branding", brandingText);
-
-		String version = env.getProperty("version");
-		modelAndView.addObject("version", version);
+		configSetter.setBranding(modelAndView);
+		configSetter.setVersion(modelAndView);
 
 		return modelAndView;
 	}
@@ -74,22 +64,25 @@ public class LoginController {
 			HttpServletRequest request) throws ServletException {
 		logger.debug("Login executing...");
 
-		ModelAndView model = new ModelAndView();
+		ModelAndView modelAndView = new ModelAndView();
 		if (error != null) {
-			model.addObject("error", "Benutzername und/oder Passwort falsch!");
+			modelAndView.addObject("error",
+					"Benutzername und/oder Passwort falsch!");
 		}
 		if (logout != null) {
 			request.logout();
-			model.addObject("msg", "Logout war erfolgreich.");
+			modelAndView.addObject("msg", "Logout war erfolgreich.");
 		}
 		if (authError != null) {
 			request.logout();
-			model.addObject("error",
+			modelAndView.addObject("error",
 					"Sie haben keinen Zugriff auf dieser Anwendung.");
 		}
-		model.setViewName("/login");
+		modelAndView.setViewName("/login");
+		configSetter.setBranding(modelAndView);
+		configSetter.setVersion(modelAndView);
 
-		return model;
+		return modelAndView;
 	}
 
 }

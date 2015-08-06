@@ -8,7 +8,7 @@
     <meta name="description" content="Report Cockpit for Birt"/>
     <meta name="author" content="Ingo Düppe from Crowdcode"/>
 
-    <title>Report Cockpit Birt</title>
+    <title>Report Cockpit BIRT</title>
 
 
     <!-- TODO make the favicon configurable -->
@@ -26,13 +26,13 @@
           rel="stylesheet"/>
 </head>
 <body>
-<!-- Navigation bar -->
 
+<!-- Navigation bar -->
 <nav xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
      class="navbar navbar-inverse navbar-fixed-top"
      role="navigation"
      th:fragment="defaultNavbar">
-    <div class="container">
+    <div class="container-fluid">
         <div class="navbar-header">
             <button type="button"
                     class="navbar-toggle collapsed"
@@ -43,8 +43,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"
-               th:text="${brandingText}">Branding</a>
+            <a class="navbar-brand" rel="home" href="#"
+			   title="Interseroh Report"> <img
+				style="max-width: 80px; margin-top: -7px;"
+				src="../../images/birt-logo.png"
+				th:src="@{${brandingLogo}}" />
+			</a> 
+			<a class="navbar-brand" href="#"
+				th:text="${brandingText}">Branding
+			</a>
         </div>
         <div class="collapse navbar-collapse" id="report-navbar-collapse">
             <ul class="nav navbar-nav">
@@ -88,9 +95,9 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="container-fluid">
     <div class="jumbotron">
-        <span>Report Cockpit Birt :: Navbar</span>
+        <span>Report Cockpit BIRT :: Navbar</span>
     </div>
 </div>
 

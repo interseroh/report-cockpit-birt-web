@@ -17,19 +17,19 @@
 <body>
 <div class="container-fluid">
     <div class="jumbotron">
-        <span>Report Cockpit Birt :: HeaderTag Fragment</span>
+        <span>Report Cockpit BIRT :: HeaderTag Fragment</span>
     </div>
 </div>
 
-<footer class="container-fluid" th:fragment="footerTag">
-    <div class="row">
-        <div class="col-sm-12 pull-right">
-            <small>
-                <span>Build by <a
-                        href="http://www.crowdcode.io">Crowdcode</a></span>
-                <span th:text="${version}">Version</span>
-            </small>
-        </div>
+<footer class="footer" th:fragment="footerTag">
+    <div class="container-fluid">
+    	<p class="text-muted">
+        	<small>
+            	<span>Build by <a href="http://www.crowdcode.io">Crowdcode</a> 
+            		and <a href="http://www.interseroh.com">Interseroh</a></span>
+                	<span th:text="${version}">Version</span>
+        	</small>
+        </p>
     </div>
 </footer>
 </body>

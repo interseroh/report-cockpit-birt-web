@@ -1,13 +1,6 @@
-# URL for logo ENTW, QAT and PROD
-# PROD
-# logo.interseroh.url=images/logo-interseroh.gif
-# text.interseroh.reportcockpit=ReportingCockpit
-# ENTW
-logo.interseroh.url=images/logo-interseroh-entw.gif
-text.interseroh.reportcockpit=ENTW ReportingCockpit
-# QAT
-# logo.interseroh.url=images/logo-interseroh-qat.gif
-# text.interseroh.reportcockpit=QAT ReportingCockpit
+# URL for logo and name
+text.branding=Report Cockpit
+logo.branding=/images/birt-logo.png
 
 # LDAP or InMemory? Possible values "true" or "false"
 # Value true = Using LDAP

@@ -62,27 +62,28 @@
                         Parameter
                     </a>
                 </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a href="#print"
-                       th:href="@{${reportApiUrl} + '/pdf' + ${reportParams}}"
-                       target="_blank">
-                        Print
-                    </a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a href="#print" th:href="@{${reportApiUrl} + '/xlsx'  + ${reportParams}}">
-                        Excel (xlsx)
-                    </a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a href="#print" th:href="@{${reportApiUrl} + '/xls'  + ${reportParams}}">
-                        Excel (xls)
-                    </a>
-                </li>
+                                
+                <li sec:authorize="isAuthenticated()" class="dropdown">
+                	<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-expanded="false">Export<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" role="menu">
+						<li sec:authorize="isAuthenticated()"><a href="#print"
+							th:href="@{${reportApiUrl} + '/pdf' + ${reportParams}}"
+							target="_blank">PDF</a></li>
+						<li sec:authorize="isAuthenticated()"><a href="#print"
+							th:href="@{${reportApiUrl} + '/xlsx'}">Excel (xlsx)</a></li>
+						<li sec:authorize="isAuthenticated()"><a href="#print"
+							th:href="@{${reportApiUrl} + '/xls'}">Excel (xls)</a></li>
+					</ul>
+				</li>
+            </ul>
+            
+            <ul class="nav navbar-nav pull-right">
                 <li sec:authorize="isAuthenticated()">
                     <a href="#" th:href="@{/logout}">
                         Angemeldet als:
-                        <span sec:authentication="name"> Username </span> &raquo;
+                        <span sec:authentication="name">Username</span> &raquo;
                         Abmelden
                     </a>
                 </li>

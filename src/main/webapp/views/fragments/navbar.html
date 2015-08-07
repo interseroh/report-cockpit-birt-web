@@ -82,7 +82,7 @@
             <ul class="nav navbar-nav pull-right">
                 <li sec:authorize="isAuthenticated()">
                     <a href="#" th:href="@{/logout}">
-                        Logged in as:
+                        User:
                         <span sec:authentication="name">Username</span> &raquo;
                         Logout
                     </a>

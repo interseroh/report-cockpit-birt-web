@@ -82,13 +82,13 @@
             <ul class="nav navbar-nav pull-right">
                 <li sec:authorize="isAuthenticated()">
                     <a href="#" th:href="@{/logout}">
-                        Angemeldet als:
+                        Logged in as:
                         <span sec:authentication="name">Username</span> &raquo;
-                        Abmelden
+                        Logout
                     </a>
                 </li>
                 <li sec:authorize="!isAuthenticated()" class="navbar-right">
-                    <a href="#" th:href="@{/login}">Anmelden</a>
+                    <a href="#" th:href="@{/login}">Login</a>
                 </li>
             </ul>
         </div>

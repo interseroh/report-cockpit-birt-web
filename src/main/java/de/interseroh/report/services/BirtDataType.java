@@ -22,27 +22,34 @@ package de.interseroh.report.services;
 
 import de.interseroh.report.exception.UnknownDataTypeException;
 
+import java.lang.reflect.Array;
+import java.util.Date;
+
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public enum BirtDataType {
 
-	TYPE_ANY(0, "text"), //
-	TYPE_STRING(1, "text"), //
-	TYPE_FLOAT(2, "number"), //
-	TYPE_DECIMAL(3, "number"), //
-	TYPE_DATE_TIME(4, "datetime"), //
-	TYPE_BOOLEAN(5, "checkbox"), //
-	TYPE_INTEGER(6, "number"), //
-	TYPE_DATE(7, "date"), //
-	TYPE_TIME(8, "time"); //
+	TYPE_ANY(0, "text", String.class), //
+	TYPE_STRING(1, "text", String.class), //
+	TYPE_FLOAT(2, "number", Float.class), //
+	TYPE_DECIMAL(3, "number", Double.class), //
+	TYPE_DATE_TIME(4, "datetime", Date.class), //
+	TYPE_BOOLEAN(5, "checkbox", Boolean.class), //
+	TYPE_INTEGER(6, "number", Integer.class), //
+	TYPE_DATE(7, "date", Date.class), //
+	TYPE_TIME(8, "time", Date.class); //
 
 	private int dataType;
 	private String htmlFieldType;
+    private Class valueType;
+    private Class valueArrayType;
 
-	BirtDataType(int dataType, String htmlFieldType) {
-		this.dataType = dataType;
+	<T> BirtDataType(int dataType, String htmlFieldType, Class<T> valueType) {
+        this.dataType = dataType;
 		this.htmlFieldType = htmlFieldType;
+        this.valueType = valueType;
+        this.valueArrayType = Array.newInstance(valueType,0).getClass();
 	}
 
 	public static BirtDataType valueOf(int dataType) {
@@ -62,4 +69,11 @@ public enum BirtDataType {
 		return dataType;
 	}
 
+    public Class getValueType() {
+        return valueType;
+    }
+
+    public Class getValueArrayType() {
+        return valueArrayType;
+    }
 }

@@ -1,3 +1,23 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * (c) 2015 - Interseroh
+ */
 package de.interseroh.report.model;
 
 import java.util.ArrayList;
@@ -24,8 +44,8 @@ public class GroupParameterBuilder {
 	private static final Logger log = LoggerFactory
 			.getLogger(GroupParameterBuilder.class);
 
-	private IGetParameterDefinitionTask task;
-	private Collection<IParameterDefnBase> definitions;
+	private final IGetParameterDefinitionTask task;
+	private final Collection<IParameterDefnBase> definitions;
 
 	private GroupParameter group;
 
@@ -46,8 +66,8 @@ public class GroupParameterBuilder {
 				groups.add(buildGroup((IParameterGroupDefn) definition));
 			} else if (definition instanceof IScalarParameterDefn) {
 				wrapperGroup = buildWrapperGroup(wrapperGroup, groups);
-				wrapperGroup.addScalarParameter(buildScalarParameter(
-						(IScalarParameterDefn) definition));
+				wrapperGroup
+						.addScalarParameter(buildScalarParameter((IScalarParameterDefn) definition));
 			} else {
 				log.error("Parameter Definition is not supported: {}",
 						definition);
@@ -67,13 +87,13 @@ public class GroupParameterBuilder {
 	}
 
 	public GroupParameter buildGroup(IParameterGroupDefn definition) {
-		return new DefaultGroupParameter().withName(definition.getName())
-				.withDisplayLabel(orNull(definition.getDisplayName(),
-						definition.getPromptText()))
+		return new DefaultGroupParameter()
+				.withName(definition.getName())
+				.withDisplayLabel(
+						orNull(definition.getDisplayName(),
+								definition.getPromptText()))
 				.withCascading(definition instanceof ICascadingParameterGroup)
-				.withParameters(buildScalarParameters(
-						(Collection<IParameterDefnBase>) definition
-								.getContents()));
+				.withParameters(buildScalarParameters(definition.getContents()));
 	}
 
 	private List<ScalarParameter> buildScalarParameters(
@@ -81,18 +101,17 @@ public class GroupParameterBuilder {
 		List<ScalarParameter> parameters = new ArrayList<>(definitions.size());
 		for (IParameterDefnBase definition : definitions) {
 			if (definition instanceof IScalarParameterDefn) {
-				parameters.add(buildScalarParameter(
-						(IScalarParameterDefn) definition));
+				parameters
+						.add(buildScalarParameter((IScalarParameterDefn) definition));
 			}
 		}
 		return parameters;
 	}
 
-	private ScalarParameter buildScalarParameter(
-			IScalarParameterDefn definition) {
+	private ScalarParameter buildScalarParameter(IScalarParameterDefn definition) {
 
-		BirtControlType controlType = BirtControlType
-				.valueOf(definition.getControlType());
+		BirtControlType controlType = BirtControlType.valueOf(definition
+				.getControlType());
 		BirtDataType dataType = BirtDataType.valueOf(definition.getDataType());
 
 		ScalarParameter parameter;
@@ -120,8 +139,8 @@ public class GroupParameterBuilder {
 				definition.getPromptText(), definition.getName()));
 		parameter.setTooltip(definition.getHelpText());
 
-		parameter.setSimpleValue(
-				"simple".equals(definition.getScalarParameterType()));
+		parameter.setSimpleValue("simple".equals(definition
+				.getScalarParameterType()));
 		parameter.setDataType(BirtDataType.valueOf(definition.getDataType()));
 
 		return parameter;
@@ -145,9 +164,9 @@ public class GroupParameterBuilder {
 		List<SelectionOption> options = new ArrayList<>(choices.size());
 		for (IParameterSelectionChoice choice : choices) {
 			options.add( //
-					new SelectionOption() //
-							.withDisplayName(choice.getLabel()) //
-							.withValue(choice.getValue().toString())); //
+			new SelectionOption() //
+					.withDisplayName(choice.getLabel()) //
+					.withValue(choice.getValue().toString())); //
 		}
 		return options;
 	}

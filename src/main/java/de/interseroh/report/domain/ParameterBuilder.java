@@ -1,3 +1,23 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * (c) 2015 - Interseroh
+ */
 package de.interseroh.report.domain;
 
 import java.util.ArrayList;
@@ -24,14 +44,13 @@ public class ParameterBuilder {
 	private static final Logger log = LoggerFactory
 			.getLogger(ParameterBuilder.class);
 
-	private IGetParameterDefinitionTask task;
+	private final IGetParameterDefinitionTask task;
 
 	public ParameterBuilder(IGetParameterDefinitionTask task) {
 		this.task = task;
 	}
 
-	public List<ParameterGroup> build(
-			Collection<IParameterDefnBase> definitions) {
+	public List<ParameterGroup> build(Collection<IParameterDefnBase> definitions) {
 
 		ParameterGroup syntheticGroup = null;
 
@@ -39,13 +58,12 @@ public class ParameterBuilder {
 		for (IParameterDefnBase definition : definitions) {
 			if (definition instanceof IParameterGroupDefn) {
 				syntheticGroup = null;
-				groups.add(buildGroupFromDefinition(
-						(IParameterGroupDefn) definition));
+				groups.add(buildGroupFromDefinition((IParameterGroupDefn) definition));
 			} else if (definition instanceof IScalarParameterDefn) {
 				syntheticGroup = buildIfNeededASyntheticGroup(syntheticGroup,
 						groups);
-				syntheticGroup.addScalarParameter(buildScalarParameter(
-						(IScalarParameterDefn) definition));
+				syntheticGroup
+						.addScalarParameter(buildScalarParameter((IScalarParameterDefn) definition));
 			} else {
 				log.error("Parameter Definition is not supported: {}",
 						definition);
@@ -67,14 +85,15 @@ public class ParameterBuilder {
 	public ParameterGroup buildGroupFromDefinition(
 			IParameterGroupDefn definition) {
 
-		List<ScalarParameter> parameters = buildScalarParameters(
-				(List<IParameterDefnBase>) definition.getContents());
+		List<ScalarParameter> parameters = buildScalarParameters(definition
+				.getContents());
 
 		String displayLabel = orNull( //
 				definition.getDisplayName(), //
 				definition.getPromptText()); //
 
-		return new ParameterGroup() //
+		return new ParameterGroup()
+				//
 				.withName(definition.getName()).withDisplayLabel(displayLabel)
 				.withCascading(definition instanceof ICascadingParameterGroup)
 				.withParameters(parameters);
@@ -86,18 +105,17 @@ public class ParameterBuilder {
 		List<ScalarParameter> parameters = new ArrayList<>(definitions.size());
 		for (IParameterDefnBase definition : definitions) {
 			if (definition instanceof IScalarParameterDefn) {
-				parameters.add(buildScalarParameter(
-						(IScalarParameterDefn) definition));
+				parameters
+						.add(buildScalarParameter((IScalarParameterDefn) definition));
 			}
 		}
 		return parameters;
 	}
 
-	private ScalarParameter buildScalarParameter(
-			IScalarParameterDefn definition) {
+	private ScalarParameter buildScalarParameter(IScalarParameterDefn definition) {
 
-		BirtControlType controlType = BirtControlType
-				.valueOf(definition.getControlType());
+		BirtControlType controlType = BirtControlType.valueOf(definition
+				.getControlType());
 		BirtDataType dataType = BirtDataType.valueOf(definition.getDataType());
 
 		AbstractScalarParameter parameter;
@@ -121,8 +139,8 @@ public class ParameterBuilder {
 		parameter.setName(definition.getName());
 		parameter.setDisplayLabel(displayLabel);
 		parameter.setTooltip(definition.getHelpText());
-        parameter.setControlType(controlType);
-        parameter.setDataType(dataType);
+		parameter.setControlType(controlType);
+		parameter.setDataType(dataType);
 
 		return parameter;
 	}
@@ -141,9 +159,9 @@ public class ParameterBuilder {
 		List<SelectionOption> options = new ArrayList<>(choices.size());
 		for (IParameterSelectionChoice choice : choices) {
 			options.add( //
-					new SelectionOption() //
-							.withDisplayName(choice.getLabel()) //
-							.withValue(choice.getValue().toString())); //
+			new SelectionOption() //
+					.withDisplayName(choice.getLabel()) //
+					.withValue(choice.getValue().toString())); //
 		}
 
 		return options;

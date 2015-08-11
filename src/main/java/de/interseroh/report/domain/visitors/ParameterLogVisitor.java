@@ -1,3 +1,23 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * (c) 2015 - Interseroh
+ */
 package de.interseroh.report.domain.visitors;
 
 import java.util.Collection;
@@ -9,49 +29,47 @@ import de.interseroh.report.domain.Parameter;
 import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.ScalarParameter;
 
-
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public class ParameterLogVisitor implements ParameterVisitor {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(ParameterLogVisitor.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ParameterLogVisitor.class);
 
-    private StringBuilder output;
+	private StringBuilder output;
 
-    private String indent = "\n\t";
+	private final String indent = "\n\t";
 
+	public void printParameters(Collection<? extends Parameter> params) {
+		output = new StringBuilder();
+		visitParameters(params);
+		logger.debug(output.toString());
+	}
 
-    public void printParameters(Collection<? extends Parameter> params) {
-        output = new StringBuilder();
-        visitParameters(params);
-        logger.debug(output.toString());
-    }
+	private void visitParameters(Collection<? extends Parameter> params) {
+		for (Parameter param : params) {
+			param.accept(this);
+		}
+	}
 
-    private void visitParameters(Collection<? extends Parameter> params) {
-        for (Parameter param : params) {
-            param.accept(this);
-        }
-    }
+	private void print(String title, Parameter parameter) {
+		output.append(indent);
+		output.append(title);
+		output.append(indent);
+		output.append("\t" + parameter.toString());
+	}
 
-    private void print(String title, Parameter parameter) {
-        output.append(indent);
-        output.append(title);
-        output.append(indent);
-        output.append("\t" + parameter.toString());
-    }
+	@Override
+	public void visit(ScalarParameter parameter) {
+		print("ScalarParameter", parameter);
+	}
 
-    @Override
-    public void visit(ScalarParameter parameter) {
-        print("ScalarParameter", parameter);
-    }
-
-    @Override
-    public void visit(ParameterGroup group) {
-        output.append("\n\n");
-        output.append(group.getName());
-        output.append("{" + group.isCascading() + "}");
-        visitParameters(group.getParameters());
-    }
+	@Override
+	public void visit(ParameterGroup group) {
+		output.append("\n\n");
+		output.append(group.getName());
+		output.append("{" + group.isCascading() + "}");
+		visitParameters(group.getParameters());
+	}
 }

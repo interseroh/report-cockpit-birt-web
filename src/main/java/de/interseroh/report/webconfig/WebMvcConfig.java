@@ -28,7 +28,6 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +37,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.datetime.DateFormatter;
-import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -152,15 +150,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		String defaultDirectory = environment.getProperty("java.io.tmpdir");
 		String baseImageURL = environment
 				.getProperty(BirtReportService.REPORT_BASE_IMAGE_URL_KEY);
-		String imageDirectory = "file://" + environment.getProperty(
-				BirtReportService.REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
+		String imageDirectory = "file://"
+				+ environment.getProperty(
+						BirtReportService.REPORT_IMAGE_DIRECTORY_KEY,
+						defaultDirectory);
 
 		logger.info("\tBaseImageUrl:   " + baseImageURL);
-		logger.info(
-				"\tImageDirectory: " + ensureTrailingSeparator(imageDirectory));
+		logger.info("\tImageDirectory: "
+				+ ensureTrailingSeparator(imageDirectory));
 
-		registry.addResourceHandler(baseImageURL + "/**")
-				.addResourceLocations(ensureTrailingSeparator(imageDirectory));
+		registry.addResourceHandler(baseImageURL + "/**").addResourceLocations(
+				ensureTrailingSeparator(imageDirectory));
 	}
 
 	@Override
@@ -168,16 +168,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		super.addFormatters(registry);
 		registry.addFormatter(new SelectionOptionFormatter());
 
-        DateFormatter formatter = new DateFormatter();
-        formatter.setIso(DateTimeFormat.ISO.DATE_TIME);
+		DateFormatter formatter = new DateFormatter();
+		formatter.setIso(DateTimeFormat.ISO.DATE_TIME);
 
-        registry.addFormatter(formatter);
+		registry.addFormatter(formatter);
 
 	}
 
 	private String ensureTrailingSeparator(String imageDirectory) {
-		if (imageDirectory
-				.charAt(imageDirectory.length() - 1) != File.separatorChar) {
+		if (imageDirectory.charAt(imageDirectory.length() - 1) != File.separatorChar) {
 			imageDirectory = imageDirectory + "/";
 		}
 		return imageDirectory;

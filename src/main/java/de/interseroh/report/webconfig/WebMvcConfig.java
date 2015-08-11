@@ -172,7 +172,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		formatter.setIso(DateTimeFormat.ISO.DATE_TIME);
 
 		registry.addFormatter(formatter);
-
 	}
 
 	private String ensureTrailingSeparator(String imageDirectory) {

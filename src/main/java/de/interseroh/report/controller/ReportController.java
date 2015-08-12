@@ -29,23 +29,27 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import de.interseroh.report.domain.Parameter;
+import de.interseroh.report.domain.ParameterForm;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.GroupParameter;
-import de.interseroh.report.model.Parameter;
-import de.interseroh.report.model.ParameterForm;
-import de.interseroh.report.model.ParameterLogVisitor;
 import de.interseroh.report.services.BirtReportService;
 
 @Controller
@@ -62,37 +66,52 @@ public class ReportController {
 	@Autowired
 	private ConfigSetter configSetter;
 
+	@Autowired
+	private ParameterFormValidator parameterFormValidator;
+
 	public ReportController() {
 		logger.info("Creating new instanz auf ReportController.");
 	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		logger.info("initializing WebDataBinder");
+		logger.info("Initializing WebDataBinder");
 
 		DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
 		CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, false);
 		binder.registerCustomEditor(Date.class, dateEditor);
+
+		binder.addValidators(parameterFormValidator);
 	}
 
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
-			@PathVariable("reportName") String reportName)
-			throws BirtReportException {
+			@PathVariable("reportName") String reportName,
+			@RequestParam MultiValueMap<String, String> requestParameters)
+					throws BirtReportException {
 		logger.debug("New ParameterForm for Report {}. ", reportName);
 		return new ParameterForm() //
 				.withReportName(reportName) //
-				.withGroupParameters(
+				.withRequestParameters(requestParameters).withParameterGroups(
 						reportService.getParameterGroups(reportName));
 	}
 
+	// ModelAndView modelAndView, //
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView reportView(@ModelAttribute ParameterForm form,
-			ModelAndView modelAndView,
-			@PathVariable("reportName") String reportName) {
+	public ModelAndView reportView( //
+			@ModelAttribute @Validated ParameterForm form, //
+			@PathVariable("reportName") String reportName,
+			BindingResult errors) {
 
 		logger.debug("executing report view for " + reportName);
 
+        if (errors.hasErrors()) {
+            logger.error(errors.toString());
+        }
+
+		ParameterLogVisitor.printParameters(form);
+
+		ModelAndView modelAndView = new ModelAndView();
 		if (form.hasNoParameters()) {
 			// show report
 			modelAndView.setViewName("/report");
@@ -110,21 +129,22 @@ public class ReportController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/cascade/{groupName}")
-	public String cascadingGroup(@PathVariable("reportName") String reportName,
-			@PathVariable("groupName") String groupName,
-			@ModelAttribute ParameterForm form, ModelAndView modelAndView)
-			throws BirtReportException {
+	public String cascadingGroup( //
+			@PathVariable("reportName") String reportName, //
+			@PathVariable("groupName") String groupName, //
+			@ModelAttribute ParameterForm form, //
+			ModelAndView modelAndView) throws BirtReportException {
 
 		// filter by cascading group name
 		Parameter parameter = form.getParams().get(groupName);
 
-		if (parameter instanceof GroupParameter) {
-			GroupParameter group = (GroupParameter) parameter;
+		if (parameter instanceof ParameterGroup) {
+			ParameterGroup group = (ParameterGroup) parameter;
 			reportService.loadOptionsForCascadingGroup(reportName, group);
 			form.resetParams();
 		}
 
-		new ParameterLogVisitor().printParameters(form.getGroups());
+		ParameterLogVisitor.printParameters(form.getGroups());
 
 		return "/parameters :: form#parameters";
 	}
@@ -139,8 +159,7 @@ public class ReportController {
 	}
 
 	@RequestMapping(method = { RequestMethod.POST })
-	public ModelAndView paramPOST(
-			@PathVariable("reportName") String reportName, //
+	public ModelAndView paramPOST(@PathVariable("reportName") String reportName, //
 			@ModelAttribute("parameterForm") ParameterForm form, //
 			BindingResult bindingResult, //
 			RedirectAttributes redirectAttributes, //

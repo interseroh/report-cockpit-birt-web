@@ -21,7 +21,6 @@
 package de.interseroh.report.parameter;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +32,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import de.interseroh.report.model.GroupParameter;
 import de.interseroh.report.services.BirtReportService;
 import de.interseroh.report.webconfig.WebMvcConfig;
 
@@ -74,8 +72,7 @@ public class BirtConvertingTest {
 	private void renderPdfReport(String reportName) throws Exception {
 		String outputFileName = "target/" + reportName + ".pdf";
 
-		Collection<GroupParameter> parameterDefinitions = reportService
-				.getParameterGroups(reportName);
+		reportService.getParameterGroups(reportName);
 
 		// Map<String, Object> params = new HashMap<>();
 		// for (Parameter parameter : parameterDefinitions) {

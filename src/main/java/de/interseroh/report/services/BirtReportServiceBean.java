@@ -29,6 +29,11 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import de.interseroh.report.domain.ParameterBuilder;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ScalarParameter;
+import de.interseroh.report.domain.SelectionParameter;
+import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
@@ -54,11 +59,6 @@ import org.springframework.stereotype.Service;
 
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.exception.RenderReportException;
-import de.interseroh.report.model.GroupParameter;
-import de.interseroh.report.model.GroupParameterBuilder;
-import de.interseroh.report.model.ParameterLogVisitor;
-import de.interseroh.report.model.ScalarParameter;
-import de.interseroh.report.model.SelectionParameter;
 
 @Service
 @PropertySource({ "classpath:report-config.properties" })
@@ -95,9 +95,8 @@ public class BirtReportServiceBean implements BirtReportService {
 		logger.info("\tImageDirectory: " + imageDirectory);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<GroupParameter> getParameterGroups(String reportName)
+	public List<ParameterGroup> getParameterGroups(String reportName)
 			throws BirtReportException {
 		try {
 			String reportFileName = absolutePathOf(reportFileName(reportName));
@@ -115,9 +114,8 @@ public class BirtReportServiceBean implements BirtReportService {
 				BirtReportUtil.printParameterDefinitions(definitions, task);
 			}
 
-			Collection<GroupParameter> groups = new GroupParameterBuilder(task,
-					definitions).build();
-			new ParameterLogVisitor().printParameters(groups);
+			List<ParameterGroup> groups = new ParameterBuilder(task).build(definitions);
+			ParameterLogVisitor.printParameters(groups);
 
 			return groups;
 		} catch (EngineException | IOException e) {
@@ -130,7 +128,7 @@ public class BirtReportServiceBean implements BirtReportService {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void loadOptionsForCascadingGroup(String reportName,
-			GroupParameter group) throws BirtReportException {
+			ParameterGroup group) throws BirtReportException {
 		try {
 			String reportFileName = absolutePathOf(reportFileName(reportName));
 
@@ -139,8 +137,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			IGetParameterDefinitionTask task = reportEngine
 					.createGetParameterDefinitionTask(iReportRunnable);
 
-			GroupParameterBuilder builder = new GroupParameterBuilder(null,
-					null);
+            ParameterBuilder builder = new ParameterBuilder(task);
 
 			List params = new ArrayList();
 

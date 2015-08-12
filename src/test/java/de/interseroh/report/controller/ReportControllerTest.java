@@ -45,10 +45,25 @@ public class ReportControllerTest {
 				.andDo(print());
 	}
 
-	@Test
+    @Test
+    public void testCustomParameterViewWithMissingParameter() throws Exception {
+        this.mockMvc.perform(get("/reports/cascade_parameters?customer=278")) //
+                .andExpect(status().isBadRequest()) //
+                .andDo(print());
+    }
+
+    @Test
+    public void testCustomParameterViewWithWrongType() throws Exception {
+        this.mockMvc.perform(get("/reports/cascade_parameters?customer=ABC")) //
+                .andExpect(status().isBadRequest()) //
+                .andDo(print());
+    }
+
+
+    @Test
 	public void testCascadingParameterView() throws Exception {
 		this.mockMvc.perform(get(
-				"/reports/cascade_parameters/cascade/customerorders?params[customer].value=278")) //
+				"/reports/cascade_parameters/cascade/customerorders?customer=278")) //
 				.andExpect(status().isOk()) //
 				.andDo(print());
 	}

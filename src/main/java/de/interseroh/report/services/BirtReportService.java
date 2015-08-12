@@ -22,10 +22,11 @@ package de.interseroh.report.services;
 
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
+import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.GroupParameter;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -38,10 +39,24 @@ public interface BirtReportService {
 	String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
 	String REPORT_FILE_SUFFIX = ".rptdesign";
 
-	Collection<GroupParameter> getParameterGroups(String reportName)
+    /**
+     *
+     * @param reportName name of the report
+     * @return collection of synthetic and real parameter groups if the report
+     * @throws BirtReportException
+     */
+	List<ParameterGroup> getParameterGroups(String reportName)
 			throws BirtReportException;
 
-	void loadOptionsForCascadingGroup(String reportName, GroupParameter group)
+    /**
+     * Verifies which scalar parameters of the cascading group has values
+     * and tries to load choices for the next not yet selected scalar parameter.
+     *
+     * @param reportName name of the report
+     * @param group where the options are injected
+     * @throws BirtReportException
+     */
+	void loadOptionsForCascadingGroup(String reportName, ParameterGroup group)
 			throws BirtReportException;
 
 	void renderHtmlReport(String reportName, Map<String, Object> parameters,

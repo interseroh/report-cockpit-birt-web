@@ -29,6 +29,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.interseroh.report.domain.ParameterForm;
+import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +45,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.ParameterForm;
-import de.interseroh.report.model.ParameterLogVisitor;
 import de.interseroh.report.services.BirtOutputFormat;
 import de.interseroh.report.services.BirtReportService;
 
@@ -77,13 +77,15 @@ public class ReportRestApiController {
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
 					throws BirtReportException {
-		logger.debug("New ParameterForm for Report {}. ", reportName);
-		ParameterForm form = new ParameterForm() //
+
+        logger.debug("New ParameterForm for Report {}. ", reportName);
+
+        ParameterForm form = new ParameterForm() //
 				.withReportName(reportName) //
-				.withGroupParameters(
+				.withParameterGroups(
 						reportService.getParameterGroups(reportName));
 
-		new ParameterLogVisitor().printParameters(form.getGroups());
+		ParameterLogVisitor.printParameters(form.getGroups());
 		return form;
 
 	}

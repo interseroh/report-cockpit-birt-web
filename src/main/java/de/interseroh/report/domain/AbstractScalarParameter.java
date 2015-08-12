@@ -146,4 +146,16 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		return (SUB) this;
 	}
 
+    @Override
+    public String toString() {
+        return "AbstractScalarParameter{" +
+                " value=" + value +
+                ", valueType=" + valueType +
+                ", defaultValue=" + defaultValue +
+                ", dataType=" + dataType +
+                ", controlType=" + controlType +
+                ", required=" + required +
+                ", concealed=" + concealed +
+                "} " + super.toString();
+    }
 }

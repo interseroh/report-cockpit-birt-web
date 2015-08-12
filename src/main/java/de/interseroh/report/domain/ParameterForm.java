@@ -27,10 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.interseroh.report.domain.visitors.ParameterVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.interseroh.report.domain.visitors.ParameterToMapVisitor;
+import org.springframework.util.MultiValueMap;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -43,6 +45,14 @@ public class ParameterForm {
 	private String reportName;
 	private Collection<ParameterGroup> groups;
 	private Map<String, Parameter> parameterMap;
+    private MultiValueMap<String, String> requestParameters;
+
+    public void accept(ParameterVisitor visitor) {
+        for (ParameterGroup group : groups) {
+            group.accept(visitor);
+        }
+    }
+
 
 	/**
 	 * Checks whether or not all parameters has either a value or a default
@@ -61,21 +71,6 @@ public class ParameterForm {
 	}
 
 	public String asRequestParams() {
-//		List<String> params = new ArrayList<>();
-//
-//		for (ParameterGroup group : groups) {
-//			params.addAll(group.asRequestParameter());
-//		}
-//
-//		StringBuilder builder = new StringBuilder();
-//		for (String param : params) {
-//			if (builder.length() > 0) {
-//				builder.append("&");
-//			}
-//			builder.append(param);
-//		}
-//
-//		return (builder.length() > 0) ? "?" + builder.toString() : "";
         return "";
 	}
 
@@ -88,9 +83,7 @@ public class ParameterForm {
 	 */
 	public Map<String, Object> asReportParameters() {
 		Map<String, Object> parameters = new HashMap<>();
-//		for (GroupParameter group : groups) {
-//			parameters.putAll(group.asReportParameter());
-//		}
+        // TODO implement this
 		return parameters;
 	}
 
@@ -112,7 +105,22 @@ public class ParameterForm {
 		// nothing to do read only
 	}
 
-	/**
+
+    public MultiValueMap<String, String> getRequestParameters() {
+        return requestParameters;
+    }
+
+    public void setRequestParameters(MultiValueMap<String, String> requestParameters) {
+        this.requestParameters = requestParameters;
+    }
+
+    public ParameterForm withRequestParameters(MultiValueMap<String, String> requestParameters) {
+        this.requestParameters = requestParameters;
+        return this;
+    }
+
+
+    /**
 	 * This will clear the cached map between parameter names and objects. The
 	 * map will be rebuild lazy on the next request
 	 *
@@ -184,5 +192,4 @@ public class ParameterForm {
 	public String toString() {
 		return "ParameterForm{" + "groups=" + groups + '}';
 	}
-
 }

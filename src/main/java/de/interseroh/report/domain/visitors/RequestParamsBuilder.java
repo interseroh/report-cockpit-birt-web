@@ -35,7 +35,7 @@ import de.interseroh.report.domain.ScalarParameter;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class RequestParamsBuilder implements ParameterVisitor {
+public class RequestParamsBuilder extends AbstractParameterVisitor implements ParameterVisitor {
 
 	private final List<String> params = new ArrayList<>();
 
@@ -60,7 +60,20 @@ public class RequestParamsBuilder implements ParameterVisitor {
 		}
 	}
 
-	private String conjoin() {
+    @Override
+    public <T> void visit(ScalarParameter<T> parameter) {
+        String paramName = parameter.getName();
+
+        if (parameter.isMultiValue()) {
+            for (T paramValue : (T[]) parameter.getValue()) {
+                addKeyValueParam(paramName, paramValue);
+            }
+        } else {
+            addKeyValueParam(paramName, parameter.getValue());
+        }
+    }
+
+    private String conjoin() {
 		StringBuilder builder = new StringBuilder();
 		for (String param : params) {
 			if (builder.length() > 0) {
@@ -71,31 +84,12 @@ public class RequestParamsBuilder implements ParameterVisitor {
 		return (builder.length() > 0) ? "?" + builder.toString() : "";
 	}
 
-	@Override
-	public <T> void visit(ScalarParameter<T> parameter) {
-		String paramName = parameter.getName();
-
-		if (parameter.isMultiValue()) {
-			for (T paramValue : (T[]) parameter.getValue()) {
-				addKeyValueParam(paramName, paramValue);
-			}
-		} else {
-			addKeyValueParam(paramName, parameter.getValue());
-		}
-	}
 
 	private <T> void addKeyValueParam(String paramName, T paramValue) {
 		if (paramValue != null) {
 			String stringValue = conversionService.convert(paramValue,
 					String.class);
 			params.add(paramName + "=" + urlEncode(stringValue));
-		}
-	}
-
-	@Override
-	public void visit(ParameterGroup group) {
-		for (ScalarParameter parameter : group.getParameters()) {
-			visit(parameter);
 		}
 	}
 

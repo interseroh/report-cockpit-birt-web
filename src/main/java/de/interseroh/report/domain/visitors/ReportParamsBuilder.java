@@ -31,7 +31,7 @@ import de.interseroh.report.domain.ScalarParameter;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class ReportParamsBuilder implements ParameterVisitor {
+public class ReportParamsBuilder extends AbstractParameterVisitor implements ParameterVisitor {
 
 	private final Map<String, Object> params = new HashMap<>();
 
@@ -54,13 +54,6 @@ public class ReportParamsBuilder implements ParameterVisitor {
 		String paramName = parameter.getName();
 		T paramValue = parameter.getValue();
 		params.put(paramName, paramValue);
-	}
-
-	@Override
-	public void visit(ParameterGroup group) {
-		for (ScalarParameter parameter : group.getParameters()) {
-			visit(parameter);
-		}
 	}
 
 }

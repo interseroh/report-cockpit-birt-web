@@ -137,6 +137,8 @@ public class ParameterBuilder {
 				definition.getPromptText(), definition.getName());
 
 		parameter.setName(definition.getName());
+        parameter.setDefaultValue(definition.getDefaultValue());
+        parameter.setRequired(definition.isRequired());
 		parameter.setDisplayLabel(displayLabel);
 		parameter.setTooltip(definition.getHelpText());
 		parameter.setControlType(controlType);

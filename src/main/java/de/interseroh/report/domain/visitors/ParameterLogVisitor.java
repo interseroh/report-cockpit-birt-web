@@ -22,6 +22,7 @@ package de.interseroh.report.domain.visitors;
 
 import java.util.Collection;
 
+import de.interseroh.report.domain.ParameterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,17 @@ public class ParameterLogVisitor implements ParameterVisitor {
 
 	private final String indent = "\n\t";
 
-	public void printParameters(Collection<? extends Parameter> params) {
+    public static void printParameters(ParameterForm form) {
+        printParameters(form.getGroups());
+    }
+
+    public static void printParameters(Collection<? extends Parameter> params) {
+        if (logger.isDebugEnabled()) {
+            new ParameterLogVisitor().print(params);
+        }
+     }
+
+	private void print(Collection<? extends Parameter> params) {
 		output = new StringBuilder();
 		visitParameters(params);
 		logger.debug(output.toString());

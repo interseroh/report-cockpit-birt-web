@@ -27,6 +27,8 @@ public interface ScalarParameter<T> extends Parameter {
 
 	String getHtmlFieldType();
 
+    Class<T> getValueType();
+
 	T getDefaultValue();
 
 	T getValue();

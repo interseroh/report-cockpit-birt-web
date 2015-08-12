@@ -56,10 +56,28 @@ public class ParameterTest {
 	public void testParameterNotRequired() throws Exception {
 		Parameter parameter = GenericParameter.newInstance(String.class)
 				.withRequired(false);
-		assertThat(parameter.isValid(), is(false));
+		assertThat(parameter.isValid(), is(true));
 	}
 
-	@Test
+    @Test
+    public void testParameterWithEmptyStringMulti() throws Exception {
+        Parameter parameter = GenericParameter.newInstance(String[].class)
+                .withRequired(true)
+                .withValue(new String[]{" ","  "});
+        assertThat(parameter.isValid(), is(false));
+    }
+
+    @Test
+    public void testParameterWithEmptyStringMultiWithDefault() throws Exception {
+        Parameter parameter = GenericParameter.newInstance(String[].class)
+                .withRequired(true)
+                .withValue(new String[]{" ","  "})
+                .withDefaultValue(new String[]{"junittest"});
+        assertThat(parameter.isValid(), is(false));
+    }
+
+
+    @Test
 	public void testParameters() throws Exception {
 		ParameterForm form = new ParameterForm()
 				.addParameterGroup(new ParameterGroup().addScalarParameter(

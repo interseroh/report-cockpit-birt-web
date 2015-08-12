@@ -27,7 +27,7 @@ import de.interseroh.report.services.BirtDataType;
  * @author Ingo Düppe (Crowdcode)
  */
 public abstract class AbstractScalarParameter<SUB extends AbstractScalarParameter, T>
-		extends AbstractParameter<SUB> implements ScalarParameter<T> {
+		extends AbstractParameter<SUB>implements ScalarParameter<T> {
 
 	private final Class<T> valueType;
 	private T value;
@@ -86,7 +86,23 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 
 	@Override
 	public boolean isValid() {
-		return !required || value != null || defaultValue != null;
+		return !required || !isNullOrEmpty(value) || defaultValue != null;
+	}
+
+	private boolean isNullOrEmpty(T value) {
+		if (value == null) {
+			return true;
+		} else if (value instanceof String) {
+			return ((String) value).trim().isEmpty();
+		} else if (value.getClass().isArray()) {
+			boolean empty = true;
+			for (T v : (T[]) value) {
+				empty &= isNullOrEmpty(v);
+			}
+            return empty;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -146,16 +162,12 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		return (SUB) this;
 	}
 
-    @Override
-    public String toString() {
-        return "AbstractScalarParameter{" +
-                " value=" + value +
-                ", valueType=" + valueType +
-                ", defaultValue=" + defaultValue +
-                ", dataType=" + dataType +
-                ", controlType=" + controlType +
-                ", required=" + required +
-                ", concealed=" + concealed +
-                "} " + super.toString();
-    }
+	@Override
+	public String toString() {
+		return "AbstractScalarParameter{" + " value=" + value + ", valueType="
+				+ valueType + ", defaultValue=" + defaultValue + ", dataType="
+				+ dataType + ", controlType=" + controlType + ", required="
+				+ required + ", concealed=" + concealed + "} "
+				+ super.toString();
+	}
 }

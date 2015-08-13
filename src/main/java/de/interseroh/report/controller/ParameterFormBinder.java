@@ -74,9 +74,13 @@ public class ParameterFormBinder {
 			private <T> void addValues(String name, String propertyPath,
 					Class<T> valueType) {
 				List<String> values = requestParameters.get(name);
-				for (String requestValue : values) {
-					mpvs.add(propertyPath, requestValue);
-				}
+                if (valueType.isArray()) {
+                    mpvs.add(propertyPath, values.toArray() );
+                } else {
+                    for (String requestValue : values) {
+                        mpvs.add(propertyPath, requestValue);
+                    }
+                }
 			}
 		});
 		return mpvs;

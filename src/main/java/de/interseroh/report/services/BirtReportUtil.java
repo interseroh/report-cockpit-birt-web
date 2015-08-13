@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
@@ -105,7 +105,8 @@ public class BirtReportUtil {
 
 			if (definition instanceof ICascadingParameterGroup) {
 				ICascadingParameterGroup cascadingParameterGroup = (ICascadingParameterGroup) definition;
-				logger.debug("DataSet: " + cascadingParameterGroup.getDataSet());
+				logger.debug(
+						"DataSet: " + cascadingParameterGroup.getDataSet());
 			}
 
 			printSelectionChoices(selectionChoices);
@@ -120,19 +121,20 @@ public class BirtReportUtil {
 	public static void printScalarParameter(IParameterDefnBase definition) {
 		if (definition instanceof IScalarParameterDefn) {
 			IScalarParameterDefn scalar = (IScalarParameterDefn) definition;
-			logger.debug("DataType: "
-					+ BirtDataType.valueOf(scalar.getDataType()));
+			logger.debug(
+					"DataType: " + BirtDataType.valueOf(scalar.getDataType()));
 			logger.debug("PromptText: " + scalar.getPromptText());
 			logger.debug("Required: " + scalar.isRequired());
 			logger.debug("AllowNewValues: " + scalar.allowNewValues());
-			logger.debug("DisplayInFixedOrder: " + scalar.displayInFixedOrder());
+			logger.debug(
+					"DisplayInFixedOrder: " + scalar.displayInFixedOrder());
 			logger.debug("IsValueConcealed: " + scalar.isValueConcealed());
 			logger.debug("DisplayFormat: " + scalar.getDisplayFormat());
 			logger.debug("ControlType: "
 					+ BirtControlType.valueOf(scalar.getControlType()));
 			logger.debug("DefaultValue: " + scalar.getDefaultValue());
-			logger.debug("ScalarParameterType: "
-					+ scalar.getScalarParameterType());
+			logger.debug(
+					"ScalarParameterType: " + scalar.getScalarParameterType());
 			logger.debug("SelectionListType: " + scalar.getSelectionListType());
 		}
 	}

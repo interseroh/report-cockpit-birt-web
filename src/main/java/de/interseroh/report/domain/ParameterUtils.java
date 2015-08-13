@@ -15,15 +15,17 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.model;
-
-import java.beans.PropertyEditorSupport;
+package de.interseroh.report.domain;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class ScalarParameterPropertyEditor extends PropertyEditorSupport {
+public class ParameterUtils {
+
+	public static String nameToPath(String parameterName) {
+		return "params[" + parameterName + "].value";
+	}
 }

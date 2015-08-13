@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
@@ -52,13 +52,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import de.interseroh.report.domain.ParameterBuilder;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ScalarParameter;
+import de.interseroh.report.domain.SelectionParameter;
+import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.exception.RenderReportException;
-import de.interseroh.report.model.GroupParameter;
-import de.interseroh.report.model.GroupParameterBuilder;
-import de.interseroh.report.model.ParameterLogVisitor;
-import de.interseroh.report.model.ScalarParameter;
-import de.interseroh.report.model.SelectionParameter;
 
 @Service
 @PropertySource({ "classpath:report-config.properties" })
@@ -95,9 +95,8 @@ public class BirtReportServiceBean implements BirtReportService {
 		logger.info("\tImageDirectory: " + imageDirectory);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<GroupParameter> getParameterGroups(String reportName)
+	public List<ParameterGroup> getParameterGroups(String reportName)
 			throws BirtReportException {
 		try {
 			String reportFileName = absolutePathOf(reportFileName(reportName));
@@ -111,26 +110,27 @@ public class BirtReportServiceBean implements BirtReportService {
 			Collection<IParameterDefnBase> definitions = task
 					.getParameterDefns(includeParameterGroups);
 
-			if (logger.isDebugEnabled()) {
+			if (logger.isTraceEnabled()) {
 				BirtReportUtil.printParameterDefinitions(definitions, task);
 			}
 
-			Collection<GroupParameter> groups = new GroupParameterBuilder(task,
-					definitions).build();
-			new ParameterLogVisitor().printParameters(groups);
+			List<ParameterGroup> groups = new ParameterBuilder(task)
+					.build(definitions);
+			ParameterLogVisitor.printParameters(groups);
 
 			return groups;
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting parameter definition for "
-							+ reportName + ".", e);
+					"Error while getting parameter definition for " + reportName
+							+ ".",
+					e);
 		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void loadOptionsForCascadingGroup(String reportName,
-			GroupParameter group) throws BirtReportException {
+			ParameterGroup group) throws BirtReportException {
 		try {
 			String reportFileName = absolutePathOf(reportFileName(reportName));
 
@@ -139,8 +139,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			IGetParameterDefinitionTask task = reportEngine
 					.createGetParameterDefinitionTask(iReportRunnable);
 
-			GroupParameterBuilder builder = new GroupParameterBuilder(null,
-					null);
+			ParameterBuilder builder = new ParameterBuilder(task);
 
 			List params = new ArrayList();
 
@@ -156,17 +155,19 @@ public class BirtReportServiceBean implements BirtReportService {
 			}
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting cascading parameters for "
-							+ reportName + ".", e);
+					"Error while getting cascading parameters for " + reportName
+							+ ".",
+					e);
 		}
 	}
 
 	@Override
 	public void renderHtmlReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -188,9 +189,10 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderPDFReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -211,9 +213,10 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderExcelReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 

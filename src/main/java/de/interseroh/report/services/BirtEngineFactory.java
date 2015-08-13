@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
@@ -46,8 +46,8 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>,
 		ApplicationContextAware, DisposableBean {
 
 	public static final String SPRING_KEY = "spring";
-	private final Logger logger = Logger.getLogger(BirtEngineFactory.class
-			.getName());
+	private final Logger logger = Logger
+			.getLogger(BirtEngineFactory.class.getName());
 	private ApplicationContext applicationContext;
 
 	private IReportEngine birtEngine;
@@ -62,7 +62,8 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>,
 
 			Platform.startup(config);
 			IReportEngineFactory factory = (IReportEngineFactory) Platform
-					.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
+					.createFactoryObject(
+							IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
 			birtEngine = factory.createReportEngine(config);
 
 			return birtEngine;

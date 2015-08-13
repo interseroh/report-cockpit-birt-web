@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
@@ -36,9 +36,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ScalarParameter;
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.GroupParameter;
-import de.interseroh.report.model.ScalarParameter;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
@@ -81,10 +81,10 @@ public class BirtHtmlReportServiceTest {
 			throws EngineException, FileNotFoundException, BirtReportException {
 		String outputFileName = "target/" + reportName + ".html";
 
-		Collection<GroupParameter> groups = reportService
+		Collection<ParameterGroup> groups = reportService
 				.getParameterGroups(reportName);
 		Map<String, Object> params = new HashMap<>();
-		for (GroupParameter group : groups)
+		for (ParameterGroup group : groups)
 			for (ScalarParameter definition : group.getParameters()) {
 				if ("OrderNumber".equals(definition.getName()))
 					params.put("OrderNumber", 10110);

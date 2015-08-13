@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
@@ -25,14 +25,15 @@ import de.interseroh.report.domain.visitors.ParameterVisitor;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class GenericParameter<T> extends
-		AbstractScalarParameter<GenericParameter<T>, T> {
+public class GenericParameter<T>
+		extends AbstractScalarParameter<GenericParameter<T>, T> {
 
 	public GenericParameter(Class<T> valueType) {
 		super(valueType);
 	}
 
-	public static final <T> GenericParameter<T> newInstance(Class<T> valueType) {
+	public static final <T> GenericParameter<T> newInstance(
+			Class<T> valueType) {
 		return new GenericParameter<>(valueType);
 	}
 

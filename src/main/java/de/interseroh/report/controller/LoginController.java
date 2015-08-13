@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.controller;
 
@@ -79,6 +79,7 @@ public class LoginController {
 					"Sie haben keinen Zugriff auf dieser Anwendung.");
 		}
 		modelAndView.setViewName("/login");
+
 		configSetter.setBranding(modelAndView);
 		configSetter.setVersion(modelAndView);
 

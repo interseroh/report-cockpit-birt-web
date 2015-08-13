@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report;
 
@@ -26,8 +26,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import de.interseroh.report.controller.ReportControllerTest;
 import de.interseroh.report.controller.ReportRestApiControllerTest;
-import de.interseroh.report.model.ParameterTest;
-import de.interseroh.report.model.ParameterToMapVisitorTest;
+import de.interseroh.report.domain.ParameterTest;
+import de.interseroh.report.domain.ParameterToMapVisitorTest;
 import de.interseroh.report.services.BirtDataTypeTest;
 import de.interseroh.report.services.BirtExcelReportServiceTest;
 import de.interseroh.report.services.BirtHtmlReportServiceTest;
@@ -59,5 +59,5 @@ SecurityConfigTest.class, //
 		DatabaseConfigTest.class //
 
 })
-public class AllTests {
+public class AllUiTests {
 }

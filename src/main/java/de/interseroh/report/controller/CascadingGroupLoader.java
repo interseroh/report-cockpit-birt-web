@@ -15,22 +15,38 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.model;
+package de.interseroh.report.controller;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import de.interseroh.report.domain.ParameterForm;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.services.BirtReportService;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public interface SelectionParameter<SUB, T> extends ScalarParameter<T> {
+@Component
+public class CascadingGroupLoader {
 
-	List<SelectionOption> getOptions();
+	@Autowired
+	private BirtReportService reportService;
 
-	void setOptions(List<SelectionOption> options);
+	public void load(final ParameterForm parameterForm)
+			throws BirtReportException {
+		for (ParameterGroup group : parameterForm.getGroups()) {
+			String reportName = parameterForm.getReportName();
+			if (group.isCascading()) {
+				reportService.loadOptionsForCascadingGroup(reportName, group);
+			}
+		}
 
-	SUB withOptions(final List<SelectionOption> options);
+		parameterForm.resetParams();
+	}
 
 }

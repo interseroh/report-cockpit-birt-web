@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
@@ -24,17 +24,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.interseroh.report.domain.visitors.ParameterVisitor;
+import de.interseroh.report.services.BirtControlType;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class SelectionParameter<T> extends
-		AbstractScalarParameter<SelectionParameter, T> {
+public class SelectionParameter<T>
+		extends AbstractScalarParameter<SelectionParameter, T> {
 
 	private List<SelectionOption> options;
 
 	public SelectionParameter(Class<T> valueType) {
 		super(valueType);
+	}
+
+	public static <T> SelectionParameter<T> newInstance(Class<T> valueType) {
+		return new SelectionParameter(valueType);
+	}
+
+	@Override
+	public String getParameterType() {
+		if (isMultiValue()) {
+			return "MULTISELECT";
+		} else if (getControlType() == BirtControlType.RADIO_BUTTON) {
+			return "RADIOSELECT";
+		} else {
+			return "SINGLESELECT";
+		}
+	}
+
+	public int getRowCount() {
+		if (isMultiValue()) {
+			return (options.size() < 5) ? options.size() : 5;
+		} else {
+			return 1;
+		}
 	}
 
 	public List<SelectionOption> getOptions() {
@@ -49,13 +73,8 @@ public class SelectionParameter<T> extends
 	}
 
 	public SelectionParameter withOptions(final List<SelectionOption> options) {
-		this.options = options;
+		setOptions(options);
 		return this;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "\n\t {" + "options=" + options + "} ";
 	}
 
 	@Override
@@ -63,8 +82,8 @@ public class SelectionParameter<T> extends
 		visitor.visit(this);
 	}
 
-	public static <T> SelectionParameter<T> newInstance(Class<T> valueType) {
-		return new SelectionParameter(valueType);
+	@Override
+	public String toString() {
+		return super.toString() + "\n\t {" + "options=" + options + "} ";
 	}
-
 }

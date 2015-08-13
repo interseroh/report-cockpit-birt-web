@@ -16,15 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.controller;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,19 +29,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import de.interseroh.report.domain.ParameterForm;
+import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.ParameterForm;
-import de.interseroh.report.model.ParameterLogVisitor;
 import de.interseroh.report.services.BirtOutputFormat;
 import de.interseroh.report.services.BirtReportService;
 
@@ -62,28 +58,25 @@ public class ReportRestApiController {
 	private BirtReportService reportService;
 
 	@Autowired
-	private ConversionService conversionService;
+	private ParameterFormValidator parameterFormValidator;
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		logger.info("initializing WebDataBinder");
+	@Autowired
+	private ParameterFormBinder parameterFormBinder;
 
-		DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-		CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, false);
-		binder.registerCustomEditor(Date.class, dateEditor);
-	}
+	@Autowired
+	private ParameterFormConverter parameterFormConverter;
 
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
 					throws BirtReportException {
-		logger.debug("New ParameterForm for Report {}. ", reportName);
+
 		ParameterForm form = new ParameterForm() //
 				.withReportName(reportName) //
-				.withGroupParameters(
+				.withParameterGroups(
 						reportService.getParameterGroups(reportName));
 
-		new ParameterLogVisitor().printParameters(form.getGroups());
+		ParameterLogVisitor.printParameters(form.getGroups());
 		return form;
 
 	}
@@ -92,20 +85,27 @@ public class ReportRestApiController {
 	public void renderReportInDefaultFormat(
 			@ModelAttribute("parameterForm") ParameterForm parameterForm,
 			@PathVariable("reportName") String reportName,
-			HttpServletResponse response)
+			@RequestParam MultiValueMap<String, String> requestParams,
+			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
-		renderReport(parameterForm, reportName,
-				BirtOutputFormat.HTML5.getFormatName(), response);
+		renderReport(parameterForm, reportName, requestParams,
+				BirtOutputFormat.HTML5.getFormatName(), response, errors);
 	}
 
 	@RequestMapping(value = "/render/{reportName}/{format}", method = RequestMethod.GET)
 	public void renderReport(
 			@ModelAttribute("parameterForm") ParameterForm parameterForm,
 			@PathVariable("reportName") String reportName, //
+			@RequestParam MultiValueMap<String, String> requestParams,
 			@PathVariable("format") String format, //
-			HttpServletResponse response)
+			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
+
 		logger.debug("Rendering " + reportName + " in " + format + ".");
+
+		parameterFormBinder.bind(parameterForm, requestParams, errors);
+		parameterFormConverter.convertToRequiredTypes(parameterForm, errors);
+		parameterFormValidator.validate(parameterForm, errors);
 
 		BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
 		response.setContentType(outputFormat.getContentType());

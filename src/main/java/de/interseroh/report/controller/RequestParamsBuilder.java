@@ -15,52 +15,68 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.domain.visitors;
+package de.interseroh.report.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Component;
 
-import de.interseroh.report.domain.Parameter;
-import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ParameterForm;
 import de.interseroh.report.domain.ScalarParameter;
+import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class RequestParamsBuilder implements ParameterVisitor {
+@Component
+public class RequestParamsBuilder {
 
-	private final List<String> params = new ArrayList<>();
+	@Autowired
+	private ConversionService conversionService;
 
-	private final ConversionService conversionService;
-
-	public RequestParamsBuilder(ConversionService conversionService) {
-		this.conversionService = conversionService;
+	public String asRequestParams(ParameterForm parameterForm) {
+		return conjoin(buildParamList(parameterForm));
 	}
 
-	/**
-	 * @param parameters
-	 * @return encoded request parameters
-	 */
-	public String asRequestParams(Collection<Parameter> parameters) {
-		parse(parameters);
-		return conjoin();
+	private List<String> buildParamList(ParameterForm parameterForm) {
+		final List<String> params = new ArrayList<>();
+
+		parameterForm.accept(new AbstractParameterVisitor() {
+			@Override
+			public <T> void visit(ScalarParameter<T> parameter) {
+				String paramName = parameter.getName();
+
+				if (parameter.getValue() != null) {
+					if (parameter.isMultiValue()) {
+						for (T paramValue : (T[]) parameter.getValue()) {
+							addKeyValueParam(paramName, paramValue);
+						}
+					} else {
+						addKeyValueParam(paramName, parameter.getValue());
+					}
+				}
+			}
+
+			private <T> void addKeyValueParam(String paramName, T paramValue) {
+				if (paramValue != null) {
+					String stringValue = conversionService.convert(paramValue,
+							String.class);
+					params.add(paramName + "=" + urlEncode(stringValue));
+				}
+			}
+		});
+		return params;
 	}
 
-	private void parse(Collection<Parameter> parameters) {
-		for (Parameter parameter : parameters) {
-			parameter.accept(this);
-		}
-	}
-
-	private String conjoin() {
+	private String conjoin(List<String> params) {
 		StringBuilder builder = new StringBuilder();
 		for (String param : params) {
 			if (builder.length() > 0) {
@@ -69,34 +85,6 @@ public class RequestParamsBuilder implements ParameterVisitor {
 			builder.append(param);
 		}
 		return (builder.length() > 0) ? "?" + builder.toString() : "";
-	}
-
-	@Override
-	public <T> void visit(ScalarParameter<T> parameter) {
-		String paramName = parameter.getName();
-
-		if (parameter.isMultiValue()) {
-			for (T paramValue : (T[]) parameter.getValue()) {
-				addKeyValueParam(paramName, paramValue);
-			}
-		} else {
-			addKeyValueParam(paramName, parameter.getValue());
-		}
-	}
-
-	private <T> void addKeyValueParam(String paramName, T paramValue) {
-		if (paramValue != null) {
-			String stringValue = conversionService.convert(paramValue,
-					String.class);
-			params.add(paramName + "=" + urlEncode(stringValue));
-		}
-	}
-
-	@Override
-	public void visit(ParameterGroup group) {
-		for (ScalarParameter parameter : group.getParameters()) {
-			visit(parameter);
-		}
 	}
 
 	protected String urlEncode(String text) {

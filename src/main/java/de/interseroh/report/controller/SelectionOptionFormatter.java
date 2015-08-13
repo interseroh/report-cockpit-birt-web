@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.controller;
 
@@ -25,7 +25,7 @@ import java.util.Locale;
 
 import org.springframework.format.Formatter;
 
-import de.interseroh.report.model.SelectionOption;
+import de.interseroh.report.domain.SelectionOption;
 
 /**
  * @author Ingo Düppe (Crowdcode)

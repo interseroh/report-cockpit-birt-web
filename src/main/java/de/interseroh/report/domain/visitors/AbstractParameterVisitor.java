@@ -15,26 +15,23 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.model;
+package de.interseroh.report.domain.visitors;
+
+import de.interseroh.report.domain.Parameter;
+import de.interseroh.report.domain.ParameterGroup;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class SingleSelectParameter<T> extends
-		AbstractSelectionParameter<SingleSelectParameter<T>, T> implements
-		SelectionParameter<SingleSelectParameter<T>, T> {
+public abstract class AbstractParameterVisitor implements ParameterVisitor {
 
 	@Override
-	public String getParameterType() {
-		return "SINGLESELECT";
+	public void visit(ParameterGroup group) {
+		for (Parameter param : group.getParameters()) {
+			param.accept(this);
+		}
 	}
-
-	@Override
-	public void accept(ParameterVisitor visitor) {
-		visitor.visit(this);
-	}
-
 }

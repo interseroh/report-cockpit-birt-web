@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain.visitors;
 
@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.interseroh.report.domain.Parameter;
+import de.interseroh.report.domain.ParameterForm;
 import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.ScalarParameter;
 
@@ -36,12 +37,20 @@ public class ParameterLogVisitor implements ParameterVisitor {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ParameterLogVisitor.class);
-
+	private final String indent = "\n\t";
 	private StringBuilder output;
 
-	private final String indent = "\n\t";
+	public static void printParameters(ParameterForm form) {
+		printParameters(form.getGroups());
+	}
 
-	public void printParameters(Collection<? extends Parameter> params) {
+	public static void printParameters(Collection<? extends Parameter> params) {
+		if (logger.isDebugEnabled()) {
+			new ParameterLogVisitor().print(params);
+		}
+	}
+
+	private void print(Collection<? extends Parameter> params) {
 		output = new StringBuilder();
 		visitParameters(params);
 		logger.debug(output.toString());

@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
@@ -68,7 +68,8 @@ public class SelectionOption {
 
 		SelectionOption that = (SelectionOption) o;
 
-		return !(value != null ? !value.equals(that.value) : that.value != null);
+		return !(value != null ? !value.equals(that.value)
+				: that.value != null);
 
 	}
 

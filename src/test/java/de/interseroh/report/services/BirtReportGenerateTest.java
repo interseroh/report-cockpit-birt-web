@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
@@ -74,8 +74,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testHelloWorldReport() throws EngineException,
-			FileNotFoundException {
+	public void testHelloWorldReport()
+			throws EngineException, FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/hello_world.rptdesign";
@@ -85,8 +85,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testSalesInvoiceReport() throws EngineException,
-			FileNotFoundException {
+	public void testSalesInvoiceReport()
+			throws EngineException, FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/salesinvoice.rptdesign";
@@ -96,8 +96,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testProductCatalogReport() throws EngineException,
-			FileNotFoundException {
+	public void testProductCatalogReport()
+			throws EngineException, FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/productcatalog.rptdesign";
@@ -124,9 +124,8 @@ public class BirtReportGenerateTest {
 			logger.info("Helptext: " + parameterDefn.getHelpText());
 			logger.info("Name: " + parameterDefn.getName());
 			logger.info("Typename: " + parameterDefn.getTypeName());
-			logger.info("ParameterType: "
-					+ BirtParameterType.valueOf(parameterDefn
-							.getParameterType()));
+			logger.info("ParameterType: " + BirtParameterType
+					.valueOf(parameterDefn.getParameterType()));
 			logger.info("PromptText: " + parameterDefn.getPromptText());
 			logger.info("DefaultValue: "
 					+ parameterDefinitionTask.getDefaultValue(parameterDefn));

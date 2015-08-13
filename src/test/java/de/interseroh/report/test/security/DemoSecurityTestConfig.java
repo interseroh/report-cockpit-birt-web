@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.test.security;
 
@@ -28,7 +28,7 @@ import de.interseroh.report.webconfig.SecurityConfig;
 
 @Configuration
 @Import(value = { SecurityConfig.class })
-@ComponentScan({ "de.interseroh.entsorgung.server.test.security.service" })
+@ComponentScan({ "de.interseroh" })
 public class DemoSecurityTestConfig {
 
 }

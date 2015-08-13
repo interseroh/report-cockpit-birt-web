@@ -15,37 +15,33 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.controller;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import de.interseroh.report.domain.Parameter;
+import de.interseroh.report.domain.ParameterForm;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.visitors.ParameterLogVisitor;
+import de.interseroh.report.domain.visitors.ParameterValueMapBuilder;
 import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.model.GroupParameter;
-import de.interseroh.report.model.Parameter;
-import de.interseroh.report.model.ParameterForm;
-import de.interseroh.report.model.ParameterLogVisitor;
 import de.interseroh.report.services.BirtReportService;
 
 @Controller
@@ -57,51 +53,57 @@ public class ReportController {
 			.getLogger(ReportController.class);
 
 	@Autowired
+	private ConfigSetter configSetter;
+
+	@Autowired
 	private BirtReportService reportService;
 
 	@Autowired
-	private ConfigSetter configSetter;
+	private ParameterFormValidator parameterFormValidator;
+
+	@Autowired
+	private ParameterFormBinder parameterFormBinder;
+
+	@Autowired
+	private ParameterFormConverter parameterFormConverter;
+
+	@Autowired
+	private RequestParamsBuilder requestParamsBuilder;
+
+	@Autowired
+	private CascadingGroupLoader cascadingGroupLoader;
 
 	public ReportController() {
 		logger.info("Creating new instanz auf ReportController.");
 	}
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		logger.info("initializing WebDataBinder");
-
-		DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
-		CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, false);
-		binder.registerCustomEditor(Date.class, dateEditor);
-	}
-
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
-			throws BirtReportException {
-		logger.debug("New ParameterForm for Report {}. ", reportName);
+					throws BirtReportException {
 		return new ParameterForm() //
 				.withReportName(reportName) //
-				.withGroupParameters(
+				.withParameterGroups(
 						reportService.getParameterGroups(reportName));
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView reportView(@ModelAttribute ParameterForm form,
-			ModelAndView modelAndView,
-			@PathVariable("reportName") String reportName) {
+	@RequestMapping(value = "/params", method = RequestMethod.GET)
+	public ModelAndView showParameterForm( //
+			@ModelAttribute ParameterForm parameterForm, //
+			@RequestParam MultiValueMap<String, String> requestParams,
+			@PathVariable("reportName") String reportName, BindingResult errors)
+					throws BirtReportException {
 
-		logger.debug("executing report view for " + reportName);
+		logger.debug("executing show parameter form for " + reportName);
 
-		if (form.hasNoParameters()) {
-			// show report
-			modelAndView.setViewName("/report");
-			injectReportUri(form, modelAndView, reportName);
-		} else {
-			// show parameters
-			modelAndView.setViewName("/parameters");
-			modelAndView.addObject("parameterForm", form);
-		}
+		ModelAndView modelAndView = new ModelAndView();
+
+		parameterFormBinder.bind(parameterForm, requestParams, errors);
+		parameterFormConverter.convertToRequiredTypes(parameterForm, errors);
+		cascadingGroupLoader.load(parameterForm);
+
+		modelAndView.setViewName("/parameters");
+		modelAndView.addObject("parameterForm", parameterForm);
 
 		configSetter.setBranding(modelAndView);
 		configSetter.setVersion(modelAndView);
@@ -109,22 +111,58 @@ public class ReportController {
 		return modelAndView;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/cascade/{groupName}")
-	public String cascadingGroup(@PathVariable("reportName") String reportName,
-			@PathVariable("groupName") String groupName,
-			@ModelAttribute ParameterForm form, ModelAndView modelAndView)
-			throws BirtReportException {
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView showReport( //
+			@ModelAttribute ParameterForm parameterForm, //
+			@RequestParam MultiValueMap<String, String> requestParams,
+			@PathVariable("reportName") String reportName,
+			BindingResult errors) {
+
+		logger.debug("executing show report for " + reportName);
+
+		ModelAndView modelAndView = new ModelAndView();
+
+		parameterFormBinder.bind(parameterForm, requestParams, errors);
+		parameterFormConverter.convertToRequiredTypes(parameterForm, errors);
+
+		if (parameterForm.isValid()) {
+			// show report
+			modelAndView.setViewName("/report");
+			injectReportUri(parameterForm, modelAndView, reportName);
+			configSetter.setVersion(modelAndView);
+			configSetter.setBranding(modelAndView);
+		} else {
+			// show parameters
+			RedirectView redirectView = new RedirectView();
+			redirectView.setUrl("/reports/{reportName}/params");
+			redirectView.setContextRelative(true);
+			redirectView.setPropagateQueryParams(false);
+			redirectView.setExposeModelAttributes(true);
+			modelAndView.setView(redirectView);
+			modelAndView.addAllObjects(
+					new ParameterValueMapBuilder().build(parameterForm));
+		}
+		modelAndView.addObject("reportName", reportName);
+
+		return modelAndView;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/params/cascade/{groupName}")
+	public String cascadingGroup( //
+			@PathVariable("reportName") String reportName, //
+			@PathVariable("groupName") String groupName, //
+			@ModelAttribute ParameterForm form) throws BirtReportException {
 
 		// filter by cascading group name
 		Parameter parameter = form.getParams().get(groupName);
 
-		if (parameter instanceof GroupParameter) {
-			GroupParameter group = (GroupParameter) parameter;
+		if (parameter instanceof ParameterGroup) {
+			ParameterGroup group = (ParameterGroup) parameter;
 			reportService.loadOptionsForCascadingGroup(reportName, group);
 			form.resetParams();
 		}
 
-		new ParameterLogVisitor().printParameters(form.getGroups());
+		ParameterLogVisitor.printParameters(form.getGroups());
 
 		return "/parameters :: form#parameters";
 	}
@@ -135,32 +173,45 @@ public class ReportController {
 		modelAndView.addObject("reportName", reportName);
 		String url = "/api/render/" + reportName;
 		modelAndView.addObject("reportApiUrl", url);
-		modelAndView.addObject("reportParams", form.asRequestParams());
+
+		modelAndView.addObject("reportParams",
+				requestParamsBuilder.asRequestParams(form));
 	}
 
-	@RequestMapping(method = { RequestMethod.POST })
-	public ModelAndView paramPOST(
-			@PathVariable("reportName") String reportName, //
+	@RequestMapping(value = "/params", method = { RequestMethod.POST })
+	public ModelAndView paramPOST(@PathVariable("reportName") String reportName, //
 			@ModelAttribute("parameterForm") ParameterForm form, //
-			BindingResult bindingResult, //
-			RedirectAttributes redirectAttributes, //
+			@RequestParam MultiValueMap<String, String> requestParams,
+			BindingResult errors, //
 			ModelAndView modelAndView) throws BirtReportException {
 
 		logger.debug("Executing POST of form for {} ", reportName);
 
-		new ParameterLogVisitor().printParameters(form.getGroups());
+		parameterFormBinder.bind(form, requestParams, errors);
+		parameterFormConverter.convertToRequiredTypes(form, errors);
+		parameterFormValidator.validate(form, errors);
 
-		if (form.isValid() && !bindingResult.hasErrors()) {
-			modelAndView.setViewName("/report");
-			injectReportUri(form, modelAndView, reportName);
+		ParameterLogVisitor.printParameters(form.getGroups());
+
+		if (form.isValid() && !errors.hasErrors()) {
+			RedirectView redirectView = new RedirectView();
+			redirectView.setUrl("/reports/{reportName}");
+			redirectView.setContextRelative(true);
+			redirectView.setPropagateQueryParams(false);
+			redirectView.setExposeModelAttributes(true);
+			modelAndView
+					.addAllObjects(new ParameterValueMapBuilder().build(form));
+			modelAndView.addObject("reportName", reportName);
+			modelAndView.setView(redirectView);
 		} else {
 			modelAndView.setViewName("/parameters");
+			configSetter.setBranding(modelAndView);
+			configSetter.setVersion(modelAndView);
 			modelAndView.addObject("parameterForm", form);
+			injectReportUri(form, modelAndView, reportName);
 		}
 
-		configSetter.setBranding(modelAndView);
-		configSetter.setVersion(modelAndView);
-
 		return modelAndView;
+
 	}
 }

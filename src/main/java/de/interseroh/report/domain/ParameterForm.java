@@ -16,21 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.MultiValueMap;
 
 import de.interseroh.report.domain.visitors.ParameterToMapVisitor;
+import de.interseroh.report.domain.visitors.ParameterVisitor;
+import de.interseroh.report.domain.visitors.ReportParamsBuilder;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -43,6 +45,13 @@ public class ParameterForm {
 	private String reportName;
 	private Collection<ParameterGroup> groups;
 	private Map<String, Parameter> parameterMap;
+	private MultiValueMap<String, String> requestParameters;
+
+	public void accept(ParameterVisitor visitor) {
+		for (ParameterGroup group : groups) {
+			group.accept(visitor);
+		}
+	}
 
 	/**
 	 * Checks whether or not all parameters has either a value or a default
@@ -60,25 +69,6 @@ public class ParameterForm {
 		return valid;
 	}
 
-	public String asRequestParams() {
-//		List<String> params = new ArrayList<>();
-//
-//		for (ParameterGroup group : groups) {
-//			params.addAll(group.asRequestParameter());
-//		}
-//
-//		StringBuilder builder = new StringBuilder();
-//		for (String param : params) {
-//			if (builder.length() > 0) {
-//				builder.append("&");
-//			}
-//			builder.append(param);
-//		}
-//
-//		return (builder.length() > 0) ? "?" + builder.toString() : "";
-        return "";
-	}
-
 	/**
 	 * Builds a map for all scalar parameter based on parameter name and value.
 	 * Not multi-value and adhoc scalar parameter will be transformed to an
@@ -87,11 +77,8 @@ public class ParameterForm {
 	 * @return
 	 */
 	public Map<String, Object> asReportParameters() {
-		Map<String, Object> parameters = new HashMap<>();
-//		for (GroupParameter group : groups) {
-//			parameters.putAll(group.asReportParameter());
-//		}
-		return parameters;
+		return new ReportParamsBuilder().build(groups);
+
 	}
 
 	/**
@@ -110,6 +97,21 @@ public class ParameterForm {
 	public void setParams(Map<String, ScalarParameter> params) {
 		logger.info("Got:{}", params);
 		// nothing to do read only
+	}
+
+	public MultiValueMap<String, String> getRequestParameters() {
+		return requestParameters;
+	}
+
+	public void setRequestParameters(
+			MultiValueMap<String, String> requestParameters) {
+		this.requestParameters = requestParameters;
+	}
+
+	public ParameterForm withRequestParameters(
+			MultiValueMap<String, String> requestParameters) {
+		this.requestParameters = requestParameters;
+		return this;
 	}
 
 	/**
@@ -184,5 +186,4 @@ public class ParameterForm {
 	public String toString() {
 		return "ParameterForm{" + "groups=" + groups + '}';
 	}
-
 }

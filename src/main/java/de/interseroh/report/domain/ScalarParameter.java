@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
@@ -26,6 +26,8 @@ package de.interseroh.report.domain;
 public interface ScalarParameter<T> extends Parameter {
 
 	String getHtmlFieldType();
+
+	Class<T> getValueType();
 
 	T getDefaultValue();
 
@@ -38,4 +40,6 @@ public interface ScalarParameter<T> extends Parameter {
 	boolean isRequired();
 
 	boolean isConcealed();
+
+	T getValueOrDefault();
 }

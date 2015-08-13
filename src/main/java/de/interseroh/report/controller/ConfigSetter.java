@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.controller;
 
@@ -29,7 +29,8 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * @author Lofi Dewanto (Interseroh)
  */
-@PropertySource({ "classpath:config.properties", "classpath:version.properties" })
+@PropertySource({ "classpath:config.properties",
+		"classpath:version.properties" })
 @Component
 public class ConfigSetter {
 
@@ -37,8 +38,8 @@ public class ConfigSetter {
 	private Environment env;
 
 	public void setBranding(ModelAndView modelAndView) {
-		String brandingText = env
-				.getProperty("text.branding", "Report Cockpit");
+		String brandingText = env.getProperty("text.branding",
+				"Report Cockpit");
 		modelAndView.addObject("brandingText", brandingText);
 		String brandingLogo = env.getProperty("logo.branding", "birt-logo.png");
 		modelAndView.addObject("brandingLogo", brandingLogo);

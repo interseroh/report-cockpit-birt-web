@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain.visitors;
 
@@ -25,13 +25,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.interseroh.report.domain.Parameter;
-import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.ScalarParameter;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class ReportParamsBuilder implements ParameterVisitor {
+public class ReportParamsBuilder extends AbstractParameterVisitor
+		implements ParameterVisitor {
 
 	private final Map<String, Object> params = new HashMap<>();
 
@@ -42,7 +42,8 @@ public class ReportParamsBuilder implements ParameterVisitor {
 	 *
 	 * @return
 	 */
-	public Map<String, Object> build(Collection<Parameter> parameters) {
+	public Map<String, Object> build(
+			Collection<? extends Parameter> parameters) {
 		for (Parameter parameter : parameters) {
 			parameter.accept(this);
 		}
@@ -51,15 +52,10 @@ public class ReportParamsBuilder implements ParameterVisitor {
 
 	@Override
 	public <T> void visit(ScalarParameter<T> parameter) {
-		String paramName = parameter.getName();
-		T paramValue = parameter.getValue();
-		params.put(paramName, paramValue);
-	}
-
-	@Override
-	public void visit(ParameterGroup group) {
-		for (ScalarParameter parameter : group.getParameters()) {
-			visit(parameter);
+		if (parameter.getValue() != null) {
+			String paramName = parameter.getName();
+			T paramValue = parameter.getValue();
+			params.put(paramName, paramValue);
 		}
 	}
 

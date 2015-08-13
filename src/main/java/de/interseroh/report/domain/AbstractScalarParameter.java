@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
@@ -45,6 +45,11 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 
 	public Class<T> getValueType() {
 		return valueType;
+	}
+
+	@Override
+	public T getValueOrDefault() {
+		return (value != null) ? value : defaultValue;
 	}
 
 	@Override
@@ -99,7 +104,7 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 			for (T v : (T[]) value) {
 				empty &= isNullOrEmpty(v);
 			}
-            return empty;
+			return empty;
 		} else {
 			return false;
 		}

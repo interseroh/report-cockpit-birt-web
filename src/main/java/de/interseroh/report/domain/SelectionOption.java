@@ -68,7 +68,8 @@ public class SelectionOption {
 
 		SelectionOption that = (SelectionOption) o;
 
-		return !(value != null ? !value.equals(that.value) : that.value != null);
+		return !(value != null ? !value.equals(that.value)
+				: that.value != null);
 
 	}
 

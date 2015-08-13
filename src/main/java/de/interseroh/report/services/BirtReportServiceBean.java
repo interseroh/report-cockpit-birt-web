@@ -110,18 +110,20 @@ public class BirtReportServiceBean implements BirtReportService {
 			Collection<IParameterDefnBase> definitions = task
 					.getParameterDefns(includeParameterGroups);
 
-			if (logger.isDebugEnabled()) {
+			if (logger.isTraceEnabled()) {
 				BirtReportUtil.printParameterDefinitions(definitions, task);
 			}
 
-			List<ParameterGroup> groups = new ParameterBuilder(task).build(definitions);
+			List<ParameterGroup> groups = new ParameterBuilder(task)
+					.build(definitions);
 			ParameterLogVisitor.printParameters(groups);
 
 			return groups;
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting parameter definition for "
-							+ reportName + ".", e);
+					"Error while getting parameter definition for " + reportName
+							+ ".",
+					e);
 		}
 	}
 

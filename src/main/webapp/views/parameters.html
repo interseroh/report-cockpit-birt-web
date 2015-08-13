@@ -42,7 +42,7 @@
                     </div>
                     <div class="panel-body">
                         <form id="parameters" class="form-horizontal render-partial"
-                              th:action="@{'/reports/'+${reportName}}"
+                              th:action="@{'/reports/'+${reportName}+'/params'}"
                               th:object="${parameterForm}"
                               method="post"
                               novalidate="false">
@@ -56,7 +56,8 @@
                                     </legend>
 
                                     <th:block th:each="scalar, scalarStat : ${group.parameters}">
-                                        <div class="control-group">
+                                        <div class="control-group"
+                                             th:classappend="${#fields.hasErrors('params['+scalar.name+'].value')}? 'has-error'">
                                             <label class="control-label"
                                                    th:for="${scalar.name}"
                                                    th:text="${scalar.displayLabel}">
@@ -70,7 +71,8 @@
                                                                 th:field="*{params[__${scalar.name}__].value}"
                                                                 th:size="${scalar.rowCount}"
                                                                 multiple="multiple"
-                                                                class="form-control">
+                                                                class="form-control"
+                                                                data-toggle="tooltip" data-placement="bottom" rel="tooltip" th:title="${scalar.tooltip}">
                                                             <option th:each="option : ${scalar.options}"
                                                                     th:value="${{option}}"
                                                                     th:text="${option.displayName}">
@@ -81,7 +83,9 @@
                                                     <th:block th:case="'SINGLESELECT'">
                                                         <select th:id="*{params[__${scalar.name}__].value}"
                                                                 th:field="*{params[__${scalar.name}__].value}"
-                                                                class="form-control">
+                                                                class="form-control"
+                                                                data-toggle="tooltip" data-placement="bottom" rel="tooltip" th:title="${scalar.tooltip}">
+                                                            <option value=""></option>
                                                             <option th:each="option : ${scalar.options}"
                                                                     th:value="${{option}}"
                                                                     th:text="${option.displayName}">
@@ -95,7 +99,8 @@
                                                                    th:inline="text">
                                                                 <input type="radio"
                                                                        th:field="*{params[__${scalar.name}__].value}"
-                                                                       th:value="${{option}}"/>
+                                                                       th:value="${{option}}"
+                                                                />
                                                                 [[${option.displayName}]]
                                                             </label>
                                                         </div>
@@ -106,9 +111,11 @@
                                                                th:field="*{params[__${scalar.name}__].value}"
                                                                th:type="${scalar.htmlFieldType}"
                                                                th:value="${scalar.value}"
-                                                               th:placeholder="${scalar.tooltip}"/>
+                                                               th:placeholder="${scalar.defaultValue}"
+                                                               data-toggle="tooltip" data-placement="bottom" rel="tooltip" th:title="${scalar.tooltip}"/>
                                                     </th:block>
                                                 </th:block>
+                                                <span class="help-block" th:if="${#fields.hasErrors('params['+scalar.name+'].value')}" th:errors="*{params[__${scalar.name}__].value}">Incorrect date</span>
                                             </div>
                                         </div>
                                     </th:block>
@@ -168,6 +175,8 @@
 
     $(document).ready(function () {
         $("div[data-cascading-group='true']").find("select").change(reloadChoicesOfCascadingGroup);
+        $('input[rel="tooltip"]').tooltip();
+        $('select[rel="tooltip"]').tooltip();
     });
     /*]]>*/
 </script>

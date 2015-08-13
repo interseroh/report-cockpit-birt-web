@@ -53,11 +53,13 @@ public class ParameterToMapVisitorTest {
 						.withName("Group2Scalar2Boolean")));
 		params.add(new ParameterGroup() //
 				.withName("group3").withCascading(true)
-				.addScalarParameter(SelectionParameter.newInstance(Boolean.class)
+				.addScalarParameter(
+						SelectionParameter.newInstance(Boolean.class)
 						.withName("Group3Scalar1Radio"))
 				.addScalarParameter(SelectionParameter.newInstance(String.class)
 						.withName("Group3Scalar2Select"))
-				.addScalarParameter(SelectionParameter.newInstance(Integer[].class)
+				.addScalarParameter(
+						SelectionParameter.newInstance(Integer[].class)
 						.withName("Group3Scalar3Multi")));
 		return params;
 	}

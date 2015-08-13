@@ -15,31 +15,34 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.domain;
+package de.interseroh.report.domain.visitors;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import de.interseroh.report.domain.ParameterForm;
+import de.interseroh.report.domain.ScalarParameter;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public interface ScalarParameter<T> extends Parameter {
+public class ParameterValueMapBuilder {
 
-	String getHtmlFieldType();
+	public Map<String, Object> build(ParameterForm form) {
+		final Map<String, Object> params = new HashMap<>();
 
-    Class<T> getValueType();
+		form.accept(new AbstractParameterVisitor() {
+			@Override
+			public <T> void visit(ScalarParameter<T> parameter) {
+				if (parameter.getValue() != null) {
+					params.put(parameter.getName(), parameter.getValue());
+				}
+			}
+		});
 
-	T getDefaultValue();
-
-	T getValue();
-
-	void setValue(T value);
-
-	boolean isMultiValue();
-
-	boolean isRequired();
-
-	boolean isConcealed();
-
-	T getValueOrDefault();
+		return params;
+	}
 }

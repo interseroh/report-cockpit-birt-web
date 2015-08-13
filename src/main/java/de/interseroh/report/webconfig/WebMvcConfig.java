@@ -59,7 +59,7 @@ import de.interseroh.report.services.BirtReportService;
 @Configuration
 @EnableWebMvc
 @ComponentScan({ "de.interseroh.report.controller",
-		"de.interseroh.report.model" })
+		"de.interseroh.report.domain." })
 @PropertySource({ "classpath:report-config.properties" })
 @Import({ ReportConfig.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {

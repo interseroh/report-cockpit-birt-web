@@ -15,20 +15,19 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report;
 
-import de.interseroh.report.controller.ReportControllerTest;
-import de.interseroh.report.controller.ReportRestApiControllerTest;
-import de.interseroh.report.model.ParameterTest;
-import de.interseroh.report.model.ParameterToMapVisitorTest;
-import de.interseroh.report.services.BirtReportServiceBeanTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.interseroh.report.controller.ReportControllerTest;
+import de.interseroh.report.controller.ReportRestApiControllerTest;
+import de.interseroh.report.domain.ParameterTest;
+import de.interseroh.report.domain.ParameterToMapVisitorTest;
 import de.interseroh.report.services.BirtDataTypeTest;
 import de.interseroh.report.services.BirtExcelReportServiceTest;
 import de.interseroh.report.services.BirtHtmlReportServiceTest;
@@ -36,6 +35,7 @@ import de.interseroh.report.services.BirtOutputFormatTest;
 import de.interseroh.report.services.BirtParameterTypeTest;
 import de.interseroh.report.services.BirtPdfReportServiceTest;
 import de.interseroh.report.services.BirtReportGenerateTest;
+import de.interseroh.report.services.BirtReportServiceBeanTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
 
@@ -50,12 +50,11 @@ import de.interseroh.report.webconfig.SecurityConfigTest;
 		BirtDataTypeTest.class, //
 		BirtParameterTypeTest.class, //
 		BirtOutputFormatTest.class, //
-        ParameterTest.class, //
-        ParameterToMapVisitorTest.class, //
-        BirtReportServiceBeanTest.class, //
-        ReportControllerTest.class, //
-        ReportRestApiControllerTest.class //
-
+		ParameterTest.class, //
+		ParameterToMapVisitorTest.class, //
+		BirtReportServiceBeanTest.class, //
+		ReportControllerTest.class, //
+		ReportRestApiControllerTest.class //
 
 })
 public class AllUiTests {

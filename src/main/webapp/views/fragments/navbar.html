@@ -58,12 +58,13 @@
                 <li><a href="#start" th:href="@{/index}">Start</a></li>
                 <li sec:authorize="isAuthenticated()">
                     <a href="#param"
-                       th:href="@{${reportName} + ${reportParams}}">
+                       th:if="${reportName}"
+                       th:href="@{${reportName} + '/params' + ${reportParams}}">
                         Parameter
                     </a>
                 </li>
                                 
-                <li sec:authorize="isAuthenticated()" class="dropdown">
+                <li sec:authorize="isAuthenticated()" class="dropdown" th:if="${reportName}">
                 	<a href="#" class="dropdown-toggle" data-toggle="dropdown"
 						role="button" aria-expanded="false">Export<span class="caret"></span>
 					</a>

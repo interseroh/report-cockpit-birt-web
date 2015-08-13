@@ -20,42 +20,33 @@
  */
 package de.interseroh.report.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import de.interseroh.report.domain.ParameterForm;
-import de.interseroh.report.domain.ParameterUtils;
-import de.interseroh.report.domain.ScalarParameter;
-import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.services.BirtReportService;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 @Component
-public class ParameterFormValidator implements Validator {
+public class CascadingGroupLoader {
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return clazz.isAssignableFrom(ParameterForm.class);
-	}
+	@Autowired
+	private BirtReportService reportService;
 
-	@Override
-	public void validate(Object target, final Errors errors) {
-		final ParameterForm parameterForm = (ParameterForm) target;
-
-		parameterForm.accept(new AbstractParameterVisitor() {
-			@Override
-			public <T> void visit(ScalarParameter<T> parameter) {
-				if (!parameter.isValid()) {
-					// TODO idueppe - provide a valid
-					String propertyPath = ParameterUtils
-							.nameToPath(parameter.getName());
-					errors.rejectValue(propertyPath,
-							"javax.validation.constraints.NotEmpty.message",
-							"Es muss ein Wert angegeben werden.");
-				}
+	public void load(final ParameterForm parameterForm)
+			throws BirtReportException {
+		for (ParameterGroup group : parameterForm.getGroups()) {
+			String reportName = parameterForm.getReportName();
+			if (group.isCascading()) {
+				reportService.loadOptionsForCascadingGroup(reportName, group);
 			}
-		});
+		}
+
+		parameterForm.resetParams();
 	}
+
 }

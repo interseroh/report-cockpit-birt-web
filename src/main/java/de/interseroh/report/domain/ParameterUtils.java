@@ -15,31 +15,17 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public interface ScalarParameter<T> extends Parameter {
+public class ParameterUtils {
 
-	String getHtmlFieldType();
-
-    Class<T> getValueType();
-
-	T getDefaultValue();
-
-	T getValue();
-
-	void setValue(T value);
-
-	boolean isMultiValue();
-
-	boolean isRequired();
-
-	boolean isConcealed();
-
-	T getValueOrDefault();
+	public static String nameToPath(String parameterName) {
+		return "params[" + parameterName + "].value";
+	}
 }

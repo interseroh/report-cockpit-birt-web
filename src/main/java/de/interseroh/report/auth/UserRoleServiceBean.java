@@ -22,12 +22,29 @@ package de.interseroh.report.auth;
 
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
- * UserService Interface.
+ * UserService Implementation.
  *
  * @author Lofi Dewanto (Interseroh)
  */
-public interface UserService {
+@Service
+public class UserRoleServiceBean implements UserRoleService {
 
-	Collection<String> findRolesByUsername(String username);
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+
+	@Override
+	public Collection<String> findUserRolesByUsername(String username) {
+		Collection<String> findByUsername = userRoleRepository
+				.findByUsername(username);
+		return findByUsername;
+	}
+
+	@Override
+	public void createUserRole(UserRole userRole) {
+		userRoleRepository.save((UserRoleEntity) userRole);
+	}
 }

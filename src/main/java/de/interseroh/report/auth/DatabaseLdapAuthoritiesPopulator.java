@@ -40,14 +40,14 @@ public class DatabaseLdapAuthoritiesPopulator implements
 		LdapAuthoritiesPopulator {
 
 	@Autowired
-	private UserService userService;
+	private UserRoleService userRoleService;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getGrantedAuthorities(
 			DirContextOperations userData, String userName) {
 		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-		Collection<String> role = userService.findRolesByUsername(userName);
+		Collection<String> role = userRoleService.findUserRolesByUsername(userName);
 		for (String currentRole : role) {
 			authorities.add(new SimpleGrantedAuthority(currentRole));
 		}

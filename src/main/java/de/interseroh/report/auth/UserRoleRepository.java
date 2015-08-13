@@ -18,13 +18,19 @@
  * 
  * (c) 2015 - Interseroh
  */
-package de.interseroh.report;
+package de.interseroh.report.auth;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import java.util.Collection;
 
-@RunWith(Suite.class)
-@SuiteClasses({})
-public class AllUiITs {
+import org.springframework.data.repository.CrudRepository;
+
+/**
+ * Spring Data JPA.
+ *
+ * @author Lofi Dewanto (Interseroh)
+ */
+public interface UserRoleRepository extends
+		CrudRepository<UserRoleEntity, Long> {
+
+	Collection<String> findByUsername(String username);
 }

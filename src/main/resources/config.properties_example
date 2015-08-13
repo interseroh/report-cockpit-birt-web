@@ -19,3 +19,23 @@ ldap.managerPassword=xxx
 # Login and Logout page
 login.successful.page=/index
 logout.successful.page=/index?logout
+
+# HSQL Database
+jdbc.driver.classname.reportcockpit=org.hsqldb.jdbcDriver
+jdbc.url.reportcockpit=jdbc:hsqldb:mem:testdb;sql.syntax_ora=true
+jdbc.username.reportcockpit=sa
+jdbc.password.reportcockpit=
+
+# Oracle Database
+# jdbc.driver.classname.reportcockpit=oracle.jdbc.OracleDriver
+# jdbc.url.reportcockpit=jdbc:oracle:thin:localhost:1521/XE
+# jdbc.username.reportcockpit=USER
+# jdbc.password.reportcockpit=PASSWORD
+
+# Hibernate properties for database
+# hibernate.dialect.reportcockpit=org.hibernate.dialect.Oracle10gDialect
+hibernate.dialect.reportcockpit=org.hibernate.dialect.H2Dialect
+hibernate.show_sql.reportcockpit=false
+hibernate.hbm2ddl.auto.reportcockpit=create
+# hibernate.hbm2ddl.auto.reportcockpit=create-update
+# hibernate.hbm2ddl.auto.reportcockpit=none

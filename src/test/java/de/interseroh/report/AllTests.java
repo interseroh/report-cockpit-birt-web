@@ -20,15 +20,14 @@
  */
 package de.interseroh.report;
 
-import de.interseroh.report.controller.ReportControllerTest;
-import de.interseroh.report.controller.ReportRestApiControllerTest;
-import de.interseroh.report.model.ParameterTest;
-import de.interseroh.report.model.ParameterToMapVisitorTest;
-import de.interseroh.report.services.BirtReportServiceBeanTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.interseroh.report.controller.ReportControllerTest;
+import de.interseroh.report.controller.ReportRestApiControllerTest;
+import de.interseroh.report.model.ParameterTest;
+import de.interseroh.report.model.ParameterToMapVisitorTest;
 import de.interseroh.report.services.BirtDataTypeTest;
 import de.interseroh.report.services.BirtExcelReportServiceTest;
 import de.interseroh.report.services.BirtHtmlReportServiceTest;
@@ -36,12 +35,14 @@ import de.interseroh.report.services.BirtOutputFormatTest;
 import de.interseroh.report.services.BirtParameterTypeTest;
 import de.interseroh.report.services.BirtPdfReportServiceTest;
 import de.interseroh.report.services.BirtReportGenerateTest;
+import de.interseroh.report.services.BirtReportServiceBeanTest;
+import de.interseroh.report.webconfig.DatabaseConfigTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ //
-		SecurityConfigTest.class, //
+SecurityConfigTest.class, //
 		SecurityConfigAuthTest.class, //
 		BirtReportGenerateTest.class, //
 		BirtPdfReportServiceTest.class, //
@@ -50,13 +51,13 @@ import de.interseroh.report.webconfig.SecurityConfigTest;
 		BirtDataTypeTest.class, //
 		BirtParameterTypeTest.class, //
 		BirtOutputFormatTest.class, //
-        ParameterTest.class, //
-        ParameterToMapVisitorTest.class, //
-        BirtReportServiceBeanTest.class, //
-        ReportControllerTest.class, //
-        ReportRestApiControllerTest.class //
-
+		ParameterTest.class, //
+		ParameterToMapVisitorTest.class, //
+		BirtReportServiceBeanTest.class, //
+		ReportControllerTest.class, //
+		ReportRestApiControllerTest.class, //
+		DatabaseConfigTest.class //
 
 })
-public class AllUiTests {
+public class AllTests {
 }

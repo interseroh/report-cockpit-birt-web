@@ -3,3 +3,4 @@
 /server.properties
 /report-config.properties
 /logback.xml
+/hibernate.hbm2ddl.properties

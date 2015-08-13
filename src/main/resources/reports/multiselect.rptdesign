@@ -1,8 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
     <property name="comments">Copyright (c) 2006 &lt;&lt;Your Company Name here>></property>
-    <property name="createdBy">Eclipse BIRT Designer Version 4.5.0.v201506092134 Build &lt;@BUILD@></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.4.1.v201408290142 Build &lt;4.4.1.v20140916-1320></property>
     <property name="units">in</property>
+    <method name="initialize"><![CDATA[function log(msg){
+	logFileName = "birt.log";   
+	importPackage(Packages.java.io); 
+	out = new PrintWriter(new FileWriter(logFileName, true));   
+	out.println(msg); 
+	out.close()
+}
+
+reportContext.setGlobalVariable("log", log);
+
+function testParameters(pmParameterName) {
+	strParamValsSelected = reportContext.getParameterValue(pmParameterName);
+	
+	if (strParamValsSelected != null) {
+		strSelectedValues = "";
+		
+		for (var varCounter = 0; varCounter < strParamValsSelected.length; varCounter++) {
+   			strSelectedValues = strSelectedValues + "'" + strParamValsSelected[varCounter].toString() + "'" + ",";
+    	}
+	
+		strSelectedValues = strSelectedValues.substring(0, strSelectedValues.length - 1);
+		log("strSelectedValues: " + strSelectedValues);
+		strResult = strSelectedValues;
+		log("strResult Not Null: " + strResult);
+	
+		return strSelectedValues;
+	} else {
+		strResult = "Empty";
+		log("strResult Null: " + strResult);
+		return strResult;
+	}
+}
+]]></method>
     <property name="layoutPreference">auto layout</property>
     <parameters>
         <cascading-parameter-group name="customerorders" id="7">
@@ -38,6 +71,33 @@
                 </scalar-parameter>
             </parameters>
         </cascading-parameter-group>
+        <scalar-parameter name="multiParams" id="61">
+            <text-property name="promptText">Multi params test:</text-property>
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList">
+                <structure>
+                    <property name="value">Test1</property>
+                    <property name="label">Test1</property>
+                </structure>
+                <structure>
+                    <property name="value">Test2</property>
+                    <property name="label">Test2</property>
+                </structure>
+                <structure>
+                    <property name="value">Test3</property>
+                    <property name="label">Test3</property>
+                </structure>
+            </list-property>
+            <property name="paramType">multi-value</property>
+            <property name="controlType">list-box</property>
+            <property name="mustMatch">true</property>
+            <property name="fixedOrder">true</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
     </parameters>
     <data-sources>
         <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source" id="4">
@@ -449,6 +509,8 @@ from CLASSICMODELS.CUSTOMERS</design:queryText>
                     </structure>
                 </list-property>
             </structure>
+            <method name="beforeOpen"><![CDATA[testParameters("multiParams");
+]]></method>
             <property name="dataSource">Data Source</property>
             <list-property name="resultSet">
                 <structure>

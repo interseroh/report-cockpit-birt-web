@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain.visitors;
 
@@ -40,15 +40,15 @@ public class ParameterLogVisitor implements ParameterVisitor {
 	private final String indent = "\n\t";
 	private StringBuilder output;
 
-    public static void printParameters(ParameterForm form) {
-        printParameters(form.getGroups());
-    }
+	public static void printParameters(ParameterForm form) {
+		printParameters(form.getGroups());
+	}
 
-    public static void printParameters(Collection<? extends Parameter> params) {
-        if (logger.isDebugEnabled()) {
-            new ParameterLogVisitor().print(params);
-        }
-     }
+	public static void printParameters(Collection<? extends Parameter> params) {
+		if (logger.isDebugEnabled()) {
+			new ParameterLogVisitor().print(params);
+		}
+	}
 
 	private void print(Collection<? extends Parameter> params) {
 		output = new StringBuilder();

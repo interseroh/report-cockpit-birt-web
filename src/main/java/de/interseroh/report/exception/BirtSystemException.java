@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.exception;
 

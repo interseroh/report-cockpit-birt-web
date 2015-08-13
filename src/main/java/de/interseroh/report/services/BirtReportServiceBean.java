@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
@@ -29,11 +29,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import de.interseroh.report.domain.ParameterBuilder;
-import de.interseroh.report.domain.ParameterGroup;
-import de.interseroh.report.domain.ScalarParameter;
-import de.interseroh.report.domain.SelectionParameter;
-import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
@@ -57,6 +52,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import de.interseroh.report.domain.ParameterBuilder;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ScalarParameter;
+import de.interseroh.report.domain.SelectionParameter;
+import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.exception.RenderReportException;
 
@@ -139,7 +139,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			IGetParameterDefinitionTask task = reportEngine
 					.createGetParameterDefinitionTask(iReportRunnable);
 
-            ParameterBuilder builder = new ParameterBuilder(task);
+			ParameterBuilder builder = new ParameterBuilder(task);
 
 			List params = new ArrayList();
 
@@ -155,17 +155,19 @@ public class BirtReportServiceBean implements BirtReportService {
 			}
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting cascading parameters for "
-							+ reportName + ".", e);
+					"Error while getting cascading parameters for " + reportName
+							+ ".",
+					e);
 		}
 	}
 
 	@Override
 	public void renderHtmlReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -187,9 +189,10 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderPDFReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -210,9 +213,10 @@ public class BirtReportServiceBean implements BirtReportService {
 	@Override
 	public void renderExcelReport(String reportName,
 			Map<String, Object> parameters, OutputStream out)
-			throws BirtReportException {
+					throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 

@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
-import de.interseroh.report.exception.UnknownDataTypeException;
-
 import java.lang.reflect.Array;
 import java.util.Date;
+
+import de.interseroh.report.exception.UnknownDataTypeException;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -42,14 +42,14 @@ public enum BirtDataType {
 
 	private int dataType;
 	private String htmlFieldType;
-    private Class valueType;
-    private Class valueArrayType;
+	private Class valueType;
+	private Class valueArrayType;
 
 	<T> BirtDataType(int dataType, String htmlFieldType, Class<T> valueType) {
-        this.dataType = dataType;
+		this.dataType = dataType;
 		this.htmlFieldType = htmlFieldType;
-        this.valueType = valueType;
-        this.valueArrayType = Array.newInstance(valueType,0).getClass();
+		this.valueType = valueType;
+		this.valueArrayType = Array.newInstance(valueType, 0).getClass();
 	}
 
 	public static BirtDataType valueOf(int dataType) {
@@ -69,11 +69,11 @@ public enum BirtDataType {
 		return dataType;
 	}
 
-    public Class getValueType() {
-        return valueType;
-    }
+	public Class getValueType() {
+		return valueType;
+	}
 
-    public Class getValueArrayType() {
-        return valueArrayType;
-    }
+	public Class getValueArrayType() {
+		return valueArrayType;
+	}
 }

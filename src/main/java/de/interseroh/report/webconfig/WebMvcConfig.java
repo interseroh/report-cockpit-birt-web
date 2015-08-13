@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.webconfig;
 
@@ -150,17 +150,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		String defaultDirectory = environment.getProperty("java.io.tmpdir");
 		String baseImageURL = environment
 				.getProperty(BirtReportService.REPORT_BASE_IMAGE_URL_KEY);
-		String imageDirectory = "file://"
-				+ environment.getProperty(
-						BirtReportService.REPORT_IMAGE_DIRECTORY_KEY,
-						defaultDirectory);
+		String imageDirectory = "file://" + environment.getProperty(
+				BirtReportService.REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
 
 		logger.info("\tBaseImageUrl:   " + baseImageURL);
-		logger.info("\tImageDirectory: "
-				+ ensureTrailingSeparator(imageDirectory));
+		logger.info(
+				"\tImageDirectory: " + ensureTrailingSeparator(imageDirectory));
 
-		registry.addResourceHandler(baseImageURL + "/**").addResourceLocations(
-				ensureTrailingSeparator(imageDirectory));
+		registry.addResourceHandler(baseImageURL + "/**")
+				.addResourceLocations(ensureTrailingSeparator(imageDirectory));
 	}
 
 	@Override
@@ -175,7 +173,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	}
 
 	private String ensureTrailingSeparator(String imageDirectory) {
-		if (imageDirectory.charAt(imageDirectory.length() - 1) != File.separatorChar) {
+		if (imageDirectory
+				.charAt(imageDirectory.length() - 1) != File.separatorChar) {
 			imageDirectory = imageDirectory + "/";
 		}
 		return imageDirectory;

@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
@@ -25,8 +25,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.interseroh.report.domain.ScalarParameter;
-import de.interseroh.report.webconfig.ReportConfig;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +34,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ScalarParameter;
+import de.interseroh.report.webconfig.ReportConfig;
 
 /**
  * @author Ingo Düppe (Crowdcode)

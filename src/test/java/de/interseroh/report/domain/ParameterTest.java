@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * (c) 2015 - Interseroh
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.domain;
 
@@ -59,25 +59,23 @@ public class ParameterTest {
 		assertThat(parameter.isValid(), is(true));
 	}
 
-    @Test
-    public void testParameterWithEmptyStringMulti() throws Exception {
-        Parameter parameter = GenericParameter.newInstance(String[].class)
-                .withRequired(true)
-                .withValue(new String[]{" ","  "});
-        assertThat(parameter.isValid(), is(false));
-    }
+	@Test
+	public void testParameterWithEmptyStringMulti() throws Exception {
+		Parameter parameter = GenericParameter.newInstance(String[].class)
+				.withRequired(true).withValue(new String[] { " ", "  " });
+		assertThat(parameter.isValid(), is(false));
+	}
 
-    @Test
-    public void testParameterWithEmptyStringMultiWithDefault() throws Exception {
-        Parameter parameter = GenericParameter.newInstance(String[].class)
-                .withRequired(true)
-                .withValue(new String[]{" ","  "})
-                .withDefaultValue(new String[]{"junittest"});
-        assertThat(parameter.isValid(), is(false));
-    }
+	@Test
+	public void testParameterWithEmptyStringMultiWithDefault()
+			throws Exception {
+		Parameter parameter = GenericParameter.newInstance(String[].class)
+				.withRequired(true).withValue(new String[] { " ", "  " })
+				.withDefaultValue(new String[] { "junittest" });
+		assertThat(parameter.isValid(), is(true));
+	}
 
-
-    @Test
+	@Test
 	public void testParameters() throws Exception {
 		ParameterForm form = new ParameterForm()
 				.addParameterGroup(new ParameterGroup().addScalarParameter(
@@ -86,4 +84,8 @@ public class ParameterTest {
 		assertThat(form.isValid(), is(true));
 	}
 
+	@Test
+	public void testAssignable() throws Exception {
+		assertThat(Number.class.isAssignableFrom(Integer.class), is(true));
+	}
 }

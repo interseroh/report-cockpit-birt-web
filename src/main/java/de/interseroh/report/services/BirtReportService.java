@@ -15,13 +15,12 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.services;
 
 import java.io.OutputStream;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -39,23 +38,26 @@ public interface BirtReportService {
 	String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
 	String REPORT_FILE_SUFFIX = ".rptdesign";
 
-    /**
-     *
-     * @param reportName name of the report
-     * @return collection of synthetic and real parameter groups if the report
-     * @throws BirtReportException
-     */
+	/**
+	 *
+	 * @param reportName
+	 *            name of the report
+	 * @return collection of synthetic and real parameter groups if the report
+	 * @throws BirtReportException
+	 */
 	List<ParameterGroup> getParameterGroups(String reportName)
 			throws BirtReportException;
 
-    /**
-     * Verifies which scalar parameters of the cascading group has values
-     * and tries to load choices for the next not yet selected scalar parameter.
-     *
-     * @param reportName name of the report
-     * @param group where the options are injected
-     * @throws BirtReportException
-     */
+	/**
+	 * Verifies which scalar parameters of the cascading group has values and
+	 * tries to load choices for the next not yet selected scalar parameter.
+	 *
+	 * @param reportName
+	 *            name of the report
+	 * @param group
+	 *            where the options are injected
+	 * @throws BirtReportException
+	 */
 	void loadOptionsForCascadingGroup(String reportName, ParameterGroup group)
 			throws BirtReportException;
 

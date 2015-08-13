@@ -72,7 +72,7 @@ function testParameters(pmParameterName) {
             </parameters>
         </cascading-parameter-group>
         <scalar-parameter name="multiParams" id="61">
-            <text-property name="promptText">Multi params test:</text-property>
+            <text-property name="promptText">multi params test</text-property>
             <property name="valueType">static</property>
             <property name="dataType">string</property>
             <property name="distinct">true</property>
@@ -94,6 +94,21 @@ function testParameters(pmParameterName) {
             <property name="controlType">list-box</property>
             <property name="mustMatch">true</property>
             <property name="fixedOrder">true</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="dateWithFunctionParam" id="62">
+            <text-property name="promptText">enter date</text-property>
+            <property name="valueType">static</property>
+            <property name="dataType">date</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="javascript">BirtDateTime.firstDayOfYear(BirtDateTime.today())</value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
             <structure name="format">
                 <property name="category">Unformatted</property>
             </structure>

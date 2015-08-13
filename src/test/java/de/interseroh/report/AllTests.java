@@ -59,5 +59,5 @@ SecurityConfigTest.class, //
 		DatabaseConfigTest.class //
 
 })
-public class AllUiTests {
+public class AllTests {
 }

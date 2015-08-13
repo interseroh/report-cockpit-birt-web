@@ -128,4 +128,14 @@ public class ReportControllerTest {
 				.andDo(print());
 
 	}
+	@Test
+	public void testMultiSelectGet() throws Exception {
+		this.mockMvc.perform(get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
+                .andExpect(status().isOk()) //
+				.andExpect(content().string(containsString("10123")))
+				.andExpect(content().string(containsString("10298")))
+				.andExpect(content().string(containsString("10345")))
+				.andDo(print());
+
+	}
 }

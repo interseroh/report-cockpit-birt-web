@@ -47,6 +47,7 @@ public class DatabaseLdapAuthoritiesPopulator implements
 			DirContextOperations userData, String userName) {
 		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
+		// Username == email
 		Collection<Membership> membership = userService
 				.findMembershipsByUserEmail(userName);
 		for (Membership currentMembership : membership) {

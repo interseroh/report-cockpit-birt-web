@@ -43,7 +43,7 @@ public class DatabaseConfigTest {
 
 	@Test
 	public void testContext() {
-		applicationContext.getBean("userRoleServiceBean");
+		applicationContext.getBean("userServiceBean");
 	}
 
 }

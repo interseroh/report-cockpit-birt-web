@@ -44,6 +44,9 @@
 		<spring.data.version>1.8.2.RELEASE</spring.data.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
 		<jackson-version>2.0.2</jackson-version>
+		<kissmda.maven.plugin.version>2.0.0</kissmda.maven.plugin.version>
+        <kissmda.cartridges.simple.java.version>2.0.2</kissmda.cartridges.simple.java.version>
+        <kissmda.extensions.importpacker.version>1.0.0</kissmda.extensions.importpacker.version>
 	</properties>
 
 	<dependencies>
@@ -267,7 +270,107 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>target/generated-sources/java</source>
+								<source>target/generated-sources/apt</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
+			<plugin>
+				<groupId>de.juplo</groupId>
+				<artifactId>hibernate4-maven-plugin</artifactId>
+				<version>1.0.5</version>
+				<configuration>
+					<hibernateProperties>src/test/resources/hibernate.hbm2ddl.properties</hibernateProperties>
+					<target>SCRIPT</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>2.0.5</version>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<processors>
+								<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+							</processors>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-jpamodelgen</artifactId>
+						<version>${hibernate.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			
+			<plugin>
+				<groupId>de.crowdcode.kissmda.maven</groupId>
+				<artifactId>kissmda-maven-plugin</artifactId>
+				<version>${kissmda.maven.plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>de.crowdcode.kissmda.cartridges</groupId>
+						<artifactId>kissmda-cartridges-simple-java</artifactId>
+						<version>${kissmda.cartridges.simple.java.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>de.crowdcode.kissmda.cartridges</groupId>
+						<artifactId>kissmda-extensions-import-packer</artifactId>
+						<version>${kissmda.extensions.importpacker.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformerScanPackageNames>
+						<transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
+					</transformerScanPackageNames>
+					<transformerNameWithOrders>
+						<transformerNameWithOrder>
+							1:de.crowdcode.kissmda.extensions.importpacker.ImportPackerTransformer
+						</transformerNameWithOrder>
+						<transformerNameWithOrder>
+							2:de.crowdcode.kissmda.cartridges.simplejava.SimpleJavaTransformer
+						</transformerNameWithOrder>
+					</transformerNameWithOrders>
+					<modelFile>src/main/resources/model/emf/report-cockpit-birt.uml</modelFile>
+					<loggingLevel>DEBUG</loggingLevel>
+					<targetEncoding>UTF-8</targetEncoding> 
+				</configuration>
+			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -288,8 +391,8 @@
 									tofile="src/main/resources/server.properties" />
 								<copy file="src/main/resources/report-config.properties_example"
 									tofile="src/main/resources/report-config.properties" />
-								<copy file="src/main/resources/hibernate.hbm2ddl.properties_example"
-									tofile="src/main/resources/hibernate.hbm2ddl.properties" />								
+								<copy file="src/test/resources/hibernate.hbm2ddl.properties_example"
+									tofile="src/test/resources/hibernate.hbm2ddl.properties" />								
 								<copy file="src/test/resources/logback-test.xml_example"
 									tofile="src/test/resources/logback-test.xml" />
 							</target>
@@ -361,6 +464,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -406,6 +510,42 @@
 											<goal>
 												read-project-properties
 											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											de.crowdcode.kissmda.maven
+										</groupId>
+										<artifactId>
+											kissmda-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.0.0,)
+										</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.bsc.maven</groupId>
+										<artifactId>
+											maven-processor-plugin
+										</artifactId>
+										<versionRange>
+											[2.0.5,)
+										</versionRange>
+										<goals>
+											<goal>process</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

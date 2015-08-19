@@ -20,19 +20,34 @@
  */
 package de.interseroh.report.auth;
 
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
- * JPA User Role Interface.
+ * UserService Implementation.
  *
  * @author Lofi Dewanto (Interseroh)
  */
-public interface UserRole {
+@Service
+public class UserServiceBean implements UserService {
 
-	String getUsername();
+	@Autowired
+	private MembershipRepository membershipRepository;
 
-	void setUsername(String username);
+	@Override
+	public Collection<Membership> findMembershipsByUserEmail(String email) {
+		User user = null;
+		Collection<MembershipEntity> memberships = membershipRepository
+				.findByUser(user);
 
-	String getRole();
+		return null;
+	}
 
-	void setRole(String role);
-
+	@Override
+	public void createMembership(User user, Group group) {
+		Membership membership = null;
+		membershipRepository.save((MembershipEntity) membership);
+	}
 }

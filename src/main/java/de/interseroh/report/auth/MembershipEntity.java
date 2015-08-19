@@ -20,31 +20,51 @@
  */
 package de.interseroh.report.auth;
 
-import java.util.Collection;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
- * UserService Implementation.
+ * JPA Membership entity.
  *
  * @author Lofi Dewanto (Interseroh)
  */
-@Service
-public class UserRoleServiceBean implements UserRoleService {
+@Entity
+@Table(name = "MEMBERSHIP")
+public class MembershipEntity extends AbstractPersistable<Long> implements
+		Membership {
 
-	@Autowired
-	private UserRoleRepository userRoleRepository;
+	private static final long serialVersionUID = -2552585409665169353L;
+
+	@ManyToOne(optional = false, targetEntity = UserEntity.class)
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+	private User user;
+
+	@ManyToOne(optional = false, targetEntity = GroupEntity.class)
+	@JoinColumn(name = "GROUP_ID", referencedColumnName = "ID")
+	private Group group;
 
 	@Override
-	public Collection<String> findUserRolesByUsername(String username) {
-		Collection<String> findByUsername = userRoleRepository
-				.findByUsername(username);
-		return findByUsername;
+	public User getUser() {
+		return user;
 	}
 
 	@Override
-	public void createUserRole(UserRole userRole) {
-		userRoleRepository.save((UserRoleEntity) userRole);
+	public void setUser(User user) {
+		this.user = user;
 	}
+
+	@Override
+	public Group getGroup() {
+		return group;
+	}
+
+	@Override
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
 }

@@ -29,8 +29,8 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author Lofi Dewanto (Interseroh)
  */
-public interface UserRoleRepository extends
-		CrudRepository<UserRoleEntity, Long> {
+public interface MembershipRepository extends
+		CrudRepository<MembershipEntity, Long> {
 
-	Collection<String> findByUsername(String username);
+	Collection<MembershipEntity> findByUser(User user);
 }

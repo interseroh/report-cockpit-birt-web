@@ -1,2 +1,3 @@
 /log4j.properties
 logback-test.xml
+/hibernate.hbm2ddl.properties

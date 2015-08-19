@@ -60,8 +60,11 @@ public class ReportControllerTest {
 
 	@Test
 	public void testCustomParameterView() throws Exception {
-		this.mockMvc.perform(get("/reports/custom/params")) //
-				.andExpect(status().isOk()) //
+		this.mockMvc
+				.perform(get("/reports/custom/params"))
+				//
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("Parameter")))
 				.andExpect(content().string(containsString("radio")))
 				.andDo(print());
@@ -70,8 +73,10 @@ public class ReportControllerTest {
 	@Test
 	public void testCustomParameterViewDateParameter() throws Exception {
 		this.mockMvc
-				.perform(get("/reports/custom/params")) //
-				.andExpect(status().isOk()) //
+				.perform(get("/reports/custom/params"))
+				//
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("Parameter")))
 				.andExpect(content().string(containsString("radio")))
 				.andDo(print());
@@ -79,9 +84,12 @@ public class ReportControllerTest {
 
 	@Test
 	public void testCustomParameterViewWithMissingParameter() throws Exception {
-		this.mockMvc.perform(
-				get("/reports/cascade_parameters/params?params[customer].value=278")) //
-				.andExpect(status().isOk()) //
+		this.mockMvc
+				.perform(
+						get("/reports/cascade_parameters/params?params[customer].value=278"))
+				//
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("278")))
 				.andDo(print());
 	}
@@ -89,53 +97,66 @@ public class ReportControllerTest {
 	@Test
 	public void testCustomParameterViewWithMissingParameter_Request()
 			throws Exception {
-		this.mockMvc.perform(get("/reports/cascade_parameters/params?customer=278")) //
-				.andExpect(status().isOk()) //
+		this.mockMvc
+				.perform(get("/reports/cascade_parameters/params?customer=278"))
+				//
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("278")))
 				.andDo(print());
 	}
 
 	@Test
 	public void testCustomParameterViewWithWrongType() throws Exception {
-		this.mockMvc.perform(
-				get("/reports/cascade_parameters/params?params[customer].value=ABC")) //
-				.andExpect(status().isOk()) //
+		this.mockMvc
+				.perform(
+						get("/reports/cascade_parameters/params?params[customer].value=ABC"))
+				//
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("help-block")))
 				.andDo(print());
 	}
 
 	@Test
-	public void testCustomParameterViewWithWrongType_Request()
-			throws Exception {
-		this.mockMvc.perform(get("/reports/cascade_parameters/params?customer=ABC")) //
-				.andExpect(status().isOk()) //
+	public void testCustomParameterViewWithWrongType_Request() throws Exception {
+		this.mockMvc
+				.perform(get("/reports/cascade_parameters/params?customer=ABC"))
+				//
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("help-block")))
 				.andDo(print());
 	}
 
 	@Test
 	public void testCascadingParameterView() throws Exception {
-		this.mockMvc.perform(get(
-				"/reports/cascade_parameters/params/cascade/customerorders?params[customer].value=278")) //
+		this.mockMvc
+				.perform(
+						get("/reports/cascade_parameters/params/cascade/customerorders?params[customer].value=278")) //
 				.andExpect(status().isOk()) //
 				.andDo(print());
 	}
 
 	@Test
 	public void testCustomParameterViewPost() throws Exception {
-		this.mockMvc.perform(post("/reports/custom/params")).andExpect(status().isOk()) //
+		this.mockMvc.perform(post("/reports/custom/params"))
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("Parameter")))
 				.andDo(print());
-
 	}
+
 	@Test
 	public void testMultiSelectGet() throws Exception {
-		this.mockMvc.perform(get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
-                .andExpect(status().isOk()) //
+		this.mockMvc
+				.perform(
+						get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
+				.andExpect(status().isOk())
+				//
 				.andExpect(content().string(containsString("10123")))
 				.andExpect(content().string(containsString("10298")))
 				.andExpect(content().string(containsString("10345")))
 				.andDo(print());
-
 	}
 }

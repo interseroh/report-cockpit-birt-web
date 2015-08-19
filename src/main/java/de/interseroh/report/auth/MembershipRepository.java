@@ -15,13 +15,14 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.auth;
 
 import java.util.Collection;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -33,4 +34,7 @@ public interface MembershipRepository extends
 		CrudRepository<MembershipEntity, Long> {
 
 	Collection<MembershipEntity> findByUser(User user);
+
+	@Query("SELECT m FROM MembershipEntity m, UserEntity u where u.email = ?1")
+	Collection<MembershipEntity> findByUserEmail(String email);
 }

@@ -13,10 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -34,13 +32,17 @@ public class DatabaseConfig {
 	private static final String JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT = "jdbc.driver.classname.reportcockpit";
 
 	public static final String REPORTCOCKPIT_PERSISTENCE_UNIT = "reportcockpitPersistenceUnit";
-	public static final String REPORTCOCKPIT_JPA_TX_MANAGER = "reportcockpitJpaTransactionManager";
+	public static final String REPORTCOCKPIT_JPA_TX_MANAGER = "transactionManager";
 
 	private static final String REPORTCOCKPIT_ENTITYMANAGER_PACKAGES_TO_SCAN = "de.interseroh.report.auth";
 
-	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect.reportcockpit";
-	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql.reportcockpit";
-	private static final String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto.reportcockpit";
+	private static final String REPORTCOCKPIT_PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect.reportcockpit";
+	private static final String REPORTCOCKPIT_PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql.reportcockpit";
+	private static final String REPORTCOCKPIT_PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto.reportcockpit";
+
+	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
+	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
+	private static final String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
 
 	@Autowired
 	private Environment env;
@@ -62,11 +64,6 @@ public class DatabaseConfig {
 	}
 
 	@Bean
-	public PlatformTransactionManager reportcockpitJdbcTransactionManager() {
-		return new DataSourceTransactionManager(reportcockpitDataSource());
-	}
-
-	@Bean
 	public LocalContainerEntityManagerFactoryBean reportcockpitEntityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(reportcockpitDataSource());
@@ -84,17 +81,20 @@ public class DatabaseConfig {
 
 	private Properties reportcockpitHibernateProperties() {
 		Properties properties = new Properties();
-		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,
-				env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL,
-				env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
-		properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO,
-				env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
+		properties
+				.put(PROPERTY_NAME_HIBERNATE_DIALECT,
+						env.getRequiredProperty(REPORTCOCKPIT_PROPERTY_NAME_HIBERNATE_DIALECT));
+		properties
+				.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL,
+						env.getRequiredProperty(REPORTCOCKPIT_PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+		properties
+				.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO,
+						env.getRequiredProperty(REPORTCOCKPIT_PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
 		return properties;
 	}
 
 	@Bean
-	public JpaTransactionManager reportcockpitJpaTransactionManager() {
+	public JpaTransactionManager transactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager
 				.setEntityManagerFactory(reportcockpitEntityManagerFactory()

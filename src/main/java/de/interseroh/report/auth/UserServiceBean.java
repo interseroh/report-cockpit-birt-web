@@ -15,15 +15,17 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.auth;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * UserService Implementation.
@@ -36,18 +38,33 @@ public class UserServiceBean implements UserService {
 	@Autowired
 	private MembershipRepository membershipRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private GroupRepository groupRepository;
+
+	@Transactional(readOnly = true)
 	@Override
 	public Collection<Membership> findMembershipsByUserEmail(String email) {
-		User user = null;
 		Collection<MembershipEntity> memberships = membershipRepository
-				.findByUser(user);
+				.findByUserEmail(email);
 
-		return null;
+		Collection<Membership> returnMemberships = new ArrayList<>();
+		returnMemberships.addAll(memberships);
+
+		return returnMemberships;
 	}
 
+	@Transactional
 	@Override
 	public void createMembership(User user, Group group) {
-		Membership membership = null;
+		Membership membership = new MembershipEntity();
+		membership.setGroup(group);
+		membership.setUser(user);
+
+		userRepository.save((UserEntity) user);
+		groupRepository.save((GroupEntity) group);
 		membershipRepository.save((MembershipEntity) membership);
 	}
 }

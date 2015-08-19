@@ -15,8 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * (c) 2015 - Interseroh
+ *
+ * (c) 2015 - Interseroh and Crowdcode
  */
 package de.interseroh.report.auth;
 
@@ -33,7 +33,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  * @author Lofi Dewanto (Interseroh)
  */
 @Entity
-@Table(name = "MEMBERSHIP")
+@Table(name = "RCB_MEMBERSHIP")
 public class MembershipEntity extends AbstractPersistable<Long> implements
 		Membership {
 

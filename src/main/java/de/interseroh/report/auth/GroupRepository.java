@@ -18,15 +18,15 @@
  *
  * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report;
+package de.interseroh.report.auth;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.springframework.data.repository.CrudRepository;
 
-import de.interseroh.report.auth.UserServiceBeanIT;
+/**
+ * Spring Data JPA.
+ *
+ * @author Lofi Dewanto (Interseroh)
+ */
+public interface GroupRepository extends CrudRepository<GroupEntity, Long> {
 
-@RunWith(Suite.class)
-@SuiteClasses({ UserServiceBeanIT.class })
-public class AllITs {
 }

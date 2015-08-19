@@ -395,6 +395,8 @@
 									tofile="src/test/resources/hibernate.hbm2ddl.properties" />								
 								<copy file="src/test/resources/logback-test.xml_example"
 									tofile="src/test/resources/logback-test.xml" />
+								<copy file="src/test/resources/report-config.properties_example"
+									tofile="src/test/resources/report-config.properties" />
 							</target>
 						</configuration>
 					</execution>

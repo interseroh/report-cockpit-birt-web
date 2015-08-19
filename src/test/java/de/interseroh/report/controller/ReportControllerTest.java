@@ -151,7 +151,7 @@ public class ReportControllerTest {
 	public void testMultiSelectGet() throws Exception {
 		this.mockMvc
 				.perform(
-						get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
+						get("/reports/multiselect/params?order=10123&order=10298&order=10345&customer=103"))
 				.andExpect(status().isOk())
 				//
 				.andExpect(content().string(containsString("10123")))

@@ -26,12 +26,14 @@ import de.interseroh.report.services.BirtDataType;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public abstract class AbstractScalarParameter<SUB extends AbstractScalarParameter, T>
-		extends AbstractParameter<SUB>implements ScalarParameter<T> {
+public abstract class AbstractScalarParameter<SUB extends AbstractScalarParameter, V, T>
+		extends AbstractParameter<SUB>implements ScalarParameter<V, T> {
 
-	private final Class<T> valueType;
-	private T value;
-	private T defaultValue;
+	private final Class<V> valueType;
+	private final Class<T> textType;
+	private V value;
+	private V defaultValue;
+	private T text;
 
 	private BirtDataType dataType = BirtDataType.TYPE_STRING;
 	private BirtControlType controlType;
@@ -39,16 +41,21 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 	private boolean required;
 	private boolean concealed;
 
-	public AbstractScalarParameter(Class<T> valueType) {
+	public AbstractScalarParameter(Class<V> valueType, Class<T> textType) {
 		this.valueType = valueType;
+		this.textType = textType;
 	}
 
-	public Class<T> getValueType() {
+	public Class<V> getValueType() {
 		return valueType;
 	}
 
+	public Class<T> getTextType() {
+		return textType;
+	}
+
 	@Override
-	public T getValueOrDefault() {
+	public V getValueOrDefault() {
 		return (value != null) ? value : defaultValue;
 	}
 
@@ -94,14 +101,14 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		return !required || !isNullOrEmpty(value) || defaultValue != null;
 	}
 
-	private boolean isNullOrEmpty(T value) {
+	private boolean isNullOrEmpty(V value) {
 		if (value == null) {
 			return true;
 		} else if (value instanceof String) {
 			return ((String) value).trim().isEmpty();
 		} else if (value.getClass().isArray()) {
 			boolean empty = true;
-			for (T v : (T[]) value) {
+			for (V v : (V[]) value) {
 				empty &= isNullOrEmpty(v);
 			}
 			return empty;
@@ -111,31 +118,46 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 	}
 
 	@Override
-	public T getDefaultValue() {
+	public V getDefaultValue() {
 		return defaultValue;
 	}
 
-	public void setDefaultValue(T defaultValue) {
+	public void setDefaultValue(V defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
-	public SUB withDefaultValue(final T defaultValue) {
+	public SUB withDefaultValue(final V defaultValue) {
 		this.defaultValue = defaultValue;
 		return (SUB) this;
 	}
 
 	@Override
-	public T getValue() {
+	public V getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(T value) {
+	public void setValue(V value) {
 		this.value = value;
 	}
 
-	public SUB withValue(final T value) {
+	public SUB withValue(final V value) {
 		this.value = value;
+		return (SUB) this;
+	}
+
+	@Override
+	public T getText() {
+		return text;
+	}
+
+	@Override
+	public void setText(T text) {
+		this.text = text;
+	}
+
+	public SUB withText(final T text) {
+		this.text = text;
 		return (SUB) this;
 	}
 

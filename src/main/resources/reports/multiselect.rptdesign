@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
     <property name="comments">Copyright (c) 2006 &lt;&lt;Your Company Name here>></property>
-    <property name="createdBy">Eclipse BIRT Designer Version 4.4.1.v201408290142 Build &lt;4.4.1.v20140916-1320></property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.5.0.v201506092134 Build &lt;@BUILD@></property>
     <property name="units">in</property>
     <method name="initialize"><![CDATA[function log(msg){
-	logFileName = "birt.log";   
-	importPackage(Packages.java.io); 
-	out = new PrintWriter(new FileWriter(logFileName, true));   
-	out.println(msg); 
+	logFileName = "birt.log";
+	importPackage(Packages.java.io);
+	out = new PrintWriter(new FileWriter(logFileName, true));
+	out.println(msg);
 	out.close()
 }
 
@@ -15,19 +15,19 @@ reportContext.setGlobalVariable("log", log);
 
 function testParameters(pmParameterName) {
 	strParamValsSelected = reportContext.getParameterValue(pmParameterName);
-	
+
 	if (strParamValsSelected != null) {
 		strSelectedValues = "";
-		
+
 		for (var varCounter = 0; varCounter < strParamValsSelected.length; varCounter++) {
    			strSelectedValues = strSelectedValues + "'" + strParamValsSelected[varCounter].toString() + "'" + ",";
     	}
-	
+
 		strSelectedValues = strSelectedValues.substring(0, strSelectedValues.length - 1);
 		log("strSelectedValues: " + strSelectedValues);
 		strResult = strSelectedValues;
 		log("strResult Not Null: " + strResult);
-	
+
 		return strSelectedValues;
 	} else {
 		strResult = "Empty";

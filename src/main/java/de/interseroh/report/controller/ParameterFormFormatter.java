@@ -20,12 +20,12 @@
  */
 package de.interseroh.report.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionException;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import de.interseroh.report.domain.ParameterForm;
-import de.interseroh.report.domain.ParameterUtils;
 import de.interseroh.report.domain.ScalarParameter;
 import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
 
@@ -33,29 +33,34 @@ import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
  * @author Ingo Düppe (Crowdcode)
  */
 @Component
-public class ParameterFormValidator implements Validator {
+public class ParameterFormFormatter {
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return clazz.isAssignableFrom(ParameterForm.class);
-	}
+	@Autowired
+	private ConversionService conversionService;
 
-	@Override
-	public void validate(Object target, final Errors errors) {
-		final ParameterForm parameterForm = (ParameterForm) target;
+	public void format(ParameterForm parameterForm) {
 
+		// Convert parameter values to required type
 		parameterForm.accept(new AbstractParameterVisitor() {
 			@Override
 			public <V, T> void visit(ScalarParameter<V, T> parameter) {
-				if (!parameter.isValid()) {
-					// TODO idueppe - provide a valid
-					String propertyPath = ParameterUtils
-							.nameToTextPath(parameter.getName());
-					errors.rejectValue(propertyPath,
-							"javax.validation.constraints.NotEmpty.message",
-							"Es muss ein Wert angegeben werden.");
+				Class<V> valueType = parameter.getValueType();
+				Class<T> textType = parameter.getTextType();
+
+				V value = parameter.getValue();
+				if (value != null) {
+					if (conversionService.canConvert(valueType, textType)) {
+						try {
+							T formatted = conversionService.convert(value,
+									textType);
+							parameter.setText(formatted);
+						} catch (ConversionException ce) {
+							parameter.setText((T) value.toString());
+						}
+					}
 				}
 			}
 		});
 	}
+
 }

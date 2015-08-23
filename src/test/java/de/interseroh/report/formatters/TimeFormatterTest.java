@@ -18,31 +18,36 @@
  *
  * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.domain.visitors;
+package de.interseroh.report.formatters;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.junit.Test;
 
-import de.interseroh.report.domain.ParameterForm;
-import de.interseroh.report.domain.ScalarParameter;
+import java.sql.Time;
+import java.util.Locale;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class ParameterValueMapBuilder {
+public class TimeFormatterTest {
 
-	public Map<String, Object> build(ParameterForm form) {
-		final Map<String, Object> params = new HashMap<>();
+    private static final String TEST_TIME = "13:45";
+    private static final Time testTime = new Time(45900000L);
 
-		form.accept(new AbstractParameterVisitor() {
-			@Override
-			public <V, T> void visit(ScalarParameter<V, T> parameter) {
-				if (parameter.getValue() != null) {
-					params.put(parameter.getName(), parameter.getText());
-				}
-			}
-		});
+    private static final TimeFormatter formatter = new TimeFormatter();
 
-		return params;
-	}
+
+    @Test
+    public void testParse() throws Exception {
+        Time parsed = formatter.parse(TEST_TIME, Locale.getDefault());
+        assertThat(parsed, is(testTime));
+    }
+
+    @Test
+    public void testPrint() throws Exception {
+        String print = formatter.print(testTime, Locale.getDefault());
+        assertThat(print, is(TEST_TIME));
+    }
 }

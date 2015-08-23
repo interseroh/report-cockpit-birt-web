@@ -21,19 +21,49 @@
 package de.interseroh.report.domain;
 
 /**
+ *
+ * A ScalarParameter represents a parameter that contains one or multiple
+ * values. The type of the value dependence on the underlying report parameter.
+ *
+ * The scalar parameters are defined to handle the request response cycle of a
+ * web application.
+ *
+ * The value contains the current strongly typed value from the report or
+ * previously submitted values.
+ *
+ * After a externally trigert formatting all typed values are print out
+ * formatted to the text value. The views could fetch the text values of the
+ * scalar parameters
+ *
  * @author Ingo Düppe (Crowdcode)
  */
-public interface ScalarParameter<T> extends Parameter {
+public interface ScalarParameter<V, T> extends Parameter {
 
 	String getHtmlFieldType();
 
-	Class<T> getValueType();
+	Class<V> getValueType();
 
-	T getDefaultValue();
+	Class<T> getTextType();
 
-	T getValue();
+	V getDefaultValue();
 
-	void setValue(T value);
+	V getValue();
+
+	void setValue(V value);
+
+	/**
+	 * The value as formatted text
+	 * 
+	 * @return value as Text
+	 */
+	T getText();
+
+	/**
+	 *
+	 * @param text
+	 *            new value as text
+	 */
+	void setText(T text);
 
 	boolean isMultiValue();
 
@@ -41,5 +71,6 @@ public interface ScalarParameter<T> extends Parameter {
 
 	boolean isConcealed();
 
-	T getValueOrDefault();
+	V getValueOrDefault();
+
 }

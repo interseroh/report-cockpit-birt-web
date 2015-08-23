@@ -20,6 +20,8 @@
  */
 package de.interseroh.report;
 
+import de.interseroh.report.domain.visitors.ReportParamsBuilderTest;
+import de.interseroh.report.parameter.BirtConvertingTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -56,7 +58,8 @@ SecurityConfigTest.class, //
 		BirtReportServiceBeanTest.class, //
 		ReportControllerTest.class, //
 		ReportRestApiControllerTest.class, //
-		DatabaseConfigTest.class //
+        ReportParamsBuilderTest.class, //
+        BirtConvertingTest.class
 
 })
 public class AllTests {

@@ -59,28 +59,28 @@ public class ParameterFormBinder {
 
 		parameterForm.accept(new AbstractParameterVisitor() {
 			@Override
-			public <T> void visit(ScalarParameter<T> parameter) {
+			public <V, T> void visit(ScalarParameter<V, T> parameter) {
 				String name = parameter.getName();
-				String propertyPath = ParameterUtils.nameToPath(name);
-				Class<T> valueType = parameter.getValueType();
+				String propertyPath = ParameterUtils.nameToTextPath(name);
+				Class<T> textType = parameter.getTextType();
 
 				if (requestParameters.containsKey(name)) {
-					addValues(name, propertyPath, valueType);
+					addText(name, propertyPath, textType);
 				} else if (requestParameters.containsKey('_' + name)) {
-					addValues('_' + name, propertyPath, valueType);
+					addText('_' + name, propertyPath, textType);
 				}
 			}
 
-			private <T> void addValues(String name, String propertyPath,
-					Class<T> valueType) {
+			private <T> void addText(String name, String propertyPath,
+					Class<T> textType) {
 				List<String> values = requestParameters.get(name);
-                if (valueType.isArray()) {
-                    mpvs.add(propertyPath, values.toArray() );
-                } else {
-                    for (String requestValue : values) {
-                        mpvs.add(propertyPath, requestValue);
-                    }
-                }
+				if (textType.isArray()) {
+					mpvs.add(propertyPath, values.toArray());
+				} else {
+					for (String requestValue : values) {
+						mpvs.add(propertyPath, requestValue);
+					}
+				}
 			}
 		});
 		return mpvs;

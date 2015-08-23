@@ -25,8 +25,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import de.interseroh.report.domain.ParameterForm;
@@ -39,9 +37,6 @@ import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
 @Component
 public class RequestParamsBuilder {
 
-	@Autowired
-	private ConversionService conversionService;
-
 	public String asRequestParams(ParameterForm parameterForm) {
 		return conjoin(buildParamList(parameterForm));
 	}
@@ -51,25 +46,25 @@ public class RequestParamsBuilder {
 
 		parameterForm.accept(new AbstractParameterVisitor() {
 			@Override
-			public <T> void visit(ScalarParameter<T> parameter) {
+			public <V, T> void visit(ScalarParameter<V, T> parameter) {
 				String paramName = parameter.getName();
 
-				if (parameter.getValue() != null) {
+				// FIXME - should be done by Generic Text Converter
+				if (parameter.getText() != null) {
 					if (parameter.isMultiValue()) {
-						for (T paramValue : (T[]) parameter.getValue()) {
-							addKeyValueParam(paramName, paramValue);
+						for (T paramText : (T[]) parameter.getText()) {
+							addKeyValueParam(paramName, (String) paramText);
 						}
 					} else {
-						addKeyValueParam(paramName, parameter.getValue());
+						addKeyValueParam(paramName,
+								(String) parameter.getText());
 					}
 				}
 			}
 
-			private <T> void addKeyValueParam(String paramName, T paramValue) {
+			private void addKeyValueParam(String paramName, String paramValue) {
 				if (paramValue != null) {
-					String stringValue = conversionService.convert(paramValue,
-							String.class);
-					params.add(paramName + "=" + urlEncode(stringValue));
+					params.add(paramName + "=" + urlEncode(paramValue));
 				}
 			}
 		});

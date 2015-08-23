@@ -18,31 +18,33 @@
  *
  * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.domain.visitors;
+package de.interseroh.report.formatters;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
-import de.interseroh.report.domain.ParameterForm;
-import de.interseroh.report.domain.ScalarParameter;
+import org.springframework.format.Formatter;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class ParameterValueMapBuilder {
+public class TimeFormatter implements Formatter<Time> {
 
-	public Map<String, Object> build(ParameterForm form) {
-		final Map<String, Object> params = new HashMap<>();
-
-		form.accept(new AbstractParameterVisitor() {
-			@Override
-			public <V, T> void visit(ScalarParameter<V, T> parameter) {
-				if (parameter.getValue() != null) {
-					params.put(parameter.getName(), parameter.getText());
-				}
-			}
-		});
-
-		return params;
+	@Override
+	public Time parse(String text, Locale locale) throws ParseException {
+		java.util.Date parsed = getDateFormat(locale).parse(text);
+		return new Time(parsed.getTime());
 	}
+
+	@Override
+	public String print(Time date, Locale locale) {
+		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
+	}
+
+	public SimpleDateFormat getDateFormat(Locale locale) {
+		return new SimpleDateFormat("HH:mm", locale);
+	}
+
 }

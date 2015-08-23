@@ -25,16 +25,26 @@ import de.interseroh.report.domain.visitors.ParameterVisitor;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class GenericParameter<T>
-		extends AbstractScalarParameter<GenericParameter<T>, T> {
+public class GenericParameter<V, T>
+		extends AbstractScalarParameter<GenericParameter<V, T>, V, T> {
 
-	public GenericParameter(Class<T> valueType) {
-		super(valueType);
+	public GenericParameter(Class<V> valueType, Class<T> textType) {
+		super(valueType, textType);
 	}
 
-	public static final <T> GenericParameter<T> newInstance(
-			Class<T> valueType) {
-		return new GenericParameter<>(valueType);
+	public static final <V, T> GenericParameter<V, T> newInstance(
+			Class<V> valueType, Class<T> textType) {
+		return new GenericParameter<>(valueType, textType);
+	}
+
+	public static final <V> GenericParameter<V, String> newInstance(
+			Class<V> valueType) {
+		return new GenericParameter<>(valueType, String.class);
+	}
+
+	public static final <V> GenericParameter<V, String[]> newMultiInstance(
+			Class<V> valueType) {
+		return new GenericParameter<>(valueType, String[].class);
 	}
 
 	@Override

@@ -51,10 +51,10 @@ public class ReportParamsBuilder extends AbstractParameterVisitor
 	}
 
 	@Override
-	public <T> void visit(ScalarParameter<T> parameter) {
+	public <V, T> void visit(ScalarParameter<V, T> parameter) {
 		if (parameter.getValue() != null) {
 			String paramName = parameter.getName();
-			T paramValue = parameter.getValue();
+			V paramValue = parameter.getValue();
 			params.put(paramName, paramValue);
 		}
 	}

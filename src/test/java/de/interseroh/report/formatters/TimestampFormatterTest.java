@@ -18,31 +18,36 @@
  *
  * (c) 2015 - Interseroh and Crowdcode
  */
-package de.interseroh.report.domain.visitors;
+package de.interseroh.report.formatters;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
-import de.interseroh.report.domain.ParameterForm;
-import de.interseroh.report.domain.ScalarParameter;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Locale;
+
+import org.junit.Test;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class ParameterValueMapBuilder {
+public class TimestampFormatterTest {
 
-	public Map<String, Object> build(ParameterForm form) {
-		final Map<String, Object> params = new HashMap<>();
+    private static final String TEST_TIMESTAMP = "2015-12-13 13:45";
+    private static final Timestamp testTime = new Timestamp(1450010700000L);
 
-		form.accept(new AbstractParameterVisitor() {
-			@Override
-			public <V, T> void visit(ScalarParameter<V, T> parameter) {
-				if (parameter.getValue() != null) {
-					params.put(parameter.getName(), parameter.getText());
-				}
-			}
-		});
+    private static final TimestampFormatter formatter = new TimestampFormatter();
 
-		return params;
-	}
+    @Test
+    public void testParse() throws Exception {
+        Timestamp parsed = formatter.parse(TEST_TIMESTAMP, Locale.getDefault());
+        assertThat(parsed, is(testTime));
+    }
+
+    @Test
+    public void testPrint() throws Exception {
+        String print = formatter.print(testTime, Locale.getDefault());
+        assertThat(print, is(TEST_TIMESTAMP));
+    }
 }

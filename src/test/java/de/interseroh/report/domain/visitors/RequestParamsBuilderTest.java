@@ -25,10 +25,11 @@ import static org.hamcrest.core.Is.is;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.interseroh.report.controller.ParameterFormFormatter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,14 +55,20 @@ public class RequestParamsBuilderTest {
 	@Autowired
 	private RequestParamsBuilder requestParamsBuilder;
 
+    @Autowired
+    private ParameterFormFormatter parameterFormFormatter;
+
 	@Test
 	public void testConversionService() throws Exception {
 
-		String requestParams = requestParamsBuilder
-				.asRequestParams(buildTestData());
+        ParameterForm form = buildTestData();
+        parameterFormFormatter.format(form);
+
+        String requestParams = requestParamsBuilder
+				.asRequestParams(form);
 
 		assertThat(requestParams, is(
-				"?double=55.5&boolean=false&string=value&dateTime=2015-09-05T19%3A12%3A23.344%2B0000&scalarMULTI=1&scalarMULTI=2"));
+				"?double=55.5&boolean=false&string=value&dateTime=2015-09-05&scalarMULTI=1&scalarMULTI=2"));
 	}
 
 	private ParameterForm buildTestData() {
@@ -86,7 +93,7 @@ public class RequestParamsBuilderTest {
 				.addScalarParameter(SelectionParameter.newInstance(String.class)
 						.withName("selectNULL"))
 				.addScalarParameter(SelectionParameter
-						.newInstance(Integer[].class).withName("scalarMULTI")
+						.newMultiInstance(Integer[].class).withName("scalarMULTI")
 						.withValue(new Integer[] { 1, 2 })));
 		return new ParameterForm().withParameterGroups(groups);
 	}
@@ -94,7 +101,7 @@ public class RequestParamsBuilderTest {
 	private Date fixedDate() {
 		Calendar calendar = Calendar.getInstance(Locale.GERMANY);
 		calendar.set(2015, 8, 5, 21, 12, 23);
-		return calendar.getTime();
+		return new Date(calendar.getTimeInMillis());
 	}
 
 }

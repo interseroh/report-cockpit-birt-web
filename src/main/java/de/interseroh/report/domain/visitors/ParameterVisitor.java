@@ -28,7 +28,7 @@ import de.interseroh.report.domain.ScalarParameter;
  */
 public interface ParameterVisitor {
 
-	<T> void visit(ScalarParameter<T> parameter);
+	<V, T> void visit(ScalarParameter<V, T> parameter);
 
 	void visit(ParameterGroup parameter);
 

@@ -68,6 +68,9 @@ public class ReportController {
 	private ParameterFormConverter parameterFormConverter;
 
 	@Autowired
+	private ParameterFormFormatter parameterFormFormatter;
+
+	@Autowired
 	private RequestParamsBuilder requestParamsBuilder;
 
 	@Autowired
@@ -99,12 +102,14 @@ public class ReportController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		parameterFormBinder.bind(parameterForm, requestParams, errors);
-		parameterFormConverter.convertToRequiredTypes(parameterForm, errors);
+		parameterFormConverter.convert(parameterForm, errors);
+
 		cascadingGroupLoader.load(parameterForm);
 
 		modelAndView.setViewName("/parameters");
 		modelAndView.addObject("parameterForm", parameterForm);
 
+		parameterFormFormatter.format(parameterForm);
 		configSetter.setBranding(modelAndView);
 		configSetter.setVersion(modelAndView);
 
@@ -123,7 +128,7 @@ public class ReportController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		parameterFormBinder.bind(parameterForm, requestParams, errors);
-		parameterFormConverter.convertToRequiredTypes(parameterForm, errors);
+		parameterFormConverter.convert(parameterForm, errors);
 
 		if (parameterForm.isValid()) {
 			// show report
@@ -142,6 +147,8 @@ public class ReportController {
 			modelAndView.addAllObjects(
 					new ParameterValueMapBuilder().build(parameterForm));
 		}
+
+		parameterFormFormatter.format(parameterForm);
 		modelAndView.addObject("reportName", reportName);
 
 		return modelAndView;
@@ -151,9 +158,14 @@ public class ReportController {
 	public String cascadingGroup( //
 			@PathVariable("reportName") String reportName, //
 			@PathVariable("groupName") String groupName, //
-			@ModelAttribute ParameterForm form) throws BirtReportException {
+			@ModelAttribute ParameterForm form, //
+			@RequestParam MultiValueMap<String, String> requestParams, //
+			BindingResult bindingResult) throws BirtReportException {
 
 		// filter by cascading group name
+		parameterFormBinder.bind(form, requestParams, bindingResult);
+		parameterFormConverter.convert(form, bindingResult);
+
 		Parameter parameter = form.getParams().get(groupName);
 
 		if (parameter instanceof ParameterGroup) {
@@ -161,6 +173,8 @@ public class ReportController {
 			reportService.loadOptionsForCascadingGroup(reportName, group);
 			form.resetParams();
 		}
+
+		parameterFormFormatter.format(form);
 
 		ParameterLogVisitor.printParameters(form.getGroups());
 
@@ -188,7 +202,9 @@ public class ReportController {
 		logger.debug("Executing POST of form for {} ", reportName);
 
 		parameterFormBinder.bind(form, requestParams, errors);
-		parameterFormConverter.convertToRequiredTypes(form, errors);
+		parameterFormConverter.convert(form, errors);
+		cascadingGroupLoader.load(form);
+		parameterFormFormatter.format(form);
 		parameterFormValidator.validate(form, errors);
 
 		ParameterLogVisitor.printParameters(form.getGroups());
@@ -214,4 +230,5 @@ public class ReportController {
 		return modelAndView;
 
 	}
+
 }

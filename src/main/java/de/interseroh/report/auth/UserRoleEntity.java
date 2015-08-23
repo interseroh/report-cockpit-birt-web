@@ -33,8 +33,8 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  */
 @Entity
 @Table(name = "USER_ROLE")
-public class UserRoleEntity extends AbstractPersistable<Long> implements
-		UserRole {
+public class UserRoleEntity extends AbstractPersistable<Long>
+		implements UserRole {
 
 	private static final long serialVersionUID = 2144161114571829887L;
 

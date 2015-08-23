@@ -36,8 +36,8 @@ import org.springframework.stereotype.Component;
  * @author Lofi Dewanto (Interseroh)
  */
 @Component
-public class DatabaseLdapAuthoritiesPopulator implements
-		LdapAuthoritiesPopulator {
+public class DatabaseLdapAuthoritiesPopulator
+		implements LdapAuthoritiesPopulator {
 
 	@Autowired
 	private UserRoleService userRoleService;
@@ -47,7 +47,8 @@ public class DatabaseLdapAuthoritiesPopulator implements
 			DirContextOperations userData, String userName) {
 		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-		Collection<String> role = userRoleService.findUserRolesByUsername(userName);
+		Collection<String> role = userRoleService
+				.findUserRolesByUsername(userName);
 		for (String currentRole : role) {
 			authorities.add(new SimpleGrantedAuthority(currentRole));
 		}

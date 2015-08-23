@@ -28,14 +28,12 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaRepositories(basePackages = "de.interseroh.report.auth", entityManagerFactoryRef = "reportcockpitEntityManagerFactory")
 public class DatabaseConfig {
 
+	public static final String REPORTCOCKPIT_PERSISTENCE_UNIT = "reportcockpitPersistenceUnit";
+	public static final String REPORTCOCKPIT_JPA_TX_MANAGER = "reportcockpitJpaTransactionManager";
 	private static final String JDBC_PASSWORD_REPORTCOCKPIT = "jdbc.password.reportcockpit";
 	private static final String JDBC_USERNAME_REPORTCOCKPIT = "jdbc.username.reportcockpit";
 	private static final String JDBC_URL_REPORTCOCKPIT = "jdbc.url.reportcockpit";
 	private static final String JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT = "jdbc.driver.classname.reportcockpit";
-
-	public static final String REPORTCOCKPIT_PERSISTENCE_UNIT = "reportcockpitPersistenceUnit";
-	public static final String REPORTCOCKPIT_JPA_TX_MANAGER = "reportcockpitJpaTransactionManager";
-
 	private static final String REPORTCOCKPIT_ENTITYMANAGER_PACKAGES_TO_SCAN = "de.interseroh.report.auth";
 
 	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect.reportcockpit";
@@ -53,8 +51,8 @@ public class DatabaseConfig {
 	@Bean
 	public DataSource reportcockpitDataSource() {
 		final HikariDataSource dataSource = new HikariDataSource();
-		dataSource.setDriverClassName(env
-				.getProperty(JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT));
+		dataSource.setDriverClassName(
+				env.getProperty(JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT));
 		dataSource.setJdbcUrl(env.getProperty(JDBC_URL_REPORTCOCKPIT));
 		dataSource.setUsername(env.getProperty(JDBC_USERNAME_REPORTCOCKPIT));
 		dataSource.setPassword(env.getProperty(JDBC_PASSWORD_REPORTCOCKPIT));
@@ -70,10 +68,10 @@ public class DatabaseConfig {
 	public LocalContainerEntityManagerFactoryBean reportcockpitEntityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(reportcockpitDataSource());
-		entityManagerFactory
-				.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-		entityManagerFactory
-				.setPackagesToScan(REPORTCOCKPIT_ENTITYMANAGER_PACKAGES_TO_SCAN);
+		entityManagerFactory.setPersistenceProviderClass(
+				HibernatePersistenceProvider.class);
+		entityManagerFactory.setPackagesToScan(
+				REPORTCOCKPIT_ENTITYMANAGER_PACKAGES_TO_SCAN);
 		entityManagerFactory
 				.setJpaProperties(reportcockpitHibernateProperties());
 		entityManagerFactory
@@ -96,9 +94,8 @@ public class DatabaseConfig {
 	@Bean
 	public JpaTransactionManager reportcockpitJpaTransactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager
-				.setEntityManagerFactory(reportcockpitEntityManagerFactory()
-						.getObject());
+		transactionManager.setEntityManagerFactory(
+				reportcockpitEntityManagerFactory().getObject());
 		return transactionManager;
 	}
 

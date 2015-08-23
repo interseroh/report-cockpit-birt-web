@@ -80,7 +80,7 @@ public class ParameterToMapVisitorTest {
 				.addScalarParameter(SelectionParameter.newInstance(String.class)
 						.withName("Group3Scalar2Select"))
 				.addScalarParameter(
-						SelectionParameter.newInstance(Integer[].class)
+						SelectionParameter.newMultiInstance(Integer[].class)
 								.withName("Group3Scalar3Multi")));
 		return params;
 	}

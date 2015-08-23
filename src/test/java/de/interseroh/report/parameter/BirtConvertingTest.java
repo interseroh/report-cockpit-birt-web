@@ -20,17 +20,21 @@
  */
 package de.interseroh.report.parameter;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
 import java.math.BigDecimal;
+import java.sql.Date;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.interseroh.report.services.BirtReportService;
 import de.interseroh.report.webconfig.WebMvcConfig;
@@ -40,7 +44,7 @@ import de.interseroh.report.webconfig.WebMvcConfig;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = WebMvcConfig.class)
-@PropertySource("classpath:config.properties")
+@WebAppConfiguration
 public class BirtConvertingTest {
 
 	private static final Logger logger = LoggerFactory
@@ -60,6 +64,19 @@ public class BirtConvertingTest {
 	@Test
 	public void testCascadeParameters() throws Exception {
 		renderPdfReport("cascade_parameters");
+	}
+
+	@Test
+	public void testFromStringToDate() throws Exception {
+		Date converted = conversionService.convert("2015-01-22", Date.class);
+		assertThat(converted, is(new Date(115, 0, 22)));
+	}
+
+	@Test
+	public void testFromDateToString() throws Exception {
+		String converted = conversionService.convert(new Date(115, 0, 22),
+				String.class);
+		assertThat(converted, is("2015-01-22"));
 	}
 
 	public void testConversion() throws Exception {

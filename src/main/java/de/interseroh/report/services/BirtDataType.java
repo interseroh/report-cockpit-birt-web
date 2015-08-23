@@ -21,7 +21,9 @@
 package de.interseroh.report.services;
 
 import java.lang.reflect.Array;
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 import de.interseroh.report.exception.UnknownDataTypeException;
 
@@ -34,11 +36,11 @@ public enum BirtDataType {
 	TYPE_STRING(1, "text", String.class), //
 	TYPE_FLOAT(2, "number", Float.class), //
 	TYPE_DECIMAL(3, "number", Double.class), //
-	TYPE_DATE_TIME(4, "datetime", Date.class), //
+	TYPE_DATE_TIME(4, "text", Timestamp.class), //
 	TYPE_BOOLEAN(5, "checkbox", Boolean.class), //
 	TYPE_INTEGER(6, "number", Integer.class), //
-	TYPE_DATE(7, "date", Date.class), //
-	TYPE_TIME(8, "time", Date.class); //
+	TYPE_DATE(7, "text", Date.class), //
+	TYPE_TIME(8, "text", Time.class); //
 
 	private int dataType;
 	private String htmlFieldType;

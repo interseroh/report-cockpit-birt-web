@@ -66,6 +66,9 @@ public class ReportRestApiController {
 	@Autowired
 	private ParameterFormConverter parameterFormConverter;
 
+	@Autowired
+	private ParameterFormFormatter parameterFormFormatter;
+
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
@@ -104,7 +107,8 @@ public class ReportRestApiController {
 		logger.debug("Rendering " + reportName + " in " + format + ".");
 
 		parameterFormBinder.bind(parameterForm, requestParams, errors);
-		parameterFormConverter.convertToRequiredTypes(parameterForm, errors);
+		parameterFormConverter.convert(parameterForm, errors);
+		parameterFormFormatter.format(parameterForm);
 		parameterFormValidator.validate(parameterForm, errors);
 
 		BirtOutputFormat outputFormat = BirtOutputFormat.from(format);
@@ -136,6 +140,7 @@ public class ReportRestApiController {
 			reportService.renderExcelReport(reportName, parameters,
 					response.getOutputStream());
 		}
+
 		// TODO idueppe - need exception handling
 	}
 

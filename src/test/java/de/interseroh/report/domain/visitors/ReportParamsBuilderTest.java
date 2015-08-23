@@ -25,7 +25,7 @@ import static org.hamcrest.core.Is.is;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -83,6 +83,6 @@ public class ReportParamsBuilderTest {
 	private Date fixedDate() {
 		Calendar calendar = Calendar.getInstance(Locale.GERMANY);
 		calendar.set(2015, 8, 5, 21, 12, 23);
-		return calendar.getTime();
+		return new Date(calendar.getTimeInMillis());
 	}
 }

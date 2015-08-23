@@ -33,10 +33,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -54,12 +53,15 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import de.interseroh.report.controller.SelectionOptionFormatter;
+import de.interseroh.report.formatters.DateFormatter;
+import de.interseroh.report.formatters.TimeFormatter;
+import de.interseroh.report.formatters.TimestampFormatter;
 import de.interseroh.report.services.BirtReportService;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan({ "de.interseroh.report.controller",
-		"de.interseroh.report.domain." })
+		"de.interseroh.report.domain" })
 @PropertySource({ "classpath:report-config.properties" })
 @Import({ ReportConfig.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
@@ -68,6 +70,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private Environment environment;
+
+	@Autowired
+	private ConversionService conversionService;
 
 	@Override
 	public void configureContentNegotiation(
@@ -159,17 +164,16 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 		registry.addResourceHandler(baseImageURL + "/**")
 				.addResourceLocations(ensureTrailingSeparator(imageDirectory));
+
 	}
 
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
 		super.addFormatters(registry);
 		registry.addFormatter(new SelectionOptionFormatter());
-
-		DateFormatter formatter = new DateFormatter();
-		formatter.setIso(DateTimeFormat.ISO.DATE_TIME);
-
-		registry.addFormatter(formatter);
+		registry.addFormatter(new TimeFormatter());
+		registry.addFormatter(new DateFormatter());
+		registry.addFormatter(new TimestampFormatter());
 	}
 
 	private String ensureTrailingSeparator(String imageDirectory) {

@@ -36,9 +36,9 @@ public class ParameterValueMapBuilder {
 
 		form.accept(new AbstractParameterVisitor() {
 			@Override
-			public <T> void visit(ScalarParameter<T> parameter) {
+			public <V, T> void visit(ScalarParameter<V, T> parameter) {
 				if (parameter.getValue() != null) {
-					params.put(parameter.getName(), parameter.getValue());
+					params.put(parameter.getName(), parameter.getText());
 				}
 			}
 		});

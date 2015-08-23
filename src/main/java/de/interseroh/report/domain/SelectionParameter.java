@@ -29,17 +29,28 @@ import de.interseroh.report.services.BirtControlType;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class SelectionParameter<T>
-		extends AbstractScalarParameter<SelectionParameter, T> {
+public class SelectionParameter<V, T>
+		extends AbstractScalarParameter<SelectionParameter, V, T> {
 
 	private List<SelectionOption> options;
 
-	public SelectionParameter(Class<T> valueType) {
-		super(valueType);
+	private SelectionParameter(Class<V> valueType, Class<T> textType) {
+		super(valueType, textType);
 	}
 
-	public static <T> SelectionParameter<T> newInstance(Class<T> valueType) {
-		return new SelectionParameter(valueType);
+	public static final <V, T> SelectionParameter<V, T> newInstance(
+			Class<V> valueType, Class<T> textType) {
+		return new SelectionParameter<>(valueType, textType);
+	}
+
+	public static final <V> SelectionParameter<V, String> newInstance(
+			Class<V> valueType) {
+		return new SelectionParameter<>(valueType, String.class);
+	}
+
+	public static final <V> SelectionParameter<V, String[]> newMultiInstance(
+			Class<V> valueType) {
+		return new SelectionParameter<>(valueType, String[].class);
 	}
 
 	@Override

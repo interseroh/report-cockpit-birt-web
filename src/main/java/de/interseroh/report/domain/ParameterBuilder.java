@@ -126,14 +126,17 @@ public class ParameterBuilder {
 		Class valueType = (isSingleValue(definition)) ? dataType.getValueType()
 				: dataType.getValueArrayType();
 
+		Class textType = (isSingleValue(definition)) ? String.class
+				: String[].class;
+
 		switch (controlType) {
 		case SELECTION:
 		case RADIO_BUTTON:
-			parameter = new SelectionParameter(valueType)
+			parameter = SelectionParameter.newInstance(valueType, textType)
 					.withOptions(of(definition));
 			break;
 		default:
-			parameter = new GenericParameter(valueType);
+			parameter = GenericParameter.newInstance(valueType, textType);
 		}
 
 		String displayLabel = orNull(definition.getDisplayName(),

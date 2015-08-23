@@ -40,43 +40,37 @@ public class ParameterFormConverter {
 	@Autowired
 	private ConversionService conversionService;
 
-	public void convertToRequiredTypes(ParameterForm parameterForm,
-			final Errors errors) {
+	public void convert(ParameterForm parameterForm, final Errors errors) {
 
 		// Convert parameter values to required type
 		parameterForm.accept(new AbstractParameterVisitor() {
 			@Override
-			public <T> void visit(ScalarParameter<T> parameter) {
+			public <V, T> void visit(ScalarParameter<V, T> parameter) {
 				String name = parameter.getName();
-				String propertyPath = ParameterUtils.nameToPath(name);
-				Class<T> requiredType = parameter.getValueType();
-				T value = parameter.getValue();
-				if (notAssignable(requiredType, value)) {
-					if (conversionService.canConvert(value.getClass(),
-							requiredType)) {
-						try {
-							T converted = conversionService.convert(value,
-									requiredType);
-							parameter.setValue(converted);
-						} catch (ConversionException ce) {
-							// TODO idueppe - here we need a more user friendly
-							// error code with parameters
-							errors.rejectValue(propertyPath,
-									"conversion.error.unknown_format",
-									ce.getMessage());
-						}
-					} else {
+				String propertyPath = ParameterUtils.nameToTextPath(name);
+				Class<V> requiredType = parameter.getValueType();
+				T textValue = parameter.getText();
+				if (isConversionNeeded(requiredType, textValue)) {
+					try {
+						V converted = conversionService.convert(textValue,
+								requiredType);
+						parameter.setValue(converted);
+					} catch (ConversionException ce) {
+						// TODO idueppe - here we need a more user friendly
+						// error code with parameters
 						errors.rejectValue(propertyPath,
-								"conversion.error.unknown_type",
-								"No converter for " + requiredType.getName());
+								"conversion.error.unknown_format",
+								ce.getMessage());
 					}
 				}
 			}
 
-			private <T> boolean notAssignable(Class<T> valueType, T value) {
-				return value != null
-						&& !valueType.isAssignableFrom(value.getClass());
+			private <V, T> boolean isConversionNeeded(Class<V> requiredType,
+					T textValue) {
+				return textValue != null && conversionService
+						.canConvert(textValue.getClass(), requiredType);
 			}
+
 		});
 	}
 

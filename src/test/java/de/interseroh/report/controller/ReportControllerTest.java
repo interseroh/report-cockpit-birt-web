@@ -80,7 +80,7 @@ public class ReportControllerTest {
 	@Test
 	public void testCustomParameterViewWithMissingParameter() throws Exception {
 		this.mockMvc.perform(
-				get("/reports/cascade_parameters/params?params[customer].value=278")) //
+				get("/reports/cascade_parameters/params?params[customer].text=278")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("278")))
 				.andDo(print());
@@ -98,7 +98,7 @@ public class ReportControllerTest {
 	@Test
 	public void testCustomParameterViewWithWrongType() throws Exception {
 		this.mockMvc.perform(
-				get("/reports/cascade_parameters/params?params[customer].value=ABC")) //
+				get("/reports/cascade_parameters/params?params[customer].text=ABC")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("help-block")))
 				.andDo(print());
@@ -116,7 +116,7 @@ public class ReportControllerTest {
 	@Test
 	public void testCascadingParameterView() throws Exception {
 		this.mockMvc.perform(get(
-				"/reports/cascade_parameters/params/cascade/customerorders?params[customer].value=278")) //
+				"/reports/cascade_parameters/params/cascade/customerorders?params[customer].text=278")) //
 				.andExpect(status().isOk()) //
 				.andDo(print());
 	}
@@ -128,14 +128,26 @@ public class ReportControllerTest {
 				.andDo(print());
 
 	}
+
 	@Test
 	public void testMultiSelectGet() throws Exception {
-		this.mockMvc.perform(get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
-                .andExpect(status().isOk()) //
-				.andExpect(content().string(containsString("10123")))
-				.andExpect(content().string(containsString("10298")))
-				.andExpect(content().string(containsString("10345")))
+		this.mockMvc
+				.perform(
+						get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
+				.andExpect(status().is3xxRedirection()) //
+				// .andExpect(content().string(containsString("10123")))
+				// .andExpect(content().string(containsString("10298")))
+				// .andExpect(content().string(containsString("10345")))
 				.andDo(print());
 
 	}
+
+    @Test
+    public void testDateFormField() throws Exception {
+        this.mockMvc.perform(get("/reports/multiselect/params?date=2015-08-17"))
+                .andExpect(status().isOk()) //
+				.andExpect(content().string(containsString("2015-08-17")))
+                .andDo(print());
+
+    }
 }

@@ -41,7 +41,7 @@ public class BirtDataTypeTest {
 
 	@Test
 	public void testHtmlType() throws Exception {
-		assertThat(BirtDataType.TYPE_DATE.getHtmlFieldType(), is("date"));
+		assertThat(BirtDataType.TYPE_DATE.getHtmlFieldType(), is("text"));
 	}
 
 	@Test(expected = UnknownDataTypeException.class)

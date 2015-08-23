@@ -57,7 +57,7 @@ public class ReportRestApiControllerTest {
 	@Test
 	public void testCascadingParameterView() throws Exception {
 		this.mockMvc.perform(get(
-				"/api/render/cascade_parameters/html?params[customer].value=112&params[order].value=10124")) //
+				"/api/render/cascade_parameters/html?params[customer].text=112&params[order].text=10124")) //
 				.andExpect(status().isOk()) //
 				.andDo(print());
 	}

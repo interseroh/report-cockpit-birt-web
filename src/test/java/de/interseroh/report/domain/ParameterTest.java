@@ -32,14 +32,14 @@ public class ParameterTest {
 
 	@Test
 	public void testEmptyParameter() throws Exception {
-		GenericParameter<String> parameter = GenericParameter
-				.newInstance(String.class).withRequired(true);
+		GenericParameter<String, String> parameter = GenericParameter
+				.newInstance(String.class, String.class).withRequired(true);
 		assertThat(parameter.isValid(), is(false));
 	}
 
 	@Test
 	public void testParameterWithDefaultValue() throws Exception {
-		Parameter parameter = GenericParameter.newInstance(String[].class)
+		Parameter parameter = GenericParameter.newInstance(String[].class, String[].class)
 				.withRequired(true).withDefaultValue(new String[] { "1000" });
 
 		assertThat(parameter.isValid(), is(true));
@@ -47,21 +47,21 @@ public class ParameterTest {
 
 	@Test
 	public void testParameterWithValue() throws Exception {
-		Parameter parameter = GenericParameter.newInstance(Integer.class)
+		Parameter parameter = GenericParameter.newInstance(Integer.class, String.class)
 				.withRequired(true).withValue(1000);
 		assertThat(parameter.isValid(), is(true));
 	}
 
 	@Test
 	public void testParameterNotRequired() throws Exception {
-		Parameter parameter = GenericParameter.newInstance(String.class)
+		Parameter parameter = GenericParameter.newInstance(String.class, String.class)
 				.withRequired(false);
 		assertThat(parameter.isValid(), is(true));
 	}
 
 	@Test
 	public void testParameterWithEmptyStringMulti() throws Exception {
-		Parameter parameter = GenericParameter.newInstance(String[].class)
+		Parameter parameter = GenericParameter.newInstance(String[].class, String[].class)
 				.withRequired(true).withValue(new String[] { " ", "  " });
 		assertThat(parameter.isValid(), is(false));
 	}
@@ -69,7 +69,7 @@ public class ParameterTest {
 	@Test
 	public void testParameterWithEmptyStringMultiWithDefault()
 			throws Exception {
-		Parameter parameter = GenericParameter.newInstance(String[].class)
+		Parameter parameter = GenericParameter.newInstance(String[].class, String[].class)
 				.withRequired(true).withValue(new String[] { " ", "  " })
 				.withDefaultValue(new String[] { "junittest" });
 		assertThat(parameter.isValid(), is(true));
@@ -79,7 +79,7 @@ public class ParameterTest {
 	public void testParameters() throws Exception {
 		ParameterForm form = new ParameterForm()
 				.addParameterGroup(new ParameterGroup().addScalarParameter(
-						GenericParameter.newInstance(String.class)
+						GenericParameter.newInstance(String.class, String[].class)
 								.withRequired(true).withValue("1000")));
 		assertThat(form.isValid(), is(true));
 	}

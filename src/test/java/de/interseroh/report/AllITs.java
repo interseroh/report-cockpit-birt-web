@@ -25,8 +25,10 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import de.interseroh.report.auth.UserServiceBeanIT;
+import de.interseroh.report.webconfig.DatabaseConfigTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ UserServiceBeanIT.class })
+@SuiteClasses({ DatabaseConfigTest.class, //
+		UserServiceBeanIT.class })
 public class AllITs {
 }

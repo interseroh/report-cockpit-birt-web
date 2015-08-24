@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.interseroh.report.webconfig.DatabaseConfig;
 
@@ -46,8 +47,10 @@ public class UserServiceBeanIT {
 	public void setUp() throws Exception {
 	}
 
+	@Transactional
 	@Test
 	public void testFindMembershipsByUserEmail() {
+		// We need to make this transactional so we can rollback at the end
 		// Prepare
 		createMembership();
 
@@ -60,8 +63,10 @@ public class UserServiceBeanIT {
 		assertEquals(memberships.size(), 1);
 	}
 
+	@Transactional
 	@Test
 	public void testCreateMembership() {
+		// We need to make this transactional so we can rollback at the end
 		Group group = new GroupEntity();
 		group.setName("USER");
 		User user = new UserEntity();
@@ -85,4 +90,5 @@ public class UserServiceBeanIT {
 		user.setEmail("lofi@dewanto.com");
 		userService.createMembership(user, group);
 	}
+
 }

@@ -20,8 +20,6 @@
  */
 package de.interseroh.report;
 
-import de.interseroh.report.domain.visitors.ReportParamsBuilderTest;
-import de.interseroh.report.parameter.BirtConvertingTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -30,6 +28,8 @@ import de.interseroh.report.controller.ReportControllerTest;
 import de.interseroh.report.controller.ReportRestApiControllerTest;
 import de.interseroh.report.domain.ParameterTest;
 import de.interseroh.report.domain.ParameterToMapVisitorTest;
+import de.interseroh.report.domain.visitors.ReportParamsBuilderTest;
+import de.interseroh.report.parameter.BirtConvertingTest;
 import de.interseroh.report.services.BirtDataTypeTest;
 import de.interseroh.report.services.BirtExcelReportServiceTest;
 import de.interseroh.report.services.BirtHtmlReportServiceTest;
@@ -38,7 +38,6 @@ import de.interseroh.report.services.BirtParameterTypeTest;
 import de.interseroh.report.services.BirtPdfReportServiceTest;
 import de.interseroh.report.services.BirtReportGenerateTest;
 import de.interseroh.report.services.BirtReportServiceBeanTest;
-import de.interseroh.report.webconfig.DatabaseConfigTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
 
@@ -58,9 +57,7 @@ SecurityConfigTest.class, //
 		BirtReportServiceBeanTest.class, //
 		ReportControllerTest.class, //
 		ReportRestApiControllerTest.class, //
-        ReportParamsBuilderTest.class, //
-        BirtConvertingTest.class
-
-})
+		ReportParamsBuilderTest.class, //
+		BirtConvertingTest.class })
 public class AllTests {
 }

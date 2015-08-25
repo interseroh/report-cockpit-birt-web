@@ -52,7 +52,7 @@ public class UserServiceBeanIT {
 	public void testFindMembershipsByUserEmail() {
 		// We need to make this transactional so we can rollback at the end
 		// Prepare
-		createMembership();
+		createMemberships();
 
 		// CUT
 		String email = "lofi@dewanto.com";
@@ -91,7 +91,7 @@ public class UserServiceBeanIT {
 		assertEquals(1, memberships.size());
 	}
 
-	private void createMembership() {
+	private void createMemberships() {
 		Group groupUser = new GroupEntity();
 		groupUser.setName("USER");
 		User user = new UserEntity();

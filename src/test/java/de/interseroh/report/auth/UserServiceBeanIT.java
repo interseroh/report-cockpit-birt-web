@@ -60,7 +60,15 @@ public class UserServiceBeanIT {
 				.findMembershipsByUserEmail(email);
 
 		// Asserts
-		assertEquals(memberships.size(), 1);
+		assertEquals(memberships.size(), 2);
+
+		String result = "";
+		for (Membership membership : memberships) {
+			result = result.concat(membership.getGroup().getName());
+		}
+
+		assertEquals(true, result.contains("USER"));
+		assertEquals(true, result.contains("ADMIN"));
 	}
 
 	@Transactional
@@ -84,11 +92,15 @@ public class UserServiceBeanIT {
 	}
 
 	private void createMembership() {
-		Group group = new GroupEntity();
-		group.setName("USER");
+		Group groupUser = new GroupEntity();
+		groupUser.setName("USER");
 		User user = new UserEntity();
 		user.setEmail("lofi@dewanto.com");
-		userService.createMembership(user, group);
+		userService.createMembership(user, groupUser);
+
+		Group groupAdmin = new GroupEntity();
+		groupAdmin.setName("ADMIN");
+		userService.createMembership(user, groupAdmin);
 	}
 
 }

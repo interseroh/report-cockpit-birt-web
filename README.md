@@ -4,11 +4,19 @@ This projects provides an easy to integrate and enhanced BIRT Web-Viewer based o
 
 ## Documentation
 
-- IN PROGRESS!!!
+
 
 ### Configuration
 
-- For configuration see `report-config.properties` and `BirtReportService.java`.
+For security and branding configuration see `[src/main/resources/config.properties](https://github.com/interseroh/report-cockpit-birt-web/blob/master/src/main/resources/config.properties_example)`. Be aware that the file will generated on the first `mvn initialize`.
+
+Per default inmemory authentication is activated.
+`ldap.authentication=false`
+The default username and passwords are:
+`ldap.inmemory.user=birt`
+`ldap.inmemory.password=birt`
+
+For report engine specific configuration see `report-config.properties` and `BirtReportService.java`.
 
 ```
 report.base.image.url=/reportimages
@@ -16,6 +24,17 @@ report.image.directory=/${java.io.tmpdir}/reportimages/
 report.image.contextpath=/report-cockpit-birt-web
 report.source.url=classpath:/reports/
 ```
+
+### Authorisation and the Security Domain Model
+
+*This is currently under development!*
+
+The simple authorisation mechanismen is based on a match between a group name and a report name. Each user that wants to access a report he must be a member in a group that has the exact name as a report. For instance, to open a report with the name `multiselect` the user must be a member of the `multiselect` group. 
+
+For details see the uml class diagram.
+![Domain Model](https://github.com/interseroh/report-cockpit-birt-web/blob/master/src/main/resources/model/report-cockpit-birt.jpg)
+
+To generate the source code from the model we use [NoMagic MagicDraw](http://www.nomagic.com/products/magicdraw.html) and [KissMDA](http://www.kissmda.org).
 
 ### Rest-API
 

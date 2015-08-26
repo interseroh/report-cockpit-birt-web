@@ -101,7 +101,6 @@
                                                                        th:field="*{params[__${scalar.name}__].text}"
                                                                        th:value="${{option}}"
                                                                 />
-                                                                [[${option.displayName}]]
                                                             </label>
                                                         </div>
                                                     </th:block>
@@ -115,9 +114,6 @@
                                                                data-toggle="tooltip" data-placement="bottom" rel="tooltip" th:title="${scalar.tooltip}"/>
                                                     </th:block>
                                                 </th:block>
-                                                <p>
-                                                    [ <span th:text="${scalar.name}+'='+${{scalar.text}}">REPLACE</span> ]
-                                                </p>
                                                 <span class="help-block" th:if="${#fields.hasErrors('params['+scalar.name+'].text')}" th:errors="*{params[__${scalar.name}__].text}">Incorrect date</span>
                                             </div>
                                         </div>

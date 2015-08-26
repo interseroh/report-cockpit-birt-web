@@ -8,8 +8,8 @@ logo.branding=/images/birt-logo.png
 ldap.authentication=false
 
 # Username and password for InMemory
-ldap.inmemory.user=lofidewanto
-ldap.inmemory.password=lofidewanto
+ldap.inmemory.user=birt
+ldap.inmemory.password=birt
 
 # LDAP Authentication
 ldap.url=ldap://ldap.xxx:389/OU=xxx

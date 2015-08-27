@@ -36,7 +36,7 @@ For details see the uml class diagram.
 
 To generate the source code from the model we use [NoMagic MagicDraw](http://www.nomagic.com/products/magicdraw.html) and [KissMDA](http://www.kissmda.org).
 
-### Rest-API
+### RESTful-API
 
 - Render Report with GET-Method: `/report-cockpit-birt-web/api/render/{reportName}/{format}`
 - For Instance:

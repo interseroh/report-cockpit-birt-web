@@ -29,7 +29,7 @@ report.source.url=classpath:/reports/
 
 *This is currently under development!*
 
-The simple authorisation mechanismen is based on a match between a group name and a report name. Each user that wants to access a report he must be a member in a group that has the exact name as a report. For instance, to open a report with the name `multiselect` the user must be a member of the `multiselect` group. 
+The simple authorization mechanism is based on a match between a role and a report. Each user that wants to access a report should be contained in a specific role. This role has access to that specific report. For instance, to open a report with the name `multiselect` the user must be a member of the role `multiselect` and the role has access to `multiselect` report. 
 
 For details see the uml class diagram.
 ![Domain Model](https://github.com/interseroh/report-cockpit-birt-web/blob/master/src/main/resources/model/report-cockpit-birt.jpg)

@@ -20,9 +20,6 @@
  */
 package de.interseroh.report.auth;
 
-import java.util.Collection;
-
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -30,11 +27,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author Lofi Dewanto (Interseroh)
  */
-public interface MembershipRepository extends
-		CrudRepository<MembershipEntity, Long> {
+public interface RoleRepository extends CrudRepository<RoleEntity, Long> {
 
-	Collection<MembershipEntity> findByUser(User user);
-
-	@Query("SELECT m FROM MembershipEntity m, UserEntity u where u.email = ?1")
-	Collection<MembershipEntity> findByUserEmail(String email);
 }

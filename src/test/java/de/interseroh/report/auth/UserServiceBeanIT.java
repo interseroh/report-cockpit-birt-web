@@ -49,22 +49,22 @@ public class UserServiceBeanIT {
 
 	@Transactional
 	@Test
-	public void testFindMembershipsByUserEmail() {
+	public void testFindUserRolesByUserEmail() {
 		// We need to make this transactional so we can rollback at the end
 		// Prepare
-		createMemberships();
+		createUserRoles();
 
 		// CUT
 		String email = "lofi@dewanto.com";
-		Collection<Membership> memberships = userService
-				.findMembershipsByUserEmail(email);
+		Collection<UserRole> userRoles = userService
+				.findUserRolesByUserEmail(email);
 
 		// Asserts
-		assertEquals(memberships.size(), 2);
+		assertEquals(userRoles.size(), 2);
 
 		String result = "";
-		for (Membership membership : memberships) {
-			result = result.concat(membership.getGroup().getName());
+		for (UserRole userRole : userRoles) {
+			result = result.concat(userRole.getRole().getName());
 		}
 
 		assertEquals(true, result.contains("USER"));
@@ -73,34 +73,34 @@ public class UserServiceBeanIT {
 
 	@Transactional
 	@Test
-	public void testCreateMembership() {
+	public void testCreateUserRole() {
 		// We need to make this transactional so we can rollback at the end
-		Group group = new GroupEntity();
-		group.setName("USER");
+		Role role = new RoleEntity();
+		role.setName("USER");
 		User user = new UserEntity();
 		String email = "lofi@dewanto.com";
 		user.setEmail(email);
 
 		// CUT
-		userService.createMembership(user, group);
+		userService.createUserRole(user, role);
 
 		// Asserts
-		Collection<Membership> memberships = userService
-				.findMembershipsByUserEmail(email);
+		Collection<UserRole> userRoles = userService
+				.findUserRolesByUserEmail(email);
 
-		assertEquals(1, memberships.size());
+		assertEquals(1, userRoles.size());
 	}
 
-	private void createMemberships() {
-		Group groupUser = new GroupEntity();
-		groupUser.setName("USER");
+	private void createUserRoles() {
+		Role roleUser = new RoleEntity();
+		roleUser.setName("USER");
 		User user = new UserEntity();
 		user.setEmail("lofi@dewanto.com");
-		userService.createMembership(user, groupUser);
+		userService.createUserRole(user, roleUser);
 
-		Group groupAdmin = new GroupEntity();
-		groupAdmin.setName("ADMIN");
-		userService.createMembership(user, groupAdmin);
+		Role roleAdmin = new RoleEntity();
+		roleAdmin.setName("ADMIN");
+		userService.createUserRole(user, roleAdmin);
 	}
 
 }

@@ -48,10 +48,10 @@ public class DatabaseLdapAuthoritiesPopulator implements
 		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 		// Username == email
-		Collection<Membership> membership = userService
-				.findMembershipsByUserEmail(userName);
-		for (Membership currentMembership : membership) {
-			authorities.add(new SimpleGrantedAuthority(currentMembership
+		Collection<UserRole> userRoles = userService
+				.findUserRolesByUserEmail(userName);
+		for (UserRole currentUserRole : userRoles) {
+			authorities.add(new SimpleGrantedAuthority(currentUserRole
 					.getUser().getEmail()));
 		}
 

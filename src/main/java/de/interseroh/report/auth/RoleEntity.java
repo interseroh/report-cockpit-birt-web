@@ -32,25 +32,25 @@ import javax.persistence.Table;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
-@Table(name = "RCB_GROUP")
-public class GroupEntity extends AbstractPersistable<Long> implements Group {
+@Table(name = "RCB_ROLE")
+public class RoleEntity extends AbstractPersistable<Long> implements Role {
 
 	private static final long serialVersionUID = 3878644102882809215L;
 
-	@Column(name = "GROUP_NAME")
+	@Column(name = "ROLE_NAME")
 	private String name;
 
-	@OneToMany(mappedBy = "group", targetEntity = MembershipEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Collection<Membership> memberships;
+	@OneToMany(mappedBy = "role", targetEntity = UserRoleEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Collection<UserRole> userRoles;
 
 	@Override
-	public Collection<Membership> getMemberships() {
-		return memberships;
+	public Collection<UserRole> getUserRoles() {
+		return userRoles;
 	}
 
 	@Override
-	public void addMembership(Membership membership) {
-		memberships.add(membership);
+	public void addUserRole(UserRole userRole) {
+		userRoles.add(userRole);
 	}
 
 	@Override
@@ -61,6 +61,16 @@ public class GroupEntity extends AbstractPersistable<Long> implements Group {
 	@Override
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public Collection<Report> getReports() {
+		return null;
+	}
+
+	@Override
+	public void addReport(Report report) {
+		// TODO Auto-generated method stub
 	}
 
 }

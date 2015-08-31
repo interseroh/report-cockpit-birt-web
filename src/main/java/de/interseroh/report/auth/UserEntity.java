@@ -40,8 +40,8 @@ public class UserEntity extends AbstractPersistable<Long> implements User {
 	@Column(name = "USER_EMAIL")
 	private String email;
 
-	@OneToMany(mappedBy = "user", targetEntity = MembershipEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Collection<Membership> memberships;
+	@OneToMany(mappedBy = "user", targetEntity = UserRoleEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Collection<UserRole> userRoles;
 
 	@Override
 	public String getEmail() {
@@ -54,13 +54,13 @@ public class UserEntity extends AbstractPersistable<Long> implements User {
 	}
 
 	@Override
-	public Collection<Membership> getMemberships() {
-		return memberships;
+	public Collection<UserRole> getUserRoles() {
+		return userRoles;
 	}
 
 	@Override
-	public void addMembership(Membership membership) {
-		memberships.add(membership);
+	public void addUserRole(UserRole userRole) {
+		userRoles.add(userRole);
 	}
 
 }

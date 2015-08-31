@@ -33,9 +33,9 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  * @author Lofi Dewanto (Interseroh)
  */
 @Entity
-@Table(name = "RCB_MEMBERSHIP")
-public class MembershipEntity extends AbstractPersistable<Long> implements
-		Membership {
+@Table(name = "RCB_USER_ROLE")
+public class UserRoleEntity extends AbstractPersistable<Long> implements
+		UserRole {
 
 	private static final long serialVersionUID = -2552585409665169353L;
 
@@ -43,9 +43,9 @@ public class MembershipEntity extends AbstractPersistable<Long> implements
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
 	private User user;
 
-	@ManyToOne(optional = false, targetEntity = GroupEntity.class)
-	@JoinColumn(name = "GROUP_ID", referencedColumnName = "ID")
-	private Group group;
+	@ManyToOne(optional = false, targetEntity = RoleEntity.class)
+	@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
+	private Role role;
 
 	@Override
 	public User getUser() {
@@ -58,13 +58,13 @@ public class MembershipEntity extends AbstractPersistable<Long> implements
 	}
 
 	@Override
-	public Group getGroup() {
-		return group;
+	public Role getRole() {
+		return role;
 	}
 
 	@Override
-	public void setGroup(Group group) {
-		this.group = group;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }

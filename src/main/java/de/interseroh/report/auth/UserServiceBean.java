@@ -36,35 +36,35 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceBean implements UserService {
 
 	@Autowired
-	private MembershipRepository membershipRepository;
+	private UserRoleRepository userRoleRepository;
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private RoleRepository roleRepository;
 
 	@Transactional(readOnly = true)
 	@Override
-	public Collection<Membership> findMembershipsByUserEmail(String email) {
-		Collection<MembershipEntity> memberships = membershipRepository
+	public Collection<UserRole> findUserRolesByUserEmail(String email) {
+		Collection<UserRoleEntity> userRoles = userRoleRepository
 				.findByUserEmail(email);
 
-		Collection<Membership> returnMemberships = new ArrayList<>();
-		returnMemberships.addAll(memberships);
+		Collection<UserRole> returnUserRoles = new ArrayList<>();
+		returnUserRoles.addAll(userRoles);
 
-		return returnMemberships;
+		return returnUserRoles;
 	}
 
 	@Transactional
 	@Override
-	public void createMembership(User user, Group group) {
-		Membership membership = new MembershipEntity();
-		membership.setGroup(group);
-		membership.setUser(user);
+	public void createUserRole(User user, Role role) {
+		UserRole userRole = new UserRoleEntity();
+		userRole.setRole(role);
+		userRole.setUser(user);
 
 		userRepository.save((UserEntity) user);
-		groupRepository.save((GroupEntity) group);
-		membershipRepository.save((MembershipEntity) membership);
+		roleRepository.save((RoleEntity) role);
+		userRoleRepository.save((UserRoleEntity) userRole);
 	}
 }

@@ -1151,5 +1151,9 @@ from CLASSICMODELS.CUSTOMERS</design:queryText>
                 </row>
             </footer>
         </table>
+        <text-data id="64">
+            <expression name="valueExpr">params["dateWithFunctionParam"].value</expression>
+            <property name="contentType">html</property>
+        </text-data>
     </body>
 </report>

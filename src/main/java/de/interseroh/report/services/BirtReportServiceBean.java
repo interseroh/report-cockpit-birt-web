@@ -35,9 +35,11 @@ import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
 import org.eclipse.birt.report.engine.api.IEngineTask;
 import org.eclipse.birt.report.engine.api.IGetParameterDefinitionTask;
+import org.eclipse.birt.report.engine.api.IPageHandler;
 import org.eclipse.birt.report.engine.api.IParameterDefnBase;
 import org.eclipse.birt.report.engine.api.IParameterSelectionChoice;
 import org.eclipse.birt.report.engine.api.IRenderOption;
+import org.eclipse.birt.report.engine.api.IReportDocumentInfo;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
@@ -179,6 +181,15 @@ public class BirtReportServiceBean implements BirtReportService {
 
 			htmlOptions.setBaseImageURL(baseImageURL);
 			htmlOptions.setImageDirectory(imageDirectory);
+
+            htmlOptions.setHtmlPagination(true);
+
+            runAndRenderTask.setPageHandler(new IPageHandler() {
+                @Override
+                public void onPage(int pageNumber, boolean checkpoint, IReportDocumentInfo doc) {
+
+                }
+            });
 
 			runAndRenderTask(runAndRenderTask, htmlOptions);
 		} catch (EngineException | IOException e) {

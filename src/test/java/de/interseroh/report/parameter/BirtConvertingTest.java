@@ -68,7 +68,7 @@ public class BirtConvertingTest {
 
 	@Test
 	public void testFromStringToDate() throws Exception {
-		Date converted = conversionService.convert("2015-01-22", Date.class);
+		Date converted = conversionService.convert("1/22/15", Date.class);
 		assertThat(converted, is(new Date(115, 0, 22)));
 	}
 
@@ -76,7 +76,7 @@ public class BirtConvertingTest {
 	public void testFromDateToString() throws Exception {
 		String converted = conversionService.convert(new Date(115, 0, 22),
 				String.class);
-		assertThat(converted, is("2015-01-22"));
+		assertThat(converted, is("1/22/15"));
 	}
 
 	public void testConversion() throws Exception {

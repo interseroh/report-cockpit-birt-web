@@ -20,10 +20,9 @@
  */
 package de.interseroh.report.formatters;
 
-import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import org.springframework.format.Formatter;
@@ -44,8 +43,9 @@ public class TimestampFormatter implements Formatter<Timestamp> {
 		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
 	}
 
-	public SimpleDateFormat getDateFormat(Locale locale) {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm", locale);
+	public DateFormat getDateFormat(Locale locale) {
+		return DateFormat.getDateTimeInstance(DateFormat.SHORT,
+				DateFormat.SHORT, locale);
 	}
 
 }

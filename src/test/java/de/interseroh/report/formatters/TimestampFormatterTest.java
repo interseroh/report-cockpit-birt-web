@@ -23,7 +23,6 @@ package de.interseroh.report.formatters;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Locale;
 
@@ -34,20 +33,19 @@ import org.junit.Test;
  */
 public class TimestampFormatterTest {
 
-    private static final String TEST_TIMESTAMP = "2015-12-13 13:45";
     private static final Timestamp testTime = new Timestamp(1450010700000L);
 
     private static final TimestampFormatter formatter = new TimestampFormatter();
 
     @Test
-    public void testParse() throws Exception {
-        Timestamp parsed = formatter.parse(TEST_TIMESTAMP, Locale.getDefault());
+    public void testParse_de() throws Exception {
+        Timestamp parsed = formatter.parse("13.12.2015 13:45", Locale.GERMAN);
         assertThat(parsed, is(testTime));
     }
 
     @Test
-    public void testPrint() throws Exception {
-        String print = formatter.print(testTime, Locale.getDefault());
-        assertThat(print, is(TEST_TIMESTAMP));
+    public void testPrint_DE() throws Exception {
+        String print = formatter.print(testTime, Locale.GERMAN);
+        assertThat(print, is("13.12.15 13:45"));
     }
 }

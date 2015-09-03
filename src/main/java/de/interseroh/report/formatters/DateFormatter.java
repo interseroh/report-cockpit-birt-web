@@ -21,6 +21,7 @@
 package de.interseroh.report.formatters;
 
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -43,8 +44,9 @@ public class DateFormatter implements Formatter<Date> {
 		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
 	}
 
-	public SimpleDateFormat getDateFormat(Locale locale) {
-		return new SimpleDateFormat("yyyy-MM-dd", locale);
+	public DateFormat getDateFormat(Locale locale) {
+        return DateFormat.getDateInstance(DateFormat.SHORT, locale);
+//		return new SimpleDateFormat(DateFormat., locale);
 	}
 
 }

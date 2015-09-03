@@ -22,7 +22,10 @@ package de.interseroh.report.formatters;
 
 import org.junit.Test;
 
+import javax.swing.text.*;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,21 +36,37 @@ import static org.hamcrest.core.Is.is;
  */
 public class TimeFormatterTest {
 
-    private static final String TEST_TIME = "13:45";
     private static final Time testTime = new Time(45900000L);
 
     private static final TimeFormatter formatter = new TimeFormatter();
 
-
     @Test
-    public void testParse() throws Exception {
-        Time parsed = formatter.parse(TEST_TIME, Locale.getDefault());
+    public void testParse_DE() throws Exception {
+        Time parsed = formatter.parse("13:45", Locale.GERMAN);
         assertThat(parsed, is(testTime));
     }
 
     @Test
-    public void testPrint() throws Exception {
-        String print = formatter.print(testTime, Locale.getDefault());
-        assertThat(print, is(TEST_TIME));
+    public void testPrint_DE() throws Exception {
+        String print = formatter.print(testTime, Locale.GERMAN);
+        assertThat(print, is("13:45"));
+    }
+
+    @Test
+    public void testPrint_US() throws Exception {
+        String print = formatter.print(testTime, Locale.US);
+        assertThat(print, is("1:45 PM"));
+    }
+
+    @Test
+    public void testParse_US() throws Exception {
+        Time parsed = formatter.parse("1:45 PM", Locale.US);
+        assertThat(parsed, is(testTime));
+    }
+
+    @Test
+    public void testDateFormat() throws Exception {
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
+        System.out.println(((SimpleDateFormat)dateFormat).toLocalizedPattern());
     }
 }

@@ -21,6 +21,7 @@
 package de.interseroh.report.formatters;
 
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -43,8 +44,8 @@ public class TimeFormatter implements Formatter<Time> {
 		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
 	}
 
-	public SimpleDateFormat getDateFormat(Locale locale) {
-		return new SimpleDateFormat("HH:mm", locale);
+	public DateFormat getDateFormat(Locale locale) {
+		return DateFormat.getTimeInstance(DateFormat.SHORT, locale);
 	}
 
 }

@@ -110,7 +110,10 @@ public class ReportController {
 		modelAndView.addObject("parameterForm", parameterForm);
 
 		parameterFormFormatter.format(parameterForm);
-		configSetter.setBranding(modelAndView);
+
+        injectReportUri(parameterForm, modelAndView, reportName);
+
+        configSetter.setBranding(modelAndView);
 		configSetter.setVersion(modelAndView);
 
 		return modelAndView;

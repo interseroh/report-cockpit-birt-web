@@ -59,7 +59,7 @@
                 <li sec:authorize="isAuthenticated()">
                     <a href="#param"
                        th:if="${reportName}"
-                       th:href="@{${reportName} + '/params' + ${reportParams}}">
+                       th:href="@{'/reports/'+${reportName} + '/params' + ${reportParams}}">
                         Parameter
                     </a>
                 </li>

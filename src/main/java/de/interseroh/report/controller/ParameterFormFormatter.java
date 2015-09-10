@@ -47,20 +47,40 @@ public class ParameterFormFormatter {
 				Class<V> valueType = parameter.getValueType();
 				Class<T> textType = parameter.getTextType();
 
-				V value = parameter.getValue();
-				if (value != null) {
-					if (conversionService.canConvert(valueType, textType)) {
-						try {
-							T formatted = conversionService.convert(value,
-									textType);
-							parameter.setText(formatted);
-						} catch (ConversionException ce) {
-							parameter.setText((T) value.toString());
-						}
-					}
-				}
+                convertValue(parameter, valueType, textType);
+
+                convertDefaultValue(parameter, valueType, textType);
 			}
-		});
+
+            private <V, T> void convertValue(ScalarParameter<V, T> parameter, Class<V> valueType, Class<T> textType) {
+                V value = parameter.getValue();
+                if (value != null) {
+                    if (conversionService.canConvert(valueType, textType)) {
+                        try {
+                            T formatted = conversionService.convert(value,
+                                    textType);
+                            parameter.setText(formatted);
+                        } catch (ConversionException ce) {
+                            parameter.setText((T) value.toString());
+                        }
+                    }
+                }
+            }
+
+            private <V, T> void convertDefaultValue(ScalarParameter<V, T> parameter, Class<V> valueType, Class<T> textType) {
+                V defaultValue = parameter.getDefaultValue();
+                if (defaultValue != null) {
+                    if (conversionService.canConvert(valueType, textType)) {
+                        try {
+                            T formatted = conversionService.convert(defaultValue,
+                                    textType);
+                            parameter.setDefaultText(formatted);
+                        } catch (ConversionException ce) {
+                        }
+                    }
+                }
+            }
+        });
 	}
 
 }

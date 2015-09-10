@@ -25,12 +25,14 @@ import static org.hamcrest.core.Is.is;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Locale;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -68,12 +70,14 @@ public class BirtConvertingTest {
 
 	@Test
 	public void testFromStringToDate() throws Exception {
+        LocaleContextHolder.setLocale(Locale.US);
 		Date converted = conversionService.convert("1/22/15", Date.class);
 		assertThat(converted, is(new Date(115, 0, 22)));
 	}
 
 	@Test
 	public void testFromDateToString() throws Exception {
+        LocaleContextHolder.setLocale(Locale.US);
 		String converted = conversionService.convert(new Date(115, 0, 22),
 				String.class);
 		assertThat(converted, is("1/22/15"));
@@ -82,7 +86,6 @@ public class BirtConvertingTest {
 	public void testConversion() throws Exception {
 		BigDecimal convert = conversionService.convert("12312",
 				BigDecimal.class);
-
 		logger.info((" " + convert));
 	}
 

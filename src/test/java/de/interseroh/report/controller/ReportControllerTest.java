@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -39,6 +40,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import de.interseroh.report.webconfig.WebMvcConfig;
+
+import java.util.Locale;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -148,4 +151,15 @@ public class ReportControllerTest {
                 .andDo(print());
 
     }
+
+    @Test
+    public void testDateFormFieldWithScript() throws Exception {
+        LocaleContextHolder.setLocale(Locale.GERMANY);
+        this.mockMvc.perform(get("/reports/multiselect/params?language=DE"))
+                .andExpect(status().isOk()) //
+                .andExpect(content().string(containsString("01.01.15")))
+                .andDo(print());
+
+    }
+
 }

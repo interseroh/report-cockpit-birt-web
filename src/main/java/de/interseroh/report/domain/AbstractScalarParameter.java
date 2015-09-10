@@ -34,6 +34,7 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 	private V value;
 	private V defaultValue;
 	private T text;
+    private T defaultText;
 
 	private BirtDataType dataType = BirtDataType.TYPE_STRING;
 	private BirtControlType controlType;
@@ -55,6 +56,7 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 	}
 
 	@Override
+    @Deprecated
 	public V getValueOrDefault() {
 		return (value != null) ? value : defaultValue;
 	}
@@ -161,7 +163,24 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		return (SUB) this;
 	}
 
-	@Override
+
+    @Override
+    public T getDefaultText() {
+        return defaultText;
+    }
+
+    @Override
+    public void setDefaultText(T defaultText) {
+        this.defaultText = defaultText;
+    }
+
+    public SUB withDefaultText(final T defaultText) {
+        this.defaultText = defaultText;
+        return (SUB) this;
+    }
+
+
+    @Override
 	public boolean isRequired() {
 		return required;
 	}

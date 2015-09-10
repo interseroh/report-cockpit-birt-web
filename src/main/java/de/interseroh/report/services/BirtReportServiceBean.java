@@ -23,7 +23,9 @@ package de.interseroh.report.services;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,7 +120,8 @@ public class BirtReportServiceBean implements BirtReportService {
 
 			List<ParameterGroup> groups = new ParameterBuilder(task)
 					.build(definitions);
-			ParameterLogVisitor.printParameters(groups);
+
+            ParameterLogVisitor.printParameters(groups);
 
 			return groups;
 		} catch (EngineException | IOException e) {

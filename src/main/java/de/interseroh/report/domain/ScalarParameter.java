@@ -45,25 +45,55 @@ public interface ScalarParameter<V, T> extends Parameter {
 
 	Class<T> getTextType();
 
-	V getDefaultValue();
-
+    /**
+     * The current set parameter value
+     * @return value or null
+     */
 	V getValue();
 
-	void setValue(V value);
+    /**
+     *
+     * @param value
+     */
+    void setValue(V value);
+
+    /**
+     * Default value of the parameter
+     * @return the default value or null
+     */
+	V getDefaultValue();
+
+    /**
+     * Defines the value of the defaultValue or null if defined none.
+     * @param defaultValue
+     */
+    void setDefaultValue(V defaultValue);
 
 	/**
-	 * The value as formatted text
+	 * The value of the parameter as formatted text
 	 * 
-	 * @return value as Text
+	 * @return value as Text or empty string
 	 */
 	T getText();
 
 	/**
-	 *
+     * Setting the parameter
 	 * @param text
 	 *            new value as text
 	 */
 	void setText(T text);
+
+    /**
+     * Formatted default value
+     * @return default value or empty string
+     */
+    T getDefaultText();
+
+    /**
+     * Defines the formatted default value of the parameter or null
+     * @param defaultText, null or empty string.
+     */
+    void setDefaultText(T defaultText);
 
 	boolean isMultiValue();
 

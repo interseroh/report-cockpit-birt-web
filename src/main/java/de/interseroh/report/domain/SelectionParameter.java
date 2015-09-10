@@ -97,4 +97,5 @@ public class SelectionParameter<V, T>
 	public String toString() {
 		return super.toString() + "\n\t {" + "options=" + options + "} ";
 	}
+
 }

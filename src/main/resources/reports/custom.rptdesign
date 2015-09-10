@@ -166,6 +166,9 @@
             <property name="valueType">static</property>
             <property name="dataType">string</property>
             <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">TEXT_DEFAULT</value>
+            </simple-property-list>
             <list-property name="selectionList"/>
             <property name="paramType">simple</property>
             <property name="controlType">text-box</property>
@@ -182,6 +185,9 @@
                     <property name="valueType">static</property>
                     <property name="dataType">decimal</property>
                     <property name="distinct">true</property>
+                    <simple-property-list name="defaultValue">
+                        <value type="constant">23.0</value>
+                    </simple-property-list>
                     <list-property name="selectionList">
                         <structure>
                             <property name="value">1</property>
@@ -213,6 +219,9 @@
                     <property name="sortDirection">desc</property>
                     <property name="dataType">integer</property>
                     <property name="distinct">true</property>
+                    <simple-property-list name="defaultValue">
+                        <value type="constant">12303</value>
+                    </simple-property-list>
                     <list-property name="selectionList"/>
                     <property name="paramType">simple</property>
                     <property name="controlType">list-box</property>

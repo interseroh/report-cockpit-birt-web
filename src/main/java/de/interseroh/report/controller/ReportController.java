@@ -77,7 +77,7 @@ public class ReportController {
 	private CascadingGroupLoader cascadingGroupLoader;
 
 	public ReportController() {
-		logger.info("Creating new instanz auf ReportController.");
+		logger.debug("Creating new Instance of ReportController.");
 	}
 
 	@ModelAttribute("parameterForm")

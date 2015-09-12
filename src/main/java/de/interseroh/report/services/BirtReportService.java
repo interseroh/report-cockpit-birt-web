@@ -37,6 +37,7 @@ public interface BirtReportService {
 	String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
 	String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
 	String REPORT_FILE_SUFFIX = ".rptdesign";
+    String DOCUMENT_FILE_SUFFIX = ".rptdocument";
 
 	/**
 	 *
@@ -64,10 +65,14 @@ public interface BirtReportService {
 	void renderHtmlReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;
 
+    void renderHtmlReport(String reportName, Map<String, Object> parameters,
+                          OutputStream out, long pageNumber) throws BirtReportException;
+
 	void renderPDFReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;
 
-	void renderExcelReport(String reportName, Map<String, Object> parameters,
+    void renderExcelReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;
+
 
 }

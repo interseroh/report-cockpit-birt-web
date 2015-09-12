@@ -20,17 +20,17 @@
  */
 package de.interseroh.report.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
@@ -41,10 +41,13 @@ import org.eclipse.birt.report.engine.api.IPageHandler;
 import org.eclipse.birt.report.engine.api.IParameterDefnBase;
 import org.eclipse.birt.report.engine.api.IParameterSelectionChoice;
 import org.eclipse.birt.report.engine.api.IRenderOption;
+import org.eclipse.birt.report.engine.api.IRenderTask;
+import org.eclipse.birt.report.engine.api.IReportDocument;
 import org.eclipse.birt.report.engine.api.IReportDocumentInfo;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportRunnable;
 import org.eclipse.birt.report.engine.api.IRunAndRenderTask;
+import org.eclipse.birt.report.engine.api.IRunTask;
 import org.eclipse.birt.report.engine.api.PDFRenderOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +124,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			List<ParameterGroup> groups = new ParameterBuilder(task)
 					.build(definitions);
 
-            ParameterLogVisitor.printParameters(groups);
+			ParameterLogVisitor.printParameters(groups);
 
 			return groups;
 		} catch (EngineException | IOException e) {
@@ -185,14 +188,27 @@ public class BirtReportServiceBean implements BirtReportService {
 			htmlOptions.setBaseImageURL(baseImageURL);
 			htmlOptions.setImageDirectory(imageDirectory);
 
-            htmlOptions.setHtmlPagination(true);
+			htmlOptions.setHtmlPagination(true);
+			htmlOptions.setMasterPageContent(false);
+			htmlOptions.setPageFooterFloatFlag(true);
 
-            runAndRenderTask.setPageHandler(new IPageHandler() {
-                @Override
-                public void onPage(int pageNumber, boolean checkpoint, IReportDocumentInfo doc) {
+			runAndRenderTask.setPageHandler(new IPageHandler() {
+				@Override
+				public void onPage(int pageNumber, boolean checkpoint,
+						IReportDocumentInfo doc) {
+					logger.info("Number: {} ({})", pageNumber, checkpoint);
+					try {
+						if (doc != null) {
+							IReportDocument reportDocument = doc
+									.openReportDocument();
+							logger.info(reportDocument.toString());
+						}
+					} catch (BirtException e) {
+						e.printStackTrace();
+					}
 
-                }
-            });
+				}
+			});
 
 			runAndRenderTask(runAndRenderTask, htmlOptions);
 		} catch (EngineException | IOException e) {
@@ -251,10 +267,6 @@ public class BirtReportServiceBean implements BirtReportService {
 		}
 	}
 
-	private String reportFileName(String reportName) {
-		return reportName + REPORT_FILE_SUFFIX;
-	}
-
 	private void runAndRenderTask(IRunAndRenderTask runAndRenderTask,
 			IRenderOption renderOptions) throws EngineException {
 		runAndRenderTask.setRenderOption(renderOptions);
@@ -271,7 +283,94 @@ public class BirtReportServiceBean implements BirtReportService {
 				.createRunAndRenderTask(iReportRunnable);
 		logger.debug("Setting Locale to " + LocaleContextHolder.getLocale());
 		task.setLocale(LocaleContextHolder.getLocale());
+
 		return task;
+	}
+
+	@Override
+	public void renderHtmlReport(String reportName,
+			Map<String, Object> parameters, OutputStream out, long pageNumber)
+					throws BirtReportException {
+        try {
+            String reportFileName = absolutePathOf(reportFileName(reportName));
+            IReportRunnable reportRunnable = reportEngine
+                    .openReportDesign(reportFileName);
+
+            IRunTask runTask = reportEngine.createRunTask(reportRunnable);
+            String documentFileName = absoluteTempPath(
+                    documentFileName(reportName));
+            runTask.run(documentFileName);
+
+            IReportDocument reportDocument = reportEngine
+                    .openReportDocument(documentFileName);
+
+            HTMLRenderOption htmlOptions = new HTMLRenderOption();
+            htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
+            htmlOptions.setOutputStream(out);
+            htmlOptions.setImageHandler(new HTMLServerImageHandler());
+            htmlOptions.setEmbeddable(true);
+
+            htmlOptions.setBaseImageURL(baseImageURL);
+            htmlOptions.setImageDirectory(imageDirectory);
+
+            htmlOptions.setHtmlPagination(true);
+            htmlOptions.setMasterPageContent(false);
+            htmlOptions.setPageFooterFloatFlag(true);
+
+            IRenderTask renderTask = reportEngine.createRenderTask(reportDocument,
+                    reportRunnable);
+            renderTask.setRenderOption(htmlOptions);
+            renderTask.setPageNumber(pageNumber);
+            renderTask.render();
+            renderTask.close();
+        } catch (EngineException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+	public IReportDocument openReportDocument(String reportName,
+			OutputStream out) throws IOException, EngineException {
+		String reportFileName = absolutePathOf(reportFileName(reportName));
+		IReportRunnable reportRunnable = reportEngine
+				.openReportDesign(reportFileName);
+
+		IRunTask runTask = reportEngine.createRunTask(reportRunnable);
+		String documentFileName = absoluteTempPath(
+				documentFileName(reportName));
+		runTask.run(documentFileName);
+
+		IReportDocument reportDocument = reportEngine
+				.openReportDocument(documentFileName);
+
+		HTMLRenderOption htmlOptions = new HTMLRenderOption();
+		htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
+		htmlOptions.setOutputStream(out);
+		htmlOptions.setImageHandler(new HTMLServerImageHandler());
+		htmlOptions.setEmbeddable(true);
+
+		htmlOptions.setBaseImageURL(baseImageURL);
+		htmlOptions.setImageDirectory(imageDirectory);
+
+		htmlOptions.setHtmlPagination(true);
+		htmlOptions.setMasterPageContent(false);
+		htmlOptions.setPageFooterFloatFlag(true);
+
+		IRenderTask renderTask = reportEngine.createRenderTask(reportDocument,
+				reportRunnable);
+		renderTask.setRenderOption(htmlOptions);
+		renderTask.setPageNumber(2);
+		renderTask.render();
+		renderTask.close();
+
+		return reportDocument;
+	}
+
+	private String reportFileName(String reportName) {
+		return reportName + REPORT_FILE_SUFFIX;
+	}
+
+	private String documentFileName(String reportName) {
+		return reportName + DOCUMENT_FILE_SUFFIX;
 	}
 
 	private void injectParameters(Map<String, Object> parameters,
@@ -287,6 +386,12 @@ public class BirtReportServiceBean implements BirtReportService {
 				+ reportFileName;
 		Resource resource = resourceLoader.getResource(location);
 		return resource.getFile().getAbsolutePath();
+	}
+
+	private String absoluteTempPath(String fileName) throws IOException {
+		String location = environment.getProperty("java.io.tmpdir")
+				+ File.pathSeparator + fileName;
+		return location;
 	}
 
 }

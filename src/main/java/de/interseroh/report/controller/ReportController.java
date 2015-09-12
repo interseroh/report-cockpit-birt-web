@@ -111,9 +111,9 @@ public class ReportController {
 
 		parameterFormFormatter.format(parameterForm);
 
-        injectReportUri(parameterForm, modelAndView, reportName);
+		injectReportUri(parameterForm, modelAndView, reportName);
 
-        configSetter.setBranding(modelAndView);
+		configSetter.setBranding(modelAndView);
 		configSetter.setVersion(modelAndView);
 
 		return modelAndView;
@@ -123,6 +123,7 @@ public class ReportController {
 	public ModelAndView showReport( //
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
+			@RequestParam(value = "__page", required = false) Long pageNumber,
 			@PathVariable("reportName") String reportName,
 			BindingResult errors) {
 
@@ -136,6 +137,7 @@ public class ReportController {
 		if (parameterForm.isValid()) {
 			// show report
 			modelAndView.setViewName("/report");
+            modelAndView.addObject("pageNumber", pageNumber);
 			injectReportUri(parameterForm, modelAndView, reportName);
 			configSetter.setVersion(modelAndView);
 			configSetter.setBranding(modelAndView);

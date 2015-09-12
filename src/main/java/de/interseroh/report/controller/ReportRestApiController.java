@@ -91,7 +91,7 @@ public class ReportRestApiController {
 			@RequestParam MultiValueMap<String, String> requestParams,
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
-		renderReport(parameterForm, reportName, requestParams,
+		renderReport(parameterForm, reportName, requestParams, null,
 				BirtOutputFormat.HTML5.getFormatName(), response, errors);
 	}
 
@@ -100,6 +100,7 @@ public class ReportRestApiController {
 			@ModelAttribute("parameterForm") ParameterForm parameterForm,
 			@PathVariable("reportName") String reportName, //
 			@RequestParam MultiValueMap<String, String> requestParams,
+            @RequestParam(value = "__pageNumber", required = false) Long pageNumber,
 			@PathVariable("format") String format, //
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
@@ -120,8 +121,12 @@ public class ReportRestApiController {
 
 		switch (outputFormat) {
 		case HTML5:
-			reportService.renderHtmlReport(reportName, parameters,
-					response.getOutputStream());
+            if (pageNumber == null) {
+                reportService.renderHtmlReport(reportName, parameters,
+                        response.getOutputStream());
+            } else {
+                reportService.renderHtmlReport(reportName, parameters, response.getOutputStream(), pageNumber);
+            }
 			break;
 		case PDF:
 			response.setHeader("Content-disposition",

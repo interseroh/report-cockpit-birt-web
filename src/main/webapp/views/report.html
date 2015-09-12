@@ -27,10 +27,10 @@
                 padding-right: 1px;
             }
         </style>
-        
+
         <div class="col-lg-12 col-md-12 col-sm-12" id="report-content"
-             th:attr="data-report-content-url=@{${reportApiUrl}+'/html'+${reportParams}}">
-             
+             th:attr="data-report-content-url=@{${reportApiUrl}+'/html'+${reportParams}},data-report-page=${pageNumber}">
+
             <div class="progress">
                 <div class="progress-bar progress-bar-info progress-bar-striped"
                      role="progressbar" aria-valuenow="20" aria-valuemin="0"
@@ -57,9 +57,14 @@
 </div>
 
 <script>
+    // <![CDATA[
     var reportContentUrl = $("#report-content").attr("data-report-content-url");
+    var pageNumber = $("#report-content").attr("data-report-page");
+    if (pageNumber != undefined) {
+        reportContentUrl = reportContentUrl + "?__pageNumber=" + pageNumber;
+    }
     $("#report-content").load(reportContentUrl);
-    
+
     var progress = setInterval(function () {
         var $bar = $('.progress-bar');
         var $progress = $('.progress');
@@ -70,6 +75,7 @@
             $bar.width($bar.width() + 40);
         }
     }, 800);
+    // ]]>
 </script>
 </body>
 </html>

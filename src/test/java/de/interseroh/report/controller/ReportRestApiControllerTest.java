@@ -66,7 +66,7 @@ public class ReportRestApiControllerTest {
     @Test
     public void testMultiSelectParameterView() throws Exception {
         this.mockMvc.perform(get(
-                "/api/render/cascade_parameters/html?customer=112&order=10124&order=10125")) //
+                "/api/render/chart/html")) //
                 .andExpect(status().isOk()) //
                 .andDo(print());
     }

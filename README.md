@@ -49,6 +49,14 @@ To generate the source code from the model we use [NoMagic MagicDraw](http://www
  [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xlsx](http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xlsx)
 
 
+#### Pagination
+  It is still in progress!
+  
+  - To request a specific page you can call [http://localhost:8080/report-cockpit-birt-web/reports/chart/1](http://localhost:8080/report-cockpit-birt-web/reports/chart/1).
+  - `reports/<reportName>/<pageNumber>?[__recreate=true]&....`
+  Normally the requested report is cached as long as specific pages are requested. That guarantees that the next page is generated on the same data as the previous one. 
+  If the report parameters has been changed or the report must provide new data you can force an recreate and overwrite of the cached data by a request parameter `__recreate=true`  
+  
 - JSON to customize Reports
 ```json
 {

@@ -20,7 +20,11 @@
  */
 package de.interseroh.report.services;
 
-import org.apache.derby.iapi.services.io.ArrayOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+
 import org.eclipse.birt.report.engine.api.DocumentUtil;
 import org.eclipse.birt.report.engine.api.IBookmarkInfo;
 import org.eclipse.birt.report.engine.api.IReportDocument;
@@ -28,17 +32,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import de.interseroh.report.webconfig.ReportConfig;
-
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -57,28 +58,36 @@ public class BirtReportServiceBeanTest {
 
 	}
 
-    @Test
-    public void testRenderHtml() throws Exception {
-        ByteArrayOutputStream out = new ByteArrayOutputStream(4000000);
-        reportService.renderHtmlReport("chart", new HashMap<String, Object>(), out);
-//        out.writeTo(System.out);
-    }
+	@Test
+	@DirtiesContext
+	public void testRenderHtml() throws Exception {
+//		Authentication authentication = new UsernamePasswordAuthenticationToken(
+//				"unit", "pass");
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+		ByteArrayOutputStream out = new ByteArrayOutputStream(4000000);
+		reportService.renderHtmlReport("chart", new HashMap<String, Object>(),
+				out, 2, false);
+		// out.writeTo(System.out);
+	}
 
-    @Test
-    public void testReportDocument() throws Exception {
-        ByteArrayOutputStream out = new ByteArrayOutputStream(40000000);
-        IReportDocument document = reportService.openReportDocument("chart", out);
-//        out.writeTo(System.out);
+	@Test
+	public void testReportDocument() throws Exception {
+		ByteArrayOutputStream out = new ByteArrayOutputStream(40000000);
+		IReportDocument document = reportService.openReportDocument("chart",
+				out);
+		// out.writeTo(System.out);
 
-        Collection<IBookmarkInfo> bookmarks = DocumentUtil.getBookmarks(document, Locale.GERMANY);
-        for (IBookmarkInfo bookmark : bookmarks) {
-            System.out.println("DisplayName  :"+bookmark.getDisplayName());
-            System.out.println("ElementType  :"+bookmark.getElementType());
-            System.out.println("Bookmark     :"+bookmark.getBookmark());
-            System.out.println("BookmarkType :"+bookmark.getBookmarkType());
-            System.out.println("PageNumber   :"+document.getPageNumber(bookmark.getBookmark()));
-        }
+		Collection<IBookmarkInfo> bookmarks = DocumentUtil
+				.getBookmarks(document, Locale.GERMANY);
+		for (IBookmarkInfo bookmark : bookmarks) {
+			System.out.println("DisplayName  :" + bookmark.getDisplayName());
+			System.out.println("ElementType  :" + bookmark.getElementType());
+			System.out.println("Bookmark     :" + bookmark.getBookmark());
+			System.out.println("BookmarkType :" + bookmark.getBookmarkType());
+			System.out.println("PageNumber   :"
+					+ document.getPageNumber(bookmark.getBookmark()));
+		}
 
-
-    }
+	}
 }

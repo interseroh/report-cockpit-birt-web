@@ -119,11 +119,25 @@ public class ReportController {
 		return modelAndView;
 	}
 
+    @RequestMapping(value = "/{pageNumber}", method = RequestMethod.GET)
+    public ModelAndView showReportPage(
+            @ModelAttribute ParameterForm parameterForm,
+            @RequestParam MultiValueMap<String, String> requestParams,
+            @RequestParam(value = "__recreate", required =  false, defaultValue = "false") boolean recreate,
+            @PathVariable("reportName") String reportName,
+            @PathVariable("pageNumber") Long pageNumber,
+            BindingResult errors
+    ) {
+        // if requesting a specific page reuse existing report instead of creating a new one.
+        parameterForm.setOverwrite(recreate);
+        parameterForm.setPageNumber(pageNumber);
+        return showReport(parameterForm, requestParams, reportName, errors);
+    }
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showReport( //
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
-			@RequestParam(value = "__page", required = false) Long pageNumber,
 			@PathVariable("reportName") String reportName,
 			BindingResult errors) {
 
@@ -137,7 +151,6 @@ public class ReportController {
 		if (parameterForm.isValid()) {
 			// show report
 			modelAndView.setViewName("/report");
-            modelAndView.addObject("pageNumber", pageNumber);
 			injectReportUri(parameterForm, modelAndView, reportName);
 			configSetter.setVersion(modelAndView);
 			configSetter.setBranding(modelAndView);

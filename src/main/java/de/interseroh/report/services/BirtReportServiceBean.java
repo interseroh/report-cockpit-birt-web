@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -57,6 +58,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import de.interseroh.report.domain.ParameterBuilder;
@@ -289,44 +292,65 @@ public class BirtReportServiceBean implements BirtReportService {
 
 	@Override
 	public void renderHtmlReport(String reportName,
-			Map<String, Object> parameters, OutputStream out, long pageNumber)
-					throws BirtReportException {
-        try {
-            String reportFileName = absolutePathOf(reportFileName(reportName));
-            IReportRunnable reportRunnable = reportEngine
-                    .openReportDesign(reportFileName);
+			Map<String, Object> parameters, OutputStream out, long pageNumber,
+			boolean overwrite) throws BirtReportException {
+		try {
+			String reportFileName = absolutePathOf(reportFileName(reportName));
+			String documentFileName = absoluteTempPath(
+					documentFileName(reportName));
 
-            IRunTask runTask = reportEngine.createRunTask(reportRunnable);
-            String documentFileName = absoluteTempPath(
-                    documentFileName(reportName));
-            runTask.run(documentFileName);
+			if (needToCreateNewDocumentFile(reportName, overwrite)) {
+				logger.info("Need to create document file for {} report.",
+						reportName);
+				IReportRunnable reportRunnable = reportEngine
+						.openReportDesign(reportFileName);
+				IRunTask runTask = reportEngine.createRunTask(reportRunnable);
+				injectParameters(parameters, runTask);
+				runTask.run(documentFileName);
+			}
 
-            IReportDocument reportDocument = reportEngine
-                    .openReportDocument(documentFileName);
+			IReportDocument reportDocument = reportEngine
+					.openReportDocument(documentFileName);
 
-            HTMLRenderOption htmlOptions = new HTMLRenderOption();
-            htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
-            htmlOptions.setOutputStream(out);
-            htmlOptions.setImageHandler(new HTMLServerImageHandler());
-            htmlOptions.setEmbeddable(true);
+			HTMLRenderOption htmlOptions = new HTMLRenderOption();
+			htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
+			htmlOptions.setOutputStream(out);
+			htmlOptions.setImageHandler(new HTMLServerImageHandler());
+			htmlOptions.setEmbeddable(true);
 
-            htmlOptions.setBaseImageURL(baseImageURL);
-            htmlOptions.setImageDirectory(imageDirectory);
+			htmlOptions.setBaseImageURL(baseImageURL);
+			htmlOptions.setImageDirectory(imageDirectory);
 
-            htmlOptions.setHtmlPagination(true);
-            htmlOptions.setMasterPageContent(false);
-            htmlOptions.setPageFooterFloatFlag(true);
+			htmlOptions.setHtmlPagination(true);
+			htmlOptions.setMasterPageContent(false);
+			htmlOptions.setPageFooterFloatFlag(true);
 
-            IRenderTask renderTask = reportEngine.createRenderTask(reportDocument,
-                    reportRunnable);
-            renderTask.setRenderOption(htmlOptions);
-            renderTask.setPageNumber(pageNumber);
-            renderTask.render();
-            renderTask.close();
-        } catch (EngineException | IOException e) {
-            e.printStackTrace();
-        }
-    }
+			IRenderTask renderTask = reportEngine.createRenderTask(
+					reportDocument, reportDocument.getReportRunnable());
+			renderTask.setRenderOption(htmlOptions);
+			renderTask.setPageNumber(pageNumber);
+			renderTask.render();
+			renderTask.close();
+
+		} catch (EngineException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private boolean needToCreateNewDocumentFile(String reportName,
+			boolean overwrite) throws IOException {
+		String reportFileName = absolutePathOf(reportFileName(reportName));
+		String documentFileName = absoluteTempPath(
+				documentFileName(reportName));
+
+		File reportFile = new File(reportFileName);
+		File documentFile = new File(documentFileName);
+
+		boolean outdated = reportFile.lastModified() > documentFile
+				.lastModified();
+
+		return overwrite || !documentFile.exists() || outdated;
+	}
 
 	public IReportDocument openReportDocument(String reportName,
 			OutputStream out) throws IOException, EngineException {
@@ -370,7 +394,11 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
 	private String documentFileName(String reportName) {
-		return reportName + DOCUMENT_FILE_SUFFIX;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = (authentication != null) ? authentication.getName() : UUID.randomUUID().toString();
+
+		return reportName + '_' + name + '_' + DOCUMENT_FILE_SUFFIX;
 	}
 
 	private void injectParameters(Map<String, Object> parameters,
@@ -382,16 +410,22 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
 	private String absolutePathOf(String reportFileName) throws IOException {
-		String location = environment.getProperty(REPORT_SOURCE_URL_KEY) + "/"
+		String location = appendSeparatorIfNeeded(environment.getProperty(REPORT_SOURCE_URL_KEY))
 				+ reportFileName;
 		Resource resource = resourceLoader.getResource(location);
 		return resource.getFile().getAbsolutePath();
 	}
 
 	private String absoluteTempPath(String fileName) throws IOException {
-		String location = environment.getProperty("java.io.tmpdir")
-				+ File.pathSeparator + fileName;
-		return location;
+        return appendSeparatorIfNeeded(environment.getProperty("java.io.tmpdir")) + fileName;
 	}
+
+    private String appendSeparatorIfNeeded(String path) {
+        if (path != null && !path.isEmpty() && path.charAt(path.length() - 1) != File.separatorChar) {
+            return path + File.separatorChar;
+        } else {
+            return path;
+        }
+    }
 
 }

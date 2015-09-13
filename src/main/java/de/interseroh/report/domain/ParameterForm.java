@@ -46,6 +46,8 @@ public class ParameterForm {
 	private Collection<ParameterGroup> groups;
 	private Map<String, Parameter> parameterMap;
 	private MultiValueMap<String, String> requestParameters;
+    private boolean overwrite = true;
+    private Long pageNumber;
 
 	public void accept(ParameterVisitor visitor) {
 		for (ParameterGroup group : groups) {
@@ -94,7 +96,19 @@ public class ParameterForm {
 		return Collections.synchronizedMap(parameterMap);
 	}
 
-	public void setParams(Map<String, ScalarParameter> params) {
+    public Long getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Long pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public boolean isPageSelected() {
+        return pageNumber != null;
+    }
+
+    public void setParams(Map<String, ScalarParameter> params) {
 		logger.info("Got:{}", params);
 		// nothing to do read only
 	}
@@ -164,7 +178,15 @@ public class ParameterForm {
 		this.groups = groups;
 	}
 
-	@Override
+    public boolean isOverwrite() {
+        return overwrite;
+    }
+
+    public void setOverwrite(boolean overwrite) {
+        this.overwrite = overwrite;
+    }
+
+    @Override
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;

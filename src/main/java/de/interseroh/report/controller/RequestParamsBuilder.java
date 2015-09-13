@@ -38,7 +38,14 @@ import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
 public class RequestParamsBuilder {
 
 	public String asRequestParams(ParameterForm parameterForm) {
-		return conjoin(buildParamList(parameterForm));
+        List<String> params = buildParamList(parameterForm);
+        if (!parameterForm.isOverwrite()) {
+            params.add("__overwrite=false");
+        }
+        if (parameterForm.isPageSelected()) {
+            params.add("__pageNumber="+parameterForm.getPageNumber());
+        }
+        return conjoin(params);
 	}
 
 	private List<String> buildParamList(ParameterForm parameterForm) {

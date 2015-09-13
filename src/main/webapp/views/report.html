@@ -59,10 +59,6 @@
 <script>
     // <![CDATA[
     var reportContentUrl = $("#report-content").attr("data-report-content-url");
-    var pageNumber = $("#report-content").attr("data-report-page");
-    if (pageNumber != undefined) {
-        reportContentUrl = reportContentUrl + "?__pageNumber=" + pageNumber;
-    }
     $("#report-content").load(reportContentUrl);
 
     var progress = setInterval(function () {

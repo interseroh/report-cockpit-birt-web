@@ -66,7 +66,7 @@ public interface BirtReportService {
 			OutputStream out) throws BirtReportException;
 
     void renderHtmlReport(String reportName, Map<String, Object> parameters,
-                          OutputStream out, long pageNumber) throws BirtReportException;
+                          OutputStream out, long pageNumber, boolean overwrite) throws BirtReportException;
 
 	void renderPDFReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;

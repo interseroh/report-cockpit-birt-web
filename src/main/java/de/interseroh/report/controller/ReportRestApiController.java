@@ -91,7 +91,7 @@ public class ReportRestApiController {
 			@RequestParam MultiValueMap<String, String> requestParams,
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
-		renderReport(parameterForm, reportName, requestParams, null,
+		renderReport(parameterForm, reportName, requestParams, null, true,
 				BirtOutputFormat.HTML5.getFormatName(), response, errors);
 	}
 
@@ -101,6 +101,7 @@ public class ReportRestApiController {
 			@PathVariable("reportName") String reportName, //
 			@RequestParam MultiValueMap<String, String> requestParams,
             @RequestParam(value = "__pageNumber", required = false) Long pageNumber,
+            @RequestParam(value = "__overwrite", required = false) Boolean overwrite,
 			@PathVariable("format") String format, //
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
@@ -125,7 +126,8 @@ public class ReportRestApiController {
                 reportService.renderHtmlReport(reportName, parameters,
                         response.getOutputStream());
             } else {
-                reportService.renderHtmlReport(reportName, parameters, response.getOutputStream(), pageNumber);
+                boolean overwriteFlag = overwrite == null || overwrite;
+                reportService.renderHtmlReport(reportName, parameters, response.getOutputStream(), pageNumber, overwriteFlag);
             }
 			break;
 		case PDF:

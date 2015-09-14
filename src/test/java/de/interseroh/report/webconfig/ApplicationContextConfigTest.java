@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DatabaseConfig.class)
 @PropertySource("classpath:config.properties")
-public class DatabaseConfigTest {
+public class ApplicationContextConfigTest {
 
 	@Autowired
 	ApplicationContext applicationContext;

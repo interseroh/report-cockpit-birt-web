@@ -6,15 +6,11 @@
 --
 
 -- DROP
-drop table rcb_report cascade constraints;
-
-drop table rcb_role cascade constraints;
-
-drop table rcb_user cascade constraints;
-
-drop table rcb_user_role cascade constraints;
-
-drop sequence hibernate_sequence;
+-- drop table rcb_report cascade constraints;
+-- drop table rcb_role cascade constraints;
+-- drop table rcb_user cascade constraints;
+-- drop table rcb_user_role cascade constraints;
+-- drop sequence hibernate_sequence;
     
 -- CREATE
 create table rcb_report (

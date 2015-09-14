@@ -81,6 +81,21 @@ public class ReportServiceBeanIT {
 		}
 	}
 
+	@Transactional
+	@Test
+	public void testFindReportsByUser() {
+		// We need to make this transactional so we can rollback at the end
+		// Prepare
+		createUserRolesAndReports();
+		String email = "lofi@dewanto.com";
+
+		// CUT
+		Collection<Report> reports = reportService.findReportsByUser(email);
+
+		// Asserts
+		assertEquals(3, reports.size());
+	}
+
 	private void createUserRolesAndReports() {
 		usersRolesAndReportsCreator.createUserRolesAndReports();
 	}

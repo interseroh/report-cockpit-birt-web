@@ -42,20 +42,23 @@ public class DatabaseLdapAuthoritiesPopulator implements
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private ReportService reportService;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getGrantedAuthorities(
 			DirContextOperations userData, String userName) {
 		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 		// Username == email
-		Collection<UserRole> userRoles = userService
-				.findUserRolesByUserEmail(userName);
-		for (UserRole currentUserRole : userRoles) {
-			authorities.add(new SimpleGrantedAuthority(currentUserRole
-					.getUser().getEmail()));
+		Collection<Report> reports = reportService.findReportsByUser(userName);
+
+		// Authorities == the report name
+		for (Report currentReport : reports) {
+			authorities
+					.add(new SimpleGrantedAuthority(currentReport.getName()));
 		}
 
 		return authorities;
 	}
-
 }

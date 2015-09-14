@@ -44,7 +44,7 @@ public class UsersRolesAndReportsCreator {
 
 		Role roleUser2 = new RoleEntity();
 		roleUser2.setName("USER_CROWDCODE");
-		userService.createUserRole(user, roleUser2);
+		UserRole userRole2 = userService.createUserRole(user, roleUser2);
 
 		ReportEntity report1 = new ReportEntity();
 		report1.setName("salesinvoice");
@@ -63,5 +63,14 @@ public class UsersRolesAndReportsCreator {
 		assert (reportEntity2 != null);
 
 		userRole1.getRole().addReport(reportEntity2);
+
+		ReportEntity report3 = new ReportEntity();
+		report3.setName("chart");
+		report3.setRole(userRole1.getRole());
+		ReportEntity reportEntity3 = reportRepository.save(report3);
+
+		assert (reportEntity3 != null);
+
+		userRole2.getRole().addReport(reportEntity3);
 	}
 }

@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.auth;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class ReportServiceBean implements ReportService {
 	@Autowired
 	private RoleRepository roleRepository;
 
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+
 	@Transactional(readOnly = true)
 	@Override
 	public Collection<Report> findReportsByRoleId(Long roleId) {
@@ -49,4 +53,19 @@ public class ReportServiceBean implements ReportService {
 		return reports;
 	}
 
+	@Transactional(readOnly = true)
+	@Override
+	public Collection<Report> findReportsByUser(String email) {
+		Collection<UserRoleEntity> userRoles = userRoleRepository
+				.findByUserEmail(email);
+
+		Collection<Report> allReports = new ArrayList<Report>();
+		for (UserRoleEntity userRoleEntity : userRoles) {
+			Role currentRole = userRoleEntity.getRole();
+			Collection<Report> reports = currentRole.getReports();
+			allReports.addAll(reports);
+		}
+
+		return allReports;
+	}
 }

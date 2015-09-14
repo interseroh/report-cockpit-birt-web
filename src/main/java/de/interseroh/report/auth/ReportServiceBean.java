@@ -44,7 +44,6 @@ public class ReportServiceBean implements ReportService {
 	@Override
 	public Collection<Report> findReportsByRoleId(Long roleId) {
 		RoleEntity role = roleRepository.findOne(roleId);
-
 		Collection<Report> reports = role.getReports();
 
 		return reports;

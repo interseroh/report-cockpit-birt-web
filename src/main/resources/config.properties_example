@@ -8,7 +8,7 @@ logo.branding=/images/birt-logo.png
 ldap.authentication=false
 
 # Username and password for InMemory
-ldap.inmemory.user=birt
+ldap.inmemory.user=birt@test.de
 ldap.inmemory.password=birt
 
 # LDAP Authentication

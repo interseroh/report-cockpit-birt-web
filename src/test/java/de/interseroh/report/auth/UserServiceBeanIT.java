@@ -101,6 +101,10 @@ public class UserServiceBeanIT {
 		Role roleAdmin = new RoleEntity();
 		roleAdmin.setName("ADMIN");
 		userService.createUserRole(user, roleAdmin);
+
+		Report report = new ReportEntity();
+		report.setName("salesinvoice");
+		report.setRole(roleUser);
 	}
 
 }

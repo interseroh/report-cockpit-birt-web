@@ -20,7 +20,6 @@
  */
 package de.interseroh.report.auth;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,46 +27,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * UserService Implementation.
+ * ReportService Implementation.
  *
  * @author Lofi Dewanto (Interseroh)
  */
 @Service
-public class UserServiceBean implements UserService {
+public class ReportServiceBean implements ReportService {
 
 	@Autowired
-	private UserRoleRepository userRoleRepository;
-
-	@Autowired
-	private UserRepository userRepository;
+	private ReportRepository reportRepository;
 
 	@Autowired
 	private RoleRepository roleRepository;
 
 	@Transactional(readOnly = true)
 	@Override
-	public Collection<UserRole> findUserRolesByUserEmail(String email) {
-		Collection<UserRoleEntity> userRoles = userRoleRepository
-				.findByUserEmail(email);
+	public Collection<Report> findReportsByRoleId(Long roleId) {
+		RoleEntity role = roleRepository.findOne(roleId);
 
-		Collection<UserRole> returnUserRoles = new ArrayList<>();
-		returnUserRoles.addAll(userRoles);
+		Collection<Report> reports = role.getReports();
 
-		return returnUserRoles;
+		return reports;
 	}
 
-	@Transactional
-	@Override
-	public UserRole createUserRole(User user, Role role) {
-		UserRole userRole = new UserRoleEntity();
-		userRole.setRole(role);
-		userRole.setUser(user);
-
-		userRepository.save((UserEntity) user);
-		roleRepository.save((RoleEntity) role);
-		UserRoleEntity userRoleEntity = userRoleRepository
-				.save((UserRoleEntity) userRole);
-
-		return userRoleEntity;
-	}
 }

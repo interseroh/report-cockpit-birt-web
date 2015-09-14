@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.interseroh.report.auth.ReportServiceBeanIT;
 import de.interseroh.report.auth.UserServiceBeanIT;
 import de.interseroh.report.test.database.MigrationDatabaseIT;
 import de.interseroh.report.webconfig.ApplicationContextConfigTest;
@@ -31,6 +32,7 @@ import de.interseroh.report.webconfig.ApplicationContextConfigTest;
 @RunWith(Suite.class)
 @SuiteClasses({ ApplicationContextConfigTest.class, //
 		UserServiceBeanIT.class, //
+		ReportServiceBeanIT.class, //
 		MigrationDatabaseIT.class })
 public class AllITs {
 }

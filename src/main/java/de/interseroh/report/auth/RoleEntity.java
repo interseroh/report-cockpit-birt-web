@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.auth;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
@@ -41,7 +42,10 @@ public class RoleEntity extends AbstractPersistable<Long> implements Role {
 	private String name;
 
 	@OneToMany(mappedBy = "role", targetEntity = UserRoleEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Collection<UserRole> userRoles;
+	private final Collection<UserRole> userRoles = new ArrayList<UserRole>();
+
+	@OneToMany(mappedBy = "role", targetEntity = ReportEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private final Collection<Report> reports = new ArrayList<Report>();
 
 	@Override
 	public Collection<UserRole> getUserRoles() {
@@ -65,12 +69,12 @@ public class RoleEntity extends AbstractPersistable<Long> implements Role {
 
 	@Override
 	public Collection<Report> getReports() {
-		return null;
+		return reports;
 	}
 
 	@Override
 	public void addReport(Report report) {
-		// TODO Auto-generated method stub
+		reports.add(report);
 	}
 
 }

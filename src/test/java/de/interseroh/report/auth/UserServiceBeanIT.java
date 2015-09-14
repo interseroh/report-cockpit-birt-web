@@ -41,6 +41,9 @@ import de.interseroh.report.webconfig.DatabaseConfig;
 public class UserServiceBeanIT {
 
 	@Autowired
+	private UsersRolesAndReportsCreator usersRolesAndReportsCreator;
+
+	@Autowired
 	private UserService userService;
 
 	@Before
@@ -52,7 +55,7 @@ public class UserServiceBeanIT {
 	public void testFindUserRolesByUserEmail() {
 		// We need to make this transactional so we can rollback at the end
 		// Prepare
-		createUserRoles();
+		createUserRolesAndReports();
 
 		// CUT
 		String email = "lofi@dewanto.com";
@@ -67,8 +70,8 @@ public class UserServiceBeanIT {
 			result = result.concat(userRole.getRole().getName());
 		}
 
-		assertEquals(true, result.contains("USER"));
-		assertEquals(true, result.contains("ADMIN"));
+		assertEquals(true, result.contains("USER_INTERSEROH"));
+		assertEquals(true, result.contains("USER_CROWDCODE"));
 	}
 
 	@Transactional
@@ -91,20 +94,8 @@ public class UserServiceBeanIT {
 		assertEquals(1, userRoles.size());
 	}
 
-	private void createUserRoles() {
-		Role roleUser = new RoleEntity();
-		roleUser.setName("USER");
-		User user = new UserEntity();
-		user.setEmail("lofi@dewanto.com");
-		userService.createUserRole(user, roleUser);
-
-		Role roleAdmin = new RoleEntity();
-		roleAdmin.setName("ADMIN");
-		userService.createUserRole(user, roleAdmin);
-
-		Report report = new ReportEntity();
-		report.setName("salesinvoice");
-		report.setRole(roleUser);
+	private void createUserRolesAndReports() {
+		usersRolesAndReportsCreator.createUserRolesAndReports();
 	}
 
 }

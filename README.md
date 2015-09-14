@@ -11,10 +11,14 @@ This projects provides an easy to integrate and enhanced BIRT Web-Viewer based o
 For security and branding configuration see `[src/main/resources/config.properties](https://github.com/interseroh/report-cockpit-birt-web/blob/master/src/main/resources/config.properties_example)`. Be aware that the file will generated on the first `mvn initialize`.
 
 Per default inmemory authentication is activated.
-`ldap.authentication=false`
+```
+ldap.authentication=false
+```
 The default username and passwords are:
-`ldap.inmemory.user=birt@test.de`
-`ldap.inmemory.password=birt`
+```
+ldap.inmemory.user=birt@test.de
+ldap.inmemory.password=birt
+```
 
 For report engine specific configuration see `report-config.properties` and `BirtReportService.java`.
 

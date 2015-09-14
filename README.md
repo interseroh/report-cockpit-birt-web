@@ -13,7 +13,7 @@ For security and branding configuration see `[src/main/resources/config.properti
 Per default inmemory authentication is activated.
 `ldap.authentication=false`
 The default username and passwords are:
-`ldap.inmemory.user=birt`
+`ldap.inmemory.user=birt@test.de`
 `ldap.inmemory.password=birt`
 
 For report engine specific configuration see `report-config.properties` and `BirtReportService.java`.

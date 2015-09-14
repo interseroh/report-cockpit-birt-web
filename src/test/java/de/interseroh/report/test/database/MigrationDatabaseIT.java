@@ -18,6 +18,7 @@ public class MigrationDatabaseIT {
 		// Point it to the database
 		flyway.setDataSource("jdbc:hsqldb:mem:testdb;sql.syntax_ora=true",
 				"sa", null);
+		flyway.setBaselineOnMigrate(true);
 
 		// Start the migration
 		flyway.migrate();

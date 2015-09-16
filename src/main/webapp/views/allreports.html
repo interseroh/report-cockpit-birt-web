@@ -31,7 +31,7 @@
                     th:each="report : ${reportReferencesList}">
 
                     <td>
-                        <a sec:authorize="hasRole('ROLE_USER')" href="#param"
+                        <a href="#param"
                            th:href="@{${report.name}}"
                            th:text="${report.name}">NA</a>
                     </td>

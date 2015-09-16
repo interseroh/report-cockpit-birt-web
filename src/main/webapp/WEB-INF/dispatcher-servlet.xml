@@ -27,7 +27,7 @@
     <mvc:annotation-driven/>
     <context:component-scan base-package="de.interseroh.report.controller"/>
     <context:component-scan base-package="de.interseroh.report.services"/>
-    <context:component-scan base-package="de.interseroh.report.helper"/>
+    <context:component-scan base-package="de.interseroh.report.auth"/>
 
     <!-- **************************************************************** -->
     <!--  MESSAGE EXTERNALIZATION/INTERNATIONALIZATION                    -->

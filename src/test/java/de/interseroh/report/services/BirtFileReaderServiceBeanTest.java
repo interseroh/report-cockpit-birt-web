@@ -3,20 +3,15 @@ package de.interseroh.report.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
 
 import de.interseroh.report.exception.BirtSystemException;
-import de.interseroh.report.helper.SecurityHelper;
 import de.interseroh.report.model.ReportReference;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,8 +27,7 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
     @InjectMocks
     BirtFileReaderService serviceFileReader = new BirtFileReaderServiceBean();
 
-    @Mock //currently not used (at this time method is independent from role)
-    SecurityHelper securityHelper;
+
 
     @Test
     public void testGetAllFileNamesWithNull() throws BirtSystemException {
@@ -58,7 +52,7 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
                 list.get(3).getName());
     }
 
-    @Ignore
+/*    @Ignore
     @Test
     public void testGetAllFileNamesWithRoles() throws BirtSystemException {
 
@@ -70,7 +64,7 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
         List<ReportReference>list =  serviceFileReader.getReportReferences(directory);
 
         assertEquals("1 reports in directory available with rolename", 1, list.size());
-    }
+    }*/
 
     @Test
     public void testGetAllFileNamesWithException() throws BirtSystemException {

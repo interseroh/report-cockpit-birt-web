@@ -3,21 +3,25 @@ package de.interseroh.report.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
 
+import de.interseroh.report.auth.*;
 import de.interseroh.report.exception.BirtSystemException;
 import de.interseroh.report.model.ReportReference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  *
- * currently without roles!
  *
  * Created by hhopf on 07.07.15.
  */
@@ -27,6 +31,11 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
     @InjectMocks
     BirtFileReaderService serviceFileReader = new BirtFileReaderServiceBean();
 
+    @Mock
+    UserService userService;
+
+    @Mock
+    private SecurityHelper securityHelper;
 
 
     @Test
@@ -38,33 +47,188 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
     }
 
     @Test
-    public void testGetAllFileNames() throws BirtSystemException {
+    public void testGetFileNameWithRole() throws BirtSystemException {
 
         File directory = new File(getClass().getResource("/reports").getFile());//target folder
-        List<String> roles = Arrays.asList("ROLE_USER", "ROLE_SALESINVOICE");
+        UserRole userRole = getUserRole();
+        Collection<UserRole>  roles = new ArrayList<>();
+        roles.add(userRole);
 
-        //when(securityHelper.getRoles()).thenReturn(roles); in the future :-)
+        when(securityHelper.getPrincipalName()).thenReturn("userName");
+
+        when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(roles);
 
         List<ReportReference>list =  serviceFileReader.getReportReferences(directory);
 
-        assertEquals("8 reports in directory available", 8, list.size());
-        assertEquals("hello world is in list on position 4", "hello_world",
-                list.get(3).getName());
+        assertEquals("1 report in directory with its role available", 1,
+                list.size());
     }
 
-/*    @Ignore
     @Test
-    public void testGetAllFileNamesWithRoles() throws BirtSystemException {
+    public void testGetTwoFilesNameWithRole() throws BirtSystemException {
 
         File directory = new File(getClass().getResource("/reports").getFile());//target folder
-        List<String> roles = Arrays.asList("ROLE_USER", "ROLE_SALESINVOICE");
+        Collection<UserRole>  roles = getUserRoles();
 
-        when(securityHelper.getRoles()).thenReturn(roles); //in the future :-)
+        when(securityHelper.getPrincipalName()).thenReturn("userName");
+
+        when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(roles);
 
         List<ReportReference>list =  serviceFileReader.getReportReferences(directory);
 
-        assertEquals("1 reports in directory available with rolename", 1, list.size());
-    }*/
+        assertEquals("2 report in directory with its role available", 2, list.size());
+    }
+
+    private UserRole getUserRole() {
+        final Role role = new Role() {
+            @Override public Collection<UserRole> getUserRoles() {
+                return null;
+            }
+
+            @Override public void addUserRole(UserRole userRole) {
+
+            }
+
+            @Override public Long getId() {
+                return null;
+            }
+
+            @Override public String getName() {
+                return "ROLE_SALESINVOICE";
+            }
+
+            @Override public void setName(String name) {
+
+            }
+
+            @Override public Collection<Report> getReports() {
+                return null;
+            }
+
+            @Override public void addReport(Report report) {
+
+            }
+        };
+        return new UserRole() {
+            @Override public User getUser() {
+                return null;
+            }
+
+            @Override public void setUser(User user) {
+
+            }
+
+            @Override public Role getRole() {
+                return role;
+            }
+
+            @Override public void setRole(Role role) {
+
+            }
+        };
+    }
+
+    private Collection<UserRole> getUserRoles() {
+        final Role role1 = new Role() {
+            @Override public Collection<UserRole> getUserRoles() {
+                return null;
+            }
+
+            @Override public void addUserRole(UserRole userRole) {
+
+            }
+
+            @Override public Long getId() {
+                return null;
+            }
+
+            @Override public String getName() {
+                return "ROLE_SALESINVOICE";
+            }
+
+            @Override public void setName(String name) {
+
+            }
+
+            @Override public Collection<Report> getReports() {
+                return null;
+            }
+
+            @Override public void addReport(Report report) {
+
+            }
+        };
+        final Role role2 = new Role() {
+            @Override public Collection<UserRole> getUserRoles() {
+                return null;
+            }
+
+            @Override public void addUserRole(UserRole userRole) {
+
+            }
+
+            @Override public Long getId() {
+                return null;
+            }
+
+            @Override public String getName() {
+                return "ROLE_PRODUCTCATALOG";
+            }
+
+            @Override public void setName(String name) {
+
+            }
+
+            @Override public Collection<Report> getReports() {
+                return null;
+            }
+
+            @Override public void addReport(Report report) {
+
+            }
+        };
+        UserRole userRole1 = new UserRole() {
+            @Override public User getUser() {
+                return null;
+            }
+
+            @Override public void setUser(User user) {
+
+            }
+
+            @Override public Role getRole() {
+                return role1;
+            }
+
+            @Override public void setRole(Role role) {
+
+            }
+        };
+
+        UserRole userRole2 = new UserRole() {
+            @Override public User getUser() {
+                return null;
+            }
+
+            @Override public void setUser(User user) {
+
+            }
+
+            @Override public Role getRole() {
+                return role2;
+            }
+
+            @Override public void setRole(Role role) {
+
+            }
+        };
+
+        Collection<UserRole>  roles = new ArrayList<>();
+        roles.add(userRole1);
+        roles.add(userRole2);
+        return roles;
+    }
+
 
     @Test
     public void testGetAllFileNamesWithException() throws BirtSystemException {
@@ -74,18 +238,5 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
         List<ReportReference>list =  serviceFileReader.getReportReferences(directory);
 
         assertEquals("directory not available", 0, list.size());
-    }
-
-    @Test
-    public void testGetAllFileNamesWithFilename() throws BirtSystemException {
-
-        File directory = new File(getClass().getResource("/reports/hello_world.rptdesign").getFile());//target folder
-        List<String> roles = Arrays.asList("ROLE_USER", "ROLE_SALESINVOICE");
-
-        //when(securityHelper.getRoles()).thenReturn(roles); in the future :-)
-
-        List<ReportReference>list =  serviceFileReader.getReportReferences(directory);
-
-        assertEquals("file is not a directory", 0, list.size());
     }
 }

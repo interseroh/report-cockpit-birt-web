@@ -29,6 +29,9 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private SecurityHelper securityHelper;
+
 	/**
 	 * deliver all file names (report names) in specified directory.
 	 *
@@ -74,9 +77,8 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 	}
 
 	private List<String> getRoles() {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		String userName =  auth.getName();
+
+		String userName = securityHelper.getPrincipalName();
 
 		Collection<UserRole> rolesCollection = userService.
 				findUserRolesByUserEmail(userName);

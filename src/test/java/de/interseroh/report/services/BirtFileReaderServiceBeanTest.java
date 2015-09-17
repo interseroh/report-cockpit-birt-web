@@ -80,152 +80,27 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
     }
 
     private UserRole getUserRole() {
-        final Role role = new Role() {
-            @Override public Collection<UserRole> getUserRoles() {
-                return null;
-            }
-
-            @Override public void addUserRole(UserRole userRole) {
-
-            }
-
-            @Override public Long getId() {
-                return null;
-            }
-
-            @Override public String getName() {
-                return "ROLE_SALESINVOICE";
-            }
-
-            @Override public void setName(String name) {
-
-            }
-
-            @Override public Collection<Report> getReports() {
-                return null;
-            }
-
-            @Override public void addReport(Report report) {
-
-            }
-        };
-        return new UserRole() {
-            @Override public User getUser() {
-                return null;
-            }
-
-            @Override public void setUser(User user) {
-
-            }
-
-            @Override public Role getRole() {
-                return role;
-            }
-
-            @Override public void setRole(Role role) {
-
-            }
-        };
+        Role role = new RoleEntity();
+        role.setName("ROLE_SALESINVOICE");
+        UserRole uRole = new UserRoleEntity();
+        uRole.setRole(role);
+        return uRole;
     }
 
     private Collection<UserRole> getUserRoles() {
-        final Role role1 = new Role() {
-            @Override public Collection<UserRole> getUserRoles() {
-                return null;
-            }
+        Role role = new RoleEntity();
+        role.setName("ROLE_SALESINVOICE");
+        UserRole uRole = new UserRoleEntity();
+        uRole.setRole(role);
+        Role role1 = new RoleEntity();
+        role1.setName("ROLE_PRODUCTCATALOG");
+        UserRole uRole1 = new UserRoleEntity();
+        uRole1.setRole(role1);
 
-            @Override public void addUserRole(UserRole userRole) {
-
-            }
-
-            @Override public Long getId() {
-                return null;
-            }
-
-            @Override public String getName() {
-                return "ROLE_SALESINVOICE";
-            }
-
-            @Override public void setName(String name) {
-
-            }
-
-            @Override public Collection<Report> getReports() {
-                return null;
-            }
-
-            @Override public void addReport(Report report) {
-
-            }
-        };
-        final Role role2 = new Role() {
-            @Override public Collection<UserRole> getUserRoles() {
-                return null;
-            }
-
-            @Override public void addUserRole(UserRole userRole) {
-
-            }
-
-            @Override public Long getId() {
-                return null;
-            }
-
-            @Override public String getName() {
-                return "ROLE_PRODUCTCATALOG";
-            }
-
-            @Override public void setName(String name) {
-
-            }
-
-            @Override public Collection<Report> getReports() {
-                return null;
-            }
-
-            @Override public void addReport(Report report) {
-
-            }
-        };
-        UserRole userRole1 = new UserRole() {
-            @Override public User getUser() {
-                return null;
-            }
-
-            @Override public void setUser(User user) {
-
-            }
-
-            @Override public Role getRole() {
-                return role1;
-            }
-
-            @Override public void setRole(Role role) {
-
-            }
-        };
-
-        UserRole userRole2 = new UserRole() {
-            @Override public User getUser() {
-                return null;
-            }
-
-            @Override public void setUser(User user) {
-
-            }
-
-            @Override public Role getRole() {
-                return role2;
-            }
-
-            @Override public void setRole(Role role) {
-
-            }
-        };
 
         Collection<UserRole>  roles = new ArrayList<>();
-        roles.add(userRole1);
-        roles.add(userRole2);
+        roles.add(uRole);
+        roles.add(uRole1);
         return roles;
     }
 

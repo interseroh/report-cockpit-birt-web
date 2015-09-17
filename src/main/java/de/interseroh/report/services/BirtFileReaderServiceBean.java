@@ -5,8 +5,6 @@ import de.interseroh.report.auth.UserService;
 import de.interseroh.report.exception.BirtSystemException;
 import de.interseroh.report.model.ReportReference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -23,8 +21,7 @@ import java.util.logging.Logger;
 public class BirtFileReaderServiceBean implements BirtFileReaderService {
 
 	public static final int SUFFIXCOUNT = 10;
-	private Logger logger = Logger
-			.getLogger(BirtFileReaderServiceBean.class.getName());
+	private Logger logger = Logger.getLogger(BirtFileReaderServiceBean.class.getName());
 
 	@Autowired
 	private UserService userService;
@@ -40,8 +37,7 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 	 */
 	@Override
 	public List<ReportReference> getReportReferences(final File directory) {
-		logger.info(String.format(
-				"call to get role of current user in directory: %s",
+		logger.info(String.format("call to get role of current user in directory: %s",
 				directory));
 		if (directory == null) {
 			return null;
@@ -59,7 +55,7 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 						String fileName = file.getName()
 								.substring(0, (file.getName().length() - SUFFIXCOUNT));
 						for(String role : roles) {
-							if(role.contains(fileName.toUpperCase())) {//todo roles not implemented yet
+							if(role.contains(fileName.toUpperCase())) {
 								reportReferences.add(new ReportReference(fileName,
 									"reports..."));
 							}

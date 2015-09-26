@@ -170,11 +170,10 @@ public class ReportRestApiController {
 	private boolean hasUserValidRole(String reportName) {
 
 		List<String> roles = securityControl.getRoles();
-		String fileName = reportName.substring(0, (reportName.length() - SUFFIXCOUNT));
-		fileName = fileName.toUpperCase();
+		reportName = reportName.toUpperCase();
 
 		for(String role : roles) {
-			if(role.contains(fileName)) {
+			if(role.contains(reportName)) {
 				return true;
 			}
 		}

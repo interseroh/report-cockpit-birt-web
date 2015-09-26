@@ -202,7 +202,6 @@ public class ReportController {
 			BindingResult bindingResult) throws BirtReportException {
 
 		if(!hasUserValidRole(reportName)) {
-
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -281,11 +280,13 @@ public class ReportController {
 	private boolean hasUserValidRole(String reportName) {
 
 		List<String> roles = securityControl.getRoles();
-		String fileName = reportName.substring(0, (reportName.length() - SUFFIXCOUNT));
-		fileName = fileName.toUpperCase();
+		/*String fileName = reportName.substring(0,
+				(reportName.length() - SUFFIXCOUNT));
+		fileName = fileName.toUpperCase();*/
+		reportName = reportName.toUpperCase();
 
 		for(String role : roles) {
-			if(role.contains(fileName)) {
+			if(role.contains(reportName)) {
 				return true;
 			}
 		}

@@ -2,6 +2,7 @@ package de.interseroh.report.services;
 
 import de.interseroh.report.auth.UserRole;
 import de.interseroh.report.auth.UserService;
+import de.interseroh.report.controller.SecurityControl;
 import de.interseroh.report.exception.BirtSystemException;
 import de.interseroh.report.model.ReportReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,7 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 	private Logger logger = Logger.getLogger(BirtFileReaderServiceBean.class.getName());
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private SecurityHelper securityHelper;
+	private SecurityControl securityControl;
 
 	/**
 	 * deliver all file names (report names) in specified directory.
@@ -44,7 +42,7 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 		}
 
 		List<ReportReference> reportReferences = new ArrayList<>();
-		List<String> roles = getRoles();
+		List<String> roles = securityControl.getRoles();
 
 		try {
 			if (directory.exists() && directory.canRead() && directory
@@ -70,20 +68,6 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 		}
 
 		return reportReferences;
-	}
-
-	private List<String> getRoles() {
-
-		String userName = securityHelper.getPrincipalName();
-
-		Collection<UserRole> rolesCollection = userService.
-				findUserRolesByUserEmail(userName);
-
-		List<String> roles = new ArrayList<>();
-		for (UserRole role : rolesCollection) {
-			roles.add(role.getRole().getName());
-		}
-		return roles;
 	}
 
 }

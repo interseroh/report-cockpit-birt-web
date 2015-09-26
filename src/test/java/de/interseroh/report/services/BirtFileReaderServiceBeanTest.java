@@ -7,6 +7,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import de.interseroh.report.auth.*;
+import de.interseroh.report.controller.SecurityControl;
 import de.interseroh.report.exception.BirtSystemException;
 import de.interseroh.report.model.ReportReference;
 import org.junit.Test;
@@ -32,10 +33,7 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
     BirtFileReaderService serviceFileReader = new BirtFileReaderServiceBean();
 
     @Mock
-    UserService userService;
-
-    @Mock
-    private SecurityHelper securityHelper;
+    private SecurityControl securityControl;
 
 
     @Test
@@ -50,13 +48,10 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
     public void testGetFileNameWithRole() throws BirtSystemException {
 
         File directory = new File(getClass().getResource("/reports").getFile());//target folder
-        UserRole userRole = getUserRole();
-        Collection<UserRole>  roles = new ArrayList<>();
-        roles.add(userRole);
+        List<String>  roles = new ArrayList<>();
+        roles.add("ROLE_SALESINVOICE");
 
-        when(securityHelper.getPrincipalName()).thenReturn("userName");
-
-        when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(roles);
+        when(securityControl.getRoles()).thenReturn(roles);
 
         List<ReportReference>list =  serviceFileReader.getReportReferences(directory);
 
@@ -68,41 +63,19 @@ public class BirtFileReaderServiceBeanTest {//todo autowire with problems (secur
     public void testGetTwoFilesNameWithRole() throws BirtSystemException {
 
         File directory = new File(getClass().getResource("/reports").getFile());//target folder
-        Collection<UserRole>  roles = getUserRoles();
+        List<String>  roles = new ArrayList<>();
+        roles.add("ROLE_SALESINVOICE");
+        roles.add("ROLE_PRODUCTCATALOG");
 
-        when(securityHelper.getPrincipalName()).thenReturn("userName");
-
-        when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(roles);
+        when(securityControl.getRoles()).thenReturn(roles);
 
         List<ReportReference>list =  serviceFileReader.getReportReferences(directory);
 
-        assertEquals("2 report in directory with its role available", 2, list.size());
+        assertEquals("2 report in directory with its role available", 2,
+                list.size());
     }
 
-    private UserRole getUserRole() {
-        Role role = new RoleEntity();
-        role.setName("ROLE_SALESINVOICE");
-        UserRole uRole = new UserRoleEntity();
-        uRole.setRole(role);
-        return uRole;
-    }
 
-    private Collection<UserRole> getUserRoles() {
-        Role role = new RoleEntity();
-        role.setName("ROLE_SALESINVOICE");
-        UserRole uRole = new UserRoleEntity();
-        uRole.setRole(role);
-        Role role1 = new RoleEntity();
-        role1.setName("ROLE_PRODUCTCATALOG");
-        UserRole uRole1 = new UserRoleEntity();
-        uRole1.setRole(role1);
-
-
-        Collection<UserRole>  roles = new ArrayList<>();
-        roles.add(uRole);
-        roles.add(uRole1);
-        return roles;
-    }
 
 
     @Test

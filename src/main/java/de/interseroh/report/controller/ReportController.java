@@ -44,6 +44,8 @@ import de.interseroh.report.domain.visitors.ParameterValueMapBuilder;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.services.BirtReportService;
 
+import java.util.List;
+
 @Controller
 @Scope(WebApplicationContext.SCOPE_REQUEST)
 @RequestMapping("/reports/{reportName}")
@@ -51,6 +53,7 @@ public class ReportController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReportController.class);
+	public static final int SUFFIXCOUNT = 10;
 
 	@Autowired
 	private ConfigSetter configSetter;
@@ -76,6 +79,9 @@ public class ReportController {
 	@Autowired
 	private CascadingGroupLoader cascadingGroupLoader;
 
+	@Autowired
+	private SecurityControl securityControl;
+
 	public ReportController() {
 		logger.debug("Creating new Instance of ReportController.");
 	}
@@ -84,6 +90,9 @@ public class ReportController {
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
 					throws BirtReportException {
+		if(!hasUserValidRole(reportName)) {
+
+		}
 		return new ParameterForm() //
 				.withReportName(reportName) //
 				.withParameterGroups(
@@ -98,6 +107,10 @@ public class ReportController {
 					throws BirtReportException {
 
 		logger.debug("executing show parameter form for " + reportName);
+
+		if(!hasUserValidRole(reportName)) {
+			throw new BirtReportException(String.format("User has no role for %s", reportName));
+		}
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -127,7 +140,11 @@ public class ReportController {
             @PathVariable("reportName") String reportName,
             @PathVariable("pageNumber") Long pageNumber,
             BindingResult errors
-    ) {
+    ) throws  BirtReportException {
+
+		if(!hasUserValidRole(reportName)) {
+			throw new BirtReportException(String.format("User has no role for %s", reportName));
+		}
         // if requesting a specific page reuse existing report instead of creating a new one.
         parameterForm.setOverwrite(recreate);
         parameterForm.setPageNumber(pageNumber);
@@ -139,9 +156,13 @@ public class ReportController {
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
 			@PathVariable("reportName") String reportName,
-			BindingResult errors) {
+			BindingResult errors) throws BirtReportException {
 
 		logger.debug("executing show report for " + reportName);
+
+		if(!hasUserValidRole(reportName)) {
+			throw new BirtReportException(String.format("User has no role for %s", reportName));
+		}
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -179,6 +200,11 @@ public class ReportController {
 			@ModelAttribute ParameterForm form, //
 			@RequestParam MultiValueMap<String, String> requestParams, //
 			BindingResult bindingResult) throws BirtReportException {
+
+		if(!hasUserValidRole(reportName)) {
+
+			throw new BirtReportException(String.format("User has no role for %s", reportName));
+		}
 
 		// filter by cascading group name
 		parameterFormBinder.bind(form, requestParams, bindingResult);
@@ -218,6 +244,9 @@ public class ReportController {
 			ModelAndView modelAndView) throws BirtReportException {
 
 		logger.debug("Executing POST of form for {} ", reportName);
+		if(!hasUserValidRole(reportName)) {
+			throw new BirtReportException(String.format("User has no role for %s",  reportName));
+		}
 
 		parameterFormBinder.bind(form, requestParams, errors);
 		parameterFormConverter.convert(form, errors);
@@ -247,6 +276,20 @@ public class ReportController {
 
 		return modelAndView;
 
+	}
+
+	private boolean hasUserValidRole(String reportName) {
+
+		List<String> roles = securityControl.getRoles();
+		String fileName = reportName.substring(0, (reportName.length() - SUFFIXCOUNT));
+		fileName = fileName.toUpperCase();
+
+		for(String role : roles) {
+			if(role.contains(fileName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

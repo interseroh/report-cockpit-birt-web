@@ -22,10 +22,12 @@ package de.interseroh.report.controller;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.interseroh.report.exception.BirtSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,7 @@ public class ReportRestApiController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReportRestApiController.class);
+	public static final int SUFFIXCOUNT = 10;
 
 	@Autowired
 	private BirtReportService reportService;
@@ -68,6 +71,9 @@ public class ReportRestApiController {
 
 	@Autowired
 	private ParameterFormFormatter parameterFormFormatter;
+
+	@Autowired
+	private SecurityControl securityControl;
 
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
@@ -91,9 +97,15 @@ public class ReportRestApiController {
 			@RequestParam MultiValueMap<String, String> requestParams,
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
-		renderReport(parameterForm, reportName, requestParams, null, true,
-				BirtOutputFormat.HTML5.getFormatName(), response, errors);
+		if(hasUserValidRole(reportName)) {
+			renderReport(parameterForm, reportName, requestParams, null, true,
+					BirtOutputFormat.HTML5.getFormatName(), response, errors);
+
+		} else {
+			throw new BirtReportException(String.format("User has no role for %s", reportName));
+		}
 	}
+
 
 	@RequestMapping(value = "/render/{reportName}/{format}", method = RequestMethod.GET)
 	public void renderReport(
@@ -107,6 +119,10 @@ public class ReportRestApiController {
 					throws IOException, BirtReportException, ParseException {
 
 		logger.debug("Rendering " + reportName + " in " + format + ".");
+
+		if(!hasUserValidRole(reportName)) {
+			throw new BirtReportException(String.format("User has no role for %s", reportName));
+		}
 
 		parameterFormBinder.bind(parameterForm, requestParams, errors);
 		parameterFormConverter.convert(parameterForm, errors);
@@ -149,6 +165,20 @@ public class ReportRestApiController {
 		}
 
 		// TODO idueppe - need exception handling
+	}
+
+	private boolean hasUserValidRole(String reportName) {
+
+		List<String> roles = securityControl.getRoles();
+		String fileName = reportName.substring(0, (reportName.length() - SUFFIXCOUNT));
+		fileName = fileName.toUpperCase();
+
+		for(String role : roles) {
+			if(role.contains(fileName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

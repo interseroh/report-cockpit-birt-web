@@ -1,5 +1,6 @@
 package de.interseroh.report.controller;
 
+import de.interseroh.report.annotation.BeanMock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

@@ -1,4 +1,4 @@
-package de.interseroh.report.controller;
+package de.interseroh.report.annotation;
 
 /**
  * Created by hhopf on 26.09.15.

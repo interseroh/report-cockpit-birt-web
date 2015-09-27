@@ -97,7 +97,7 @@ public class ReportRestApiController {
 			@RequestParam MultiValueMap<String, String> requestParams,
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
-		if(hasUserValidRole(reportName)) {
+		if(securityControl.hasUserValidRole(reportName)) {
 			renderReport(parameterForm, reportName, requestParams, null, true,
 					BirtOutputFormat.HTML5.getFormatName(), response, errors);
 
@@ -120,7 +120,7 @@ public class ReportRestApiController {
 
 		logger.debug("Rendering " + reportName + " in " + format + ".");
 
-		if(!hasUserValidRole(reportName)) {
+		if(!securityControl.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -165,19 +165,6 @@ public class ReportRestApiController {
 		}
 
 		// TODO idueppe - need exception handling
-	}
-
-	private boolean hasUserValidRole(String reportName) {
-
-		List<String> roles = securityControl.getRoles();
-		reportName = reportName.toUpperCase();
-
-		for(String role : roles) {
-			if(role.contains(reportName)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

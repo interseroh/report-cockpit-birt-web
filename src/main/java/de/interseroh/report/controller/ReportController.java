@@ -90,7 +90,7 @@ public class ReportController {
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
 					throws BirtReportException {
-		if(!hasUserValidRole(reportName)) {
+		if(!securityControl.hasUserValidRole(reportName)) {
 
 		}
 		return new ParameterForm() //
@@ -108,7 +108,7 @@ public class ReportController {
 
 		logger.debug("executing show parameter form for " + reportName);
 
-		if(!hasUserValidRole(reportName)) {
+		if(!securityControl.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -142,7 +142,7 @@ public class ReportController {
             BindingResult errors
     ) throws  BirtReportException {
 
-		if(!hasUserValidRole(reportName)) {
+		if(!securityControl.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
         // if requesting a specific page reuse existing report instead of creating a new one.
@@ -160,7 +160,7 @@ public class ReportController {
 
 		logger.debug("executing show report for " + reportName);
 
-		if(!hasUserValidRole(reportName)) {
+		if(!securityControl.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -201,7 +201,7 @@ public class ReportController {
 			@RequestParam MultiValueMap<String, String> requestParams, //
 			BindingResult bindingResult) throws BirtReportException {
 
-		if(!hasUserValidRole(reportName)) {
+		if(!securityControl.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -243,7 +243,7 @@ public class ReportController {
 			ModelAndView modelAndView) throws BirtReportException {
 
 		logger.debug("Executing POST of form for {} ", reportName);
-		if(!hasUserValidRole(reportName)) {
+		if(!securityControl.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s",  reportName));
 		}
 
@@ -275,22 +275,6 @@ public class ReportController {
 
 		return modelAndView;
 
-	}
-
-	private boolean hasUserValidRole(String reportName) {
-
-		List<String> roles = securityControl.getRoles();
-		/*String fileName = reportName.substring(0,
-				(reportName.length() - SUFFIXCOUNT));
-		fileName = fileName.toUpperCase();*/
-		reportName = reportName.toUpperCase();
-
-		for(String role : roles) {
-			if(role.contains(reportName)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

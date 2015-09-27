@@ -40,4 +40,16 @@ public class SecurityControl {
 		}
 		return roles;
 	}
+
+	public boolean hasUserValidRole(String reportName) {
+		List<String> roles = getRoles();
+		reportName = reportName.toUpperCase();
+
+		for(String role : roles) {
+			if(role.contains(reportName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

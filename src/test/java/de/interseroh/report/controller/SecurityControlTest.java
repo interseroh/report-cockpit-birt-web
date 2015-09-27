@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -62,9 +63,32 @@ public class SecurityControlTest {
 		assertEquals("2 role is in Array", 2, rolesResult.size());
 	}
 
+	@Test
+	public void testHasUserRoleValid() {
+		Collection<UserRole>  roles = getUserRoles();
+		roles.add(getUserRoleForCascade());
+
+		when(securityHelper.getPrincipalName()).thenReturn("userName");
+
+		when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(
+				roles);
+		boolean visible = securityControl.hasUserValidRole("cascade_parameters");
+
+		assertTrue(visible);
+
+	}
+
 	private UserRole getUserRole() {
 		Role role = new RoleEntity();
 		role.setName("ROLE_SALESINVOICE");
+		UserRole uRole = new UserRoleEntity();
+		uRole.setRole(role);
+		return uRole;
+	}
+
+	private UserRole getUserRoleForCascade() {
+		Role role = new RoleEntity();
+		role.setName("ROLE_CASCADE_PARAMETERS");
 		UserRole uRole = new UserRoleEntity();
 		uRole.setRole(role);
 		return uRole;

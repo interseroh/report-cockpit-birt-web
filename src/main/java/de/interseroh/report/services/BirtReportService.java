@@ -34,6 +34,7 @@ public interface BirtReportService {
 
 	String REPORT_SOURCE_URL_KEY = "report.source.url";
 	String REPORT_BASE_IMAGE_URL_KEY = "report.base.image.url";
+	String REPORT_SOURCE_FILE = "report.reports.directory";
 	String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
 	String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
 	String REPORT_FILE_SUFFIX = ".rptdesign";

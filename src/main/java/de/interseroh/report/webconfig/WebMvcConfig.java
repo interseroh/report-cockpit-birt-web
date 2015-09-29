@@ -63,7 +63,7 @@ import de.interseroh.report.services.BirtReportService;
 @ComponentScan({ "de.interseroh.report.controller",
 		"de.interseroh.report.domain" })
 @PropertySource({ "classpath:report-config.properties" })
-@Import({ ReportConfig.class })
+@Import({ ReportConfig.class, DatabaseConfig.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	private static Logger logger = LoggerFactory.getLogger(WebMvcConfig.class);

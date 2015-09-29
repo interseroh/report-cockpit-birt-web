@@ -36,7 +36,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String SUCCESSFUL_LOGIN_PAGE = "/index";
+	private static final String SUCCESSFUL_LOGIN_PAGE = "/reports";
 
 	private static final String SUCCESSFUL_LOGOUT_PAGE = "/index?logout";
 

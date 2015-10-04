@@ -21,21 +21,20 @@
 package de.interseroh.report.controller;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -54,6 +53,9 @@ public class ReportControllerChartTest {
 	@Autowired
 	private WebApplicationContext wac;
 
+	@Autowired
+	private SecurityControl securityControl;
+
 	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -61,6 +63,9 @@ public class ReportControllerChartTest {
 
 	@Test
 	public void testLocalizedDateInCharReport_DE() throws Exception {
+		String chartdate = "chartdate";
+
+		when(securityControl.hasUserValidRole(Matchers.eq(chartdate))).thenReturn(true);
         // TODO idueppe - charts are embedded as svg. Need to extract the url and load the svg to check
         this.mockMvc.perform(get("/api/render/chartdate/html").param("language","de"))//
                 .andExpect(status().isOk()) //
@@ -74,6 +79,9 @@ public class ReportControllerChartTest {
 
 	@Test
 	public void testLocalizedDateInCharReport_EN() throws Exception {
+		String chartdate = "chartdate";
+
+		when(securityControl.hasUserValidRole(Matchers.eq(chartdate))).thenReturn(true);
 		this.mockMvc.perform(get("/api/render/chartdate/html").param("language","en")) //
 				.andExpect(status().isOk()) //
                 .andExpect(content().string(containsString("type=\"image/svg+xml\"")));

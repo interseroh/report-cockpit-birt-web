@@ -29,9 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import de.interseroh.report.exception.BirtReportException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,6 +173,7 @@ public class ReportControllerTest {
 		List<String> roles = Arrays.asList("ROLE_CASCADE_PARAMETERS", "ROLE_MULTISELECT");
 
 		when(securityControl.getRoles()).thenReturn(roles);
+		when(securityControl.hasUserValidRole(eq("multiselect"))).thenReturn(true);
 		this.mockMvc
 				.perform(
 						get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
@@ -187,7 +186,6 @@ public class ReportControllerTest {
 
     @Test
     public void testDateFormField() throws Exception {
-		List<String> roles = Arrays.asList("ROLE_CASCADE_PARAMETERS", "ROLE_MULTISELECT");
 
 		when(securityControl.hasUserValidRole(eq("multiselect"))).thenReturn(true);
         this.mockMvc.perform(get("/reports/multiselect/params?dateWithFunctionParam=2015-08-17"))

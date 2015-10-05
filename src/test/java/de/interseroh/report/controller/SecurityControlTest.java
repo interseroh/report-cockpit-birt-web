@@ -1,21 +1,28 @@
 package de.interseroh.report.controller;
 
-import de.interseroh.report.auth.*;
-import de.interseroh.report.services.SecurityHelper;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import de.interseroh.report.services.SecurityService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
+import de.interseroh.report.auth.Role;
+import de.interseroh.report.auth.RoleEntity;
+import de.interseroh.report.auth.UserRole;
+import de.interseroh.report.auth.UserRoleEntity;
+import de.interseroh.report.auth.UserService;
+import de.interseroh.report.services.SecurityHelper;
 
 /**
  * Created by hhopf on 26.09.15.
@@ -24,25 +31,23 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SecurityControlTest {
 
-	@InjectMocks
-	private SecurityControl securityControl = new SecurityControl();
-
 	@Mock
 	UserService userService;
-
+	@InjectMocks
+	private SecurityService securityControl = new SecurityService();
 	@Mock
 	private SecurityHelper securityHelper;
-
 
 	@Test
 	public void testForLoop1() {
 		UserRole userRole = getUserRole();
-		Collection<UserRole>  roles = new ArrayList<>();
+		Collection<UserRole> roles = new ArrayList<>();
 		roles.add(userRole);
 
 		when(securityHelper.getPrincipalName()).thenReturn("userName");
 
-		when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(roles);
+		when(userService.findUserRolesByUserEmail(eq("userName")))
+				.thenReturn(roles);
 
 		List<String> rolesResult = securityControl.getRoles();
 
@@ -52,11 +57,12 @@ public class SecurityControlTest {
 
 	@Test
 	public void testForLoop2() {
-		Collection<UserRole>  roles = getUserRoles();
+		Collection<UserRole> roles = getUserRoles();
 
 		when(securityHelper.getPrincipalName()).thenReturn("userName");
 
-		when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(roles);
+		when(userService.findUserRolesByUserEmail(eq("userName")))
+				.thenReturn(roles);
 
 		List<String> rolesResult = securityControl.getRoles();
 
@@ -65,49 +71,41 @@ public class SecurityControlTest {
 
 	@Test
 	public void testHasUserRoleValid() {
-		Collection<UserRole>  roles = getUserRoles();
+		Collection<UserRole> roles = getUserRoles();
 		roles.add(getUserRoleForCascade());
 
 		when(securityHelper.getPrincipalName()).thenReturn("userName");
 
-		when(userService.findUserRolesByUserEmail(eq("userName"))).thenReturn(
-				roles);
-		boolean visible = securityControl.hasUserValidRole("cascade_parameters");
+		when(userService.findUserRolesByUserEmail(eq("userName")))
+				.thenReturn(roles);
+		boolean visible = securityControl
+				.hasUserValidRole("cascade_parameters");
 
 		assertTrue(visible);
 
 	}
 
 	private UserRole getUserRole() {
-		Role role = new RoleEntity();
-		role.setName("ROLE_SALESINVOICE");
-		UserRole uRole = new UserRoleEntity();
-		uRole.setRole(role);
-		return uRole;
+		return createUserRole("ROLE_SALESINVOICE");
 	}
 
 	private UserRole getUserRoleForCascade() {
-		Role role = new RoleEntity();
-		role.setName("ROLE_CASCADE_PARAMETERS");
-		UserRole uRole = new UserRoleEntity();
-		uRole.setRole(role);
-		return uRole;
+		return createUserRole("ROLE_CASCADE_PARAMETERS");
 	}
 
 	private Collection<UserRole> getUserRoles() {
-		Role role = new RoleEntity();
-		role.setName("ROLE_SALESINVOICE");
-		UserRole uRole = new UserRoleEntity();
-		uRole.setRole(role);
-		Role role1 = new RoleEntity();
-		role1.setName("ROLE_PRODUCTCATALOG");
-		UserRole uRole1 = new UserRoleEntity();
-		uRole1.setRole(role1);
-
-
-		Collection<UserRole>  roles = new ArrayList<>();
-		roles.add(uRole);
-		roles.add(uRole1);
-		return roles;
+        Collection<UserRole> userRoles = new ArrayList<>();
+        userRoles.add(createUserRole("ROLE_SALESINVOICE"));
+        userRoles.add(createUserRole("ROLE_PRODUCTCATALOG"));
+        return userRoles;
 	}
+
+	private UserRole createUserRole(String roleName) {
+		Role role = new RoleEntity();
+		role.setName(roleName);
+		UserRole userRole = new UserRoleEntity();
+		userRole.setRole(role);
+		return userRole;
+	}
+
 }

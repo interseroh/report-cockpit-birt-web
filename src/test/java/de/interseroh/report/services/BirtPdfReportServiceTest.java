@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.interseroh.report.controller.SecurityServiceMock;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +42,7 @@ import de.interseroh.report.webconfig.ReportConfig;
  * @author Ingo Düppe (Crowdcode)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ReportConfig.class)
+@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class })
 @PropertySource("classpath:config.properties")
 public class BirtPdfReportServiceTest {
 

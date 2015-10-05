@@ -1,18 +1,16 @@
 package de.interseroh.report.services;
 
-import de.interseroh.report.auth.UserRole;
-import de.interseroh.report.auth.UserService;
-import de.interseroh.report.controller.SecurityControl;
-import de.interseroh.report.exception.BirtSystemException;
-import de.interseroh.report.model.ReportReference;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Logger;
+import de.interseroh.report.exception.BirtSystemException;
+import de.interseroh.report.model.ReportReference;
 
 /**
  * this class give back all reports for current user with correspond role.
@@ -22,21 +20,24 @@ import java.util.logging.Logger;
 public class BirtFileReaderServiceBean implements BirtFileReaderService {
 
 	public static final int SUFFIXCOUNT = 10;
-	private Logger logger = Logger.getLogger(BirtFileReaderServiceBean.class.getName());
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(BirtFileReaderServiceBean.class);
 
 	@Autowired
-	private SecurityControl securityControl;
+	private SecurityService securityControl;
 
 	/**
 	 * deliver all file names (report names) in specified directory.
 	 *
-	 * @param directory file as directory
+	 * @param directory
+	 *            file as directory
 	 * @return names of all files in this directory (only reports)
 	 */
 	@Override
 	public List<ReportReference> getReportReferences(final File directory) {
-		logger.info(String.format("call to get role of current user in directory: %s",
-				directory));
+        logger.debug("call to get role of current user in directory {}", directory);
+
 		if (directory == null) {
 			return null;
 		}
@@ -45,17 +46,17 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 		List<String> roles = securityControl.getRoles();
 
 		try {
-			if (directory.exists() && directory.canRead() && directory
-					.isDirectory()) {
+			if (directory.exists() && directory.canRead()
+					&& directory.isDirectory()) {
 				File[] files = directory.listFiles();
 				if (files != null) {
 					for (File file : files) {
-						String fileName = file.getName()
-								.substring(0, (file.getName().length() - SUFFIXCOUNT));
-						for(String role : roles) {
-							if(role.contains(fileName.toUpperCase())) {
-								reportReferences.add(new ReportReference(fileName,
-									"reports..."));
+						String fileName = file.getName().substring(0,
+								(file.getName().length() - SUFFIXCOUNT));
+						for (String role : roles) {
+							if (role.contains(fileName.toUpperCase())) {
+								reportReferences.add(new ReportReference(
+										fileName, "reports..."));
 							}
 						}
 					}

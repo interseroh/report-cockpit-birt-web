@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Collection;
 
+import de.interseroh.report.controller.SecurityServiceMock;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
@@ -56,7 +57,7 @@ import de.interseroh.report.webconfig.ReportConfig;
  * @author Ingo Düppe (Crowdcode)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ReportConfig.class)
+@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class})
 @PropertySource("classpath:config.properties")
 public class BirtReportGenerateTest {
 

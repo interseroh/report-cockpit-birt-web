@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.controller;
 
+import de.interseroh.report.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,6 @@ import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.domain.visitors.ParameterValueMapBuilder;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.services.BirtReportService;
-
-import java.util.List;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_REQUEST)
@@ -80,7 +79,7 @@ public class ReportController {
 	private CascadingGroupLoader cascadingGroupLoader;
 
 	@Autowired
-	private SecurityControl securityControl;
+	private SecurityService securityService;
 
 	public ReportController() {
 		logger.debug("Creating new Instance of ReportController.");
@@ -90,7 +89,7 @@ public class ReportController {
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
 					throws BirtReportException {
-		if(!securityControl.hasUserValidRole(reportName)) {
+		if(!securityService.hasUserValidRole(reportName)) {
 
 		}
 		return new ParameterForm() //
@@ -108,7 +107,7 @@ public class ReportController {
 
 		logger.debug("executing show parameter form for " + reportName);
 
-		if(!securityControl.hasUserValidRole(reportName)) {
+		if(!securityService.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -142,7 +141,7 @@ public class ReportController {
             BindingResult errors
     ) throws  BirtReportException {
 
-		if(!securityControl.hasUserValidRole(reportName)) {
+		if(!securityService.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
         // if requesting a specific page reuse existing report instead of creating a new one.
@@ -160,7 +159,7 @@ public class ReportController {
 
 		logger.debug("executing show report for " + reportName);
 
-		if(!securityControl.hasUserValidRole(reportName)) {
+		if(!securityService.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -201,7 +200,7 @@ public class ReportController {
 			@RequestParam MultiValueMap<String, String> requestParams, //
 			BindingResult bindingResult) throws BirtReportException {
 
-		if(!securityControl.hasUserValidRole(reportName)) {
+		if(!securityService.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 
@@ -243,7 +242,7 @@ public class ReportController {
 			ModelAndView modelAndView) throws BirtReportException {
 
 		logger.debug("Executing POST of form for {} ", reportName);
-		if(!securityControl.hasUserValidRole(reportName)) {
+		if(!securityService.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s",  reportName));
 		}
 

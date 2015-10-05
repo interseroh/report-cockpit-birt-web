@@ -1,4 +1,4 @@
-package de.interseroh.report.controller;
+package de.interseroh.report.services;
 
 import de.interseroh.report.auth.UserRole;
 import de.interseroh.report.auth.UserService;
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by hhopf on 26.09.15.
  */
 @Component
-public class SecurityControl {
+public class SecurityService {
 
 	@Autowired
 	private SecurityHelper securityHelper;

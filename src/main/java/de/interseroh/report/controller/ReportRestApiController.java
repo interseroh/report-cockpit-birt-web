@@ -22,12 +22,11 @@ package de.interseroh.report.controller;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.interseroh.report.exception.BirtSystemException;
+import de.interseroh.report.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +72,7 @@ public class ReportRestApiController {
 	private ParameterFormFormatter parameterFormFormatter;
 
 	@Autowired
-	private SecurityControl securityControl;
+	private SecurityService securityService;
 
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
@@ -97,7 +96,7 @@ public class ReportRestApiController {
 			@RequestParam MultiValueMap<String, String> requestParams,
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
-		if(securityControl.hasUserValidRole(reportName)) {
+		if(securityService.hasUserValidRole(reportName)) {
 			renderReport(parameterForm, reportName, requestParams, null, true,
 					BirtOutputFormat.HTML5.getFormatName(), response, errors);
 
@@ -120,7 +119,7 @@ public class ReportRestApiController {
 
 		logger.debug("Rendering " + reportName + " in " + format + ".");
 
-		if(!securityControl.hasUserValidRole(reportName)) {
+		if(!securityService.hasUserValidRole(reportName)) {
 			throw new BirtReportException(String.format("User has no role for %s", reportName));
 		}
 

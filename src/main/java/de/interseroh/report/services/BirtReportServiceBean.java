@@ -192,7 +192,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			htmlOptions.setImageDirectory(imageDirectory);
 
 			htmlOptions.setHtmlPagination(true);
-			htmlOptions.setMasterPageContent(false);
+			htmlOptions.setMasterPageContent(true);
 			htmlOptions.setPageFooterFloatFlag(true);
 
 			runAndRenderTask.setPageHandler(new IPageHandler() {

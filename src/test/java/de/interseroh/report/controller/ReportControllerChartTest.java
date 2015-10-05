@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import de.interseroh.report.services.SecurityService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class ReportControllerChartTest {
 	private WebApplicationContext wac;
 
 	@Autowired
-	private SecurityControl securityControl;
+	private SecurityService securityService;
 
 	@Before
 	public void setup() {
@@ -65,7 +66,7 @@ public class ReportControllerChartTest {
 	public void testLocalizedDateInCharReport_DE() throws Exception {
 		String chartdate = "chartdate";
 
-		when(securityControl.hasUserValidRole(Matchers.eq(chartdate))).thenReturn(true);
+		when(securityService.hasUserValidRole(Matchers.eq(chartdate))).thenReturn(true);
         // TODO idueppe - charts are embedded as svg. Need to extract the url and load the svg to check
         this.mockMvc.perform(get("/api/render/chartdate/html").param("language","de"))//
                 .andExpect(status().isOk()) //
@@ -81,7 +82,7 @@ public class ReportControllerChartTest {
 	public void testLocalizedDateInCharReport_EN() throws Exception {
 		String chartdate = "chartdate";
 
-		when(securityControl.hasUserValidRole(Matchers.eq(chartdate))).thenReturn(true);
+		when(securityService.hasUserValidRole(Matchers.eq(chartdate))).thenReturn(true);
 		this.mockMvc.perform(get("/api/render/chartdate/html").param("language","en")) //
 				.andExpect(status().isOk()) //
                 .andExpect(content().string(containsString("type=\"image/svg+xml\"")));

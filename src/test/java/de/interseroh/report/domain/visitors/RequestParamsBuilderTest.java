@@ -33,6 +33,7 @@ import de.interseroh.report.controller.ParameterFormFormatter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -60,6 +61,7 @@ public class RequestParamsBuilderTest {
 
 	@Test
 	public void testConversionService() throws Exception {
+        LocaleContextHolder.setLocale(Locale.GERMAN);
 
         ParameterForm form = buildTestData();
         parameterFormFormatter.format(form);
@@ -68,7 +70,7 @@ public class RequestParamsBuilderTest {
 				.asRequestParams(form);
 
 		assertThat(requestParams, is(
-				"?double=55.5&boolean=false&string=value&dateTime=2015-09-05&scalarMULTI=1&scalarMULTI=2"));
+				"?double=55.5&boolean=false&string=value&dateTime=05.09.15&scalarMULTI=1&scalarMULTI=2"));
 	}
 
 	private ParameterForm buildTestData() {

@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.interseroh.report.controller.SecurityServiceMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ import de.interseroh.report.webconfig.ReportConfig;
  * @author Ingo Düppe (Crowdcode)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ReportConfig.class)
+@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class})
 @PropertySource("classpath:config.properties")
 public class BirtExcelReportServiceTest {
 

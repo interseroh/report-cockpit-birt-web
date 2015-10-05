@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 
+import de.interseroh.report.controller.SecurityServiceMock;
 import org.eclipse.birt.report.engine.api.DocumentUtil;
 import org.eclipse.birt.report.engine.api.IBookmarkInfo;
 import org.eclipse.birt.report.engine.api.IReportDocument;
@@ -45,7 +46,7 @@ import de.interseroh.report.webconfig.ReportConfig;
  * @author Ingo Düppe (Crowdcode)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ReportConfig.class)
+@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class})
 @PropertySource("classpath:config.properties")
 public class BirtReportServiceBeanTest {
 

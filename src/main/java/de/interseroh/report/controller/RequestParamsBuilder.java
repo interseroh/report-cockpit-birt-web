@@ -58,7 +58,7 @@ public class RequestParamsBuilder {
 
 				// FIXME - should be done by Generic Text Converter
 				if (parameter.getText() != null) {
-					if (parameter.isMultiValue()) {
+					if (parameter.isMultiValue() && (parameter.getText() != null && parameter.getText().getClass().isArray())) {
 						for (T paramText : (T[]) parameter.getText()) {
 							addKeyValueParam(paramName, (String) paramText);
 						}
@@ -70,7 +70,7 @@ public class RequestParamsBuilder {
 			}
 
 			private void addKeyValueParam(String paramName, String paramValue) {
-				if (paramValue != null) {
+				if (paramValue != null && !paramValue.trim().isEmpty()) {
 					params.add(paramName + "=" + urlEncode(paramValue));
 				}
 			}

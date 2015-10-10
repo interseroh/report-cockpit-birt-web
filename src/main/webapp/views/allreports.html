@@ -22,27 +22,21 @@
 <div class="container-fluid">
     <div th:replace="/fragments/navbar :: defaultNavbar"></div>
 
+        <div class="jumbotron">
+            <h3><img src="../../images/birt-purple-logo.png" alt="BIRT Reporting"
+                     th:src="@{/images/birt-purple-logo.png}" />&nbsp; &nbsp; &nbsp;
+                Reports </h3>
+        </div>
+
     <div class="references">
         <div class="report-references" id="report-references">
-            <h1>Reports</h1>
-
-            <table>
-                <tr sec:authorize="isAuthenticated()"
-                    th:each="report : ${reportReferencesList}">
-
-                    <td>
-                        <a href="#param"
-                           th:href="@{'/reports/'+${report.name}}"
-                           th:text="${report.name}">NA</a>
-                    </td>
-                </tr>
-            </table>
-            <div class="progress">
-                <div class="progress-bar progress-bar-info progress-bar-striped"
-                     role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                     aria-valuemax="100" style="width: 20%">
-                    <span class="sr-only">20% Complete</span>
-                </div>
+            <div class="list-group">
+                <th:block sec:authorize="isAuthenticated()" th:each="report : ${reportReferencesList}">
+                    <a href="#param"
+                       th:href="@{'/reports/'+${report.name}}"
+                       th:text="${report.name}"
+                    class="list-group-item">REPORT NAME N/A</a>
+                </th:block>
             </div>
         </div>
 
@@ -63,9 +57,5 @@
             th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 </div>
 
-<script>
-    var reportContentUrl = $("#report-content").attr("data-report-content-url");
-    $("#report-content").load(reportContentUrl);
-</script>
 </body>
 </html>

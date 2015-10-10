@@ -1,20 +1,20 @@
 package de.interseroh.report.controller;
 
-import de.interseroh.report.auth.User;
-import de.interseroh.report.auth.UserRole;
-import de.interseroh.report.auth.UserService;
-import de.interseroh.report.model.ReportReference;
-import de.interseroh.report.services.BirtFileReaderService;
-import de.interseroh.report.services.BirtReportService;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -23,18 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import de.interseroh.report.model.ReportReference;
+import de.interseroh.report.services.BirtFileReaderService;
 
 /**
- * get report references per default with no restriction.
- * spring security is responsible for this.
- * Created by hhopf on 07.07.15.
+ * get report references per default with no restriction. spring security is
+ * responsible for this. Created by hhopf on 07.07.15.
  */
 @Controller
 @Scope(WebApplicationContext.SCOPE_REQUEST)
@@ -50,6 +44,8 @@ public class DefaultReportController {
 	@Autowired
 	private Environment environment;
 
+	@Autowired
+	private ResourceLoader resourceLoader;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -65,12 +61,19 @@ public class DefaultReportController {
 
 		logger.debug("executing allReportView for default");
 
-		String defaultDirectory = environment.getProperty("java.io.tmpdir");
-		String imageDirectory = environment
-				.getProperty(BirtReportService.REPORT_SOURCE_FILE,
-						defaultDirectory);//source is in tomcat dir - not in classpath
+		// TODO move this to service layer and replace the string with
+		// BirtReportService.REPORT_SOURCE_URL_KEY
+		String tmpDirectory = environment.getProperty("java.io.tmpdir");
+		String location = environment.getProperty("report.source.url",
+				tmpDirectory);
+		Resource resource = resourceLoader.getResource(location);
 
-		File directory = new File(imageDirectory);
+		File directory = null;
+		try {
+			directory = resource.getFile().getAbsoluteFile();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 
 		List<ReportReference> reportReferencesList = birtFileReaderService
 				.getReportReferences(directory);
@@ -80,6 +83,5 @@ public class DefaultReportController {
 
 		return modelAndView;
 	}
-
 
 }

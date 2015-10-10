@@ -101,6 +101,7 @@
                 <scalar-parameter name="TEXTBOX_MULTI" id="83">
                     <text-property name="helpText">TEXTBOX_MULTI</text-property>
                     <text-property name="promptText">TEXTBOX_MULTI</text-property>
+                    <property name="valueType">static</property>
                     <property name="dataType">dateTime</property>
                     <property name="distinct">true</property>
                     <list-property name="selectionList"/>
@@ -108,7 +109,8 @@
                     <property name="concealValue">true</property>
                     <property name="controlType">text-box</property>
                     <structure name="format">
-                        <property name="category">Unformatted</property>
+                        <property name="category">Short Time</property>
+                        <property name="pattern">Short Time</property>
                     </structure>
                 </scalar-parameter>
             </parameters>
@@ -124,13 +126,13 @@
                     <property name="dataType">time</property>
                     <property name="distinct">true</property>
                     <list-property name="selectionList"/>
-                    <property name="paramType">multi-value</property>
+                    <property name="paramType">simple</property>
                     <property name="controlType">text-box</property>
                     <structure name="format">
                         <property name="category">Unformatted</property>
                     </structure>
                 </scalar-parameter>
-                <scalar-parameter name="DATE" id="73">
+                <scalar-parameter name="DATE_y" id="73">
                     <text-property name="helpText">DATE</text-property>
                     <text-property name="promptText">DATE</text-property>
                     <property name="valueType">static</property>
@@ -140,7 +142,8 @@
                     <property name="paramType">simple</property>
                     <property name="controlType">text-box</property>
                     <structure name="format">
-                        <property name="category">Unformatted</property>
+                        <property name="category">Custom</property>
+                        <property name="pattern">dd.MM.yyyy</property>
                     </structure>
                 </scalar-parameter>
                 <scalar-parameter name="DATETIME" id="74">
@@ -151,7 +154,7 @@
                     <property name="dataType">date</property>
                     <property name="distinct">true</property>
                     <list-property name="selectionList"/>
-                    <property name="paramType">multi-value</property>
+                    <property name="paramType">simple</property>
                     <property name="controlType">text-box</property>
                     <structure name="format">
                         <property name="category">Custom</property>

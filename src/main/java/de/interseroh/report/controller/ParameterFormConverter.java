@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.controller;
 
+import de.interseroh.report.formatters.DisplayFormatHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.core.convert.ConversionService;
@@ -52,7 +53,9 @@ public class ParameterFormConverter {
 				T textValue = parameter.getText();
 				if (isConversionNeeded(requiredType, textValue)) {
 					try {
-						V converted = conversionService.convert(textValue,
+                        DisplayFormatHolder.setDisplayFormat(parameter.getDisplayFormat());
+
+                        V converted = conversionService.convert(textValue,
 								requiredType);
 						parameter.setValue(converted);
 					} catch (ConversionException ce) {

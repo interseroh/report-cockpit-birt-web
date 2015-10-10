@@ -28,7 +28,7 @@ import de.interseroh.report.domain.visitors.ParameterVisitor;
 public class GenericParameter<V, T>
 		extends AbstractScalarParameter<GenericParameter<V, T>, V, T> {
 
-	public GenericParameter(Class<V> valueType, Class<T> textType) {
+    public GenericParameter(Class<V> valueType, Class<T> textType) {
 		super(valueType, textType);
 	}
 
@@ -52,7 +52,7 @@ public class GenericParameter<V, T>
 		visitor.visit(this);
 	}
 
-	@Override
+    @Override
 	public boolean isMultiValue() {
 		return getValueType().isArray();
 	}

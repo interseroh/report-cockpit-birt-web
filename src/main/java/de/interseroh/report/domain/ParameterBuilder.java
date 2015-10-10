@@ -143,12 +143,13 @@ public class ParameterBuilder {
 				definition.getPromptText(), definition.getName());
 
 		parameter.setName(definition.getName());
-        parameter.setDefaultValue(task.getDefaultValue(definition.getName()));
+		parameter.setDefaultValue(task.getDefaultValue(definition.getName()));
 		parameter.setRequired(definition.isRequired());
 		parameter.setDisplayLabel(displayLabel);
 		parameter.setTooltip(definition.getHelpText());
 		parameter.setControlType(controlType);
 		parameter.setDataType(dataType);
+        parameter.setDisplayFormat(definition.getDisplayFormat());
 
 		return parameter;
 	}

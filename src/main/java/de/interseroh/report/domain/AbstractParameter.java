@@ -29,8 +29,9 @@ public abstract class AbstractParameter<SUB extends AbstractParameter>
 	private String name;
 	private String displayLabel;
 	private String tooltip;
+    private String displayFormat;
 
-	@Override
+    @Override
 	public String getName() {
 		return name;
 	}
@@ -93,4 +94,12 @@ public abstract class AbstractParameter<SUB extends AbstractParameter>
 		return "Parameter{" + "tooltip='" + tooltip + '\'' + ", displayLabel='"
 				+ displayLabel + '\'' + ", name='" + name + "'}";
 	}
+
+    public String getDisplayFormat() {
+        return displayFormat;
+    }
+
+    public void setDisplayFormat(String displayFormat) {
+        this.displayFormat = displayFormat;
+    }
 }

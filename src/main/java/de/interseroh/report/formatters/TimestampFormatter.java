@@ -25,12 +25,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+import org.flywaydb.core.internal.util.TimeFormat;
 import org.springframework.format.Formatter;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class TimestampFormatter implements Formatter<Timestamp> {
+public class TimestampFormatter extends AbstractDateFormatter implements Formatter<Timestamp> {
 
 	@Override
 	public Timestamp parse(String text, Locale locale) throws ParseException {
@@ -43,9 +44,9 @@ public class TimestampFormatter implements Formatter<Timestamp> {
 		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
 	}
 
-	public DateFormat getDateFormat(Locale locale) {
-		return DateFormat.getDateTimeInstance(DateFormat.SHORT,
-				DateFormat.SHORT, locale);
-	}
+    @Override
+    protected DateFormat getFormatterInstance(Locale locale) {
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
+    }
 
 }

@@ -45,6 +45,8 @@ public interface ScalarParameter<V, T> extends Parameter {
 
 	Class<T> getTextType();
 
+    String getDisplayFormat();
+
     /**
      * The current set parameter value
      * @return value or null
@@ -95,7 +97,9 @@ public interface ScalarParameter<V, T> extends Parameter {
      */
     void setDefaultText(T defaultText);
 
-	boolean isMultiValue();
+    void setDisplayFormat(String displayFormat);
+
+    boolean isMultiValue();
 
 	boolean isRequired();
 

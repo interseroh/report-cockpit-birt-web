@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import de.interseroh.report.domain.ParameterForm;
 import de.interseroh.report.domain.ScalarParameter;
 import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
+import de.interseroh.report.formatters.DisplayFormatHolder;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -38,6 +39,22 @@ public class ParameterFormFormatter {
 	@Autowired
 	private ConversionService conversionService;
 
+	/**
+	 *
+	 * Checks if value is not null, is not an empty array or a blank string
+	 *
+	 * @param value
+	 * @return true if value contains a value
+	 */
+	public static boolean isNotBlank(Object value) {
+		return value != null //
+				&& (!value.getClass().isArray()
+						|| ((Object[]) value).length > 0)
+//				&& (!(value instanceof String)
+//						|| !((String) value).trim().isEmpty())
+                ;
+	}
+
 	public void format(ParameterForm parameterForm) {
 
 		// Convert parameter values to required type
@@ -47,40 +64,51 @@ public class ParameterFormFormatter {
 				Class<V> valueType = parameter.getValueType();
 				Class<T> textType = parameter.getTextType();
 
-                convertValue(parameter, valueType, textType);
+				convertValue(parameter, valueType, textType);
 
-                convertDefaultValue(parameter, valueType, textType);
+				convertDefaultValue(parameter, valueType, textType);
 			}
 
-            private <V, T> void convertValue(ScalarParameter<V, T> parameter, Class<V> valueType, Class<T> textType) {
-                V value = parameter.getValue();
-                if (value != null) {
-                    if (conversionService.canConvert(valueType, textType)) {
-                        try {
-                            T formatted = conversionService.convert(value,
-                                    textType);
-                            parameter.setText(formatted);
-                        } catch (ConversionException ce) {
-                            parameter.setText((T) value.toString());
-                        }
-                    }
-                }
-            }
+			private <V, T> void convertValue(ScalarParameter<V, T> parameter,
+					Class<V> valueType, Class<T> textType) {
 
-            private <V, T> void convertDefaultValue(ScalarParameter<V, T> parameter, Class<V> valueType, Class<T> textType) {
-                V defaultValue = parameter.getDefaultValue();
-                if (defaultValue != null) {
-                    if (conversionService.canConvert(valueType, textType)) {
-                        try {
-                            T formatted = conversionService.convert(defaultValue,
-                                    textType);
-                            parameter.setDefaultText(formatted);
-                        } catch (ConversionException ce) {
-                        }
-                    }
-                }
-            }
-        });
+				DisplayFormatHolder
+						.setDisplayFormat(parameter.getDisplayFormat());
+
+				V value = parameter.getValue();
+				if (isNotBlank(value)) {
+					if (conversionService.canConvert(valueType, textType)) {
+						try {
+							T formatted = conversionService.convert(value,
+									textType);
+							parameter.setText(formatted);
+						} catch (ConversionException ce) {
+							parameter.setText((T) value.toString());
+						}
+					}
+				}
+			}
+
+			private <V, T> void convertDefaultValue(
+					ScalarParameter<V, T> parameter, Class<V> valueType,
+					Class<T> textType) {
+
+				DisplayFormatHolder
+						.setDisplayFormat(parameter.getDisplayFormat());
+
+				V defaultValue = parameter.getDefaultValue();
+				if (defaultValue != null) {
+					if (conversionService.canConvert(valueType, textType)) {
+						try {
+							T formatted = conversionService
+									.convert(defaultValue, textType);
+							parameter.setDefaultText(formatted);
+						} catch (ConversionException ce) {
+						}
+					}
+				}
+			}
+		});
 	}
 
 }

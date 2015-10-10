@@ -26,16 +26,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.springframework.format.Formatter;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class DateFormatter implements Formatter<Date> {
+public class DateFormatter extends AbstractDateFormatter implements Formatter<Date> {
 
 	@Override
 	public Date parse(String text, Locale locale) throws ParseException {
-		java.util.Date parsed = getDateFormat(locale).parse(text);
+        java.util.Date parsed = getDateFormat(locale).parse(text);
 		return new Date(parsed.getTime());
 	}
 
@@ -44,9 +46,9 @@ public class DateFormatter implements Formatter<Date> {
 		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
 	}
 
-	public DateFormat getDateFormat(Locale locale) {
+    @Override
+    protected DateFormat getFormatterInstance(Locale locale) {
         return DateFormat.getDateInstance(DateFormat.SHORT, locale);
-//		return new SimpleDateFormat(DateFormat., locale);
-	}
+    }
 
 }

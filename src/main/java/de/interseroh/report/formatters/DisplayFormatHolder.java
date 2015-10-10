@@ -20,32 +20,25 @@
  */
 package de.interseroh.report.formatters;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Locale;
-
-import org.springframework.format.Formatter;
-
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class TimeFormatter extends AbstractDateFormatter
-		implements Formatter<Time> {
+public class DisplayFormatHolder {
 
-	@Override
-	public Time parse(String text, Locale locale) throws ParseException {
-		java.util.Date parsed = getDateFormat(locale).parse(text);
-		return new Time(parsed.getTime());
+	private static ThreadLocal<String> displayFormatHolder = new ThreadLocal<>();
+
+	public static synchronized String getDisplayFormat() {
+		return displayFormatHolder.get();
 	}
 
-	@Override
-	public String print(Time date, Locale locale) {
-		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
+	public static synchronized void setDisplayFormat(String displayFormat) {
+		displayFormatHolder.set(displayFormat);
 	}
 
-	protected DateFormat getFormatterInstance(Locale locale) {
-		return DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+	public static synchronized boolean isDisplayFormatSet() {
+		return displayFormatHolder != null
+                && displayFormatHolder.get() != null
+				&& !displayFormatHolder.get().isEmpty();
 	}
 
 }

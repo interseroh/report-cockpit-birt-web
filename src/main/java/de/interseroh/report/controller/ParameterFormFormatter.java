@@ -41,18 +41,15 @@ public class ParameterFormFormatter {
 
 	/**
 	 *
-	 * Checks if value is not null, is not an empty array or a blank string
+	 * Checks if value is not null, is not an empty array
 	 *
 	 * @param value
 	 * @return true if value contains a value
 	 */
-	public static boolean isNotBlank(Object value) {
+	public static boolean isNotNullOrEmptyArray(Object value) {
 		return value != null //
 				&& (!value.getClass().isArray()
-						|| ((Object[]) value).length > 0)
-//				&& (!(value instanceof String)
-//						|| !((String) value).trim().isEmpty())
-                ;
+						|| ((Object[]) value).length > 0);
 	}
 
 	public void format(ParameterForm parameterForm) {
@@ -76,7 +73,7 @@ public class ParameterFormFormatter {
 						.setDisplayFormat(parameter.getDisplayFormat());
 
 				V value = parameter.getValue();
-				if (isNotBlank(value)) {
+				if (isNotNullOrEmptyArray(value)) {
 					if (conversionService.canConvert(valueType, textType)) {
 						try {
 							T formatted = conversionService.convert(value,

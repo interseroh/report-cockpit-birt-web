@@ -76,9 +76,8 @@ public class CustomReportControllerTest {
 		when(securityService.hasUserValidRole(eq("custom"))).thenReturn(true);
 
 		this.mockMvc.perform(post("/reports/custom/params")) //
-				.andExpect(status().isOk()) //
-				.andExpect(content().string(containsString("{}")))
-				.andDo(print());
+				.andExpect(status().isOk()); //
+//				.andDo(print());
 	}
 
 }

@@ -6,11 +6,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import de.interseroh.report.services.SecurityService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,6 +21,7 @@ import de.interseroh.report.auth.UserRole;
 import de.interseroh.report.auth.UserRoleEntity;
 import de.interseroh.report.auth.UserService;
 import de.interseroh.report.services.SecurityHelper;
+import de.interseroh.report.services.SecurityService;
 
 /**
  * Created by hhopf on 26.09.15.
@@ -33,8 +32,10 @@ public class SecurityControlTest {
 
 	@Mock
 	UserService userService;
+
 	@InjectMocks
 	private SecurityService securityControl = new SecurityService();
+
 	@Mock
 	private SecurityHelper securityHelper;
 
@@ -94,10 +95,10 @@ public class SecurityControlTest {
 	}
 
 	private Collection<UserRole> getUserRoles() {
-        Collection<UserRole> userRoles = new ArrayList<>();
-        userRoles.add(createUserRole("ROLE_SALESINVOICE"));
-        userRoles.add(createUserRole("ROLE_PRODUCTCATALOG"));
-        return userRoles;
+		Collection<UserRole> userRoles = new ArrayList<>();
+		userRoles.add(createUserRole("ROLE_SALESINVOICE"));
+		userRoles.add(createUserRole("ROLE_PRODUCTCATALOG"));
+		return userRoles;
 	}
 
 	private UserRole createUserRole(String roleName) {

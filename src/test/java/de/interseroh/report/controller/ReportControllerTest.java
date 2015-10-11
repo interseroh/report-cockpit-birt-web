@@ -25,7 +25,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,8 +32,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import de.interseroh.report.exception.BirtReportException;
-import de.interseroh.report.services.SecurityService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +43,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.NestedServletException;
 
+import de.interseroh.report.services.SecurityService;
 import de.interseroh.report.webconfig.WebMvcConfig;
 
 /**
@@ -72,17 +69,18 @@ public class ReportControllerTest {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	}
 
-//	@Test(expected = BirtReportException.class)
-    @Test
+	// @Test(expected = BirtReportException.class)
+	@Test
 	public void testCustomParameterViewException() throws Exception {
 
-		when(securityService.hasUserValidRole(eq("cascade_parameters"))).thenReturn(
-				true);
+		when(securityService.hasUserValidRole(eq("cascade_parameters")))
+				.thenReturn(true);
 		this.mockMvc.perform(get("/reports/custom/params")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("Parameter")))
 				.andExpect(content().string(containsString("radio")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
@@ -93,122 +91,146 @@ public class ReportControllerTest {
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("Parameter")))
 				.andExpect(content().string(containsString("radio")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
 	public void testCustomParameterViewDateParameter() throws Exception {
 
 		when(securityService.hasUserValidRole(eq("custom"))).thenReturn(true);
-		this.mockMvc
-				.perform(get("/reports/custom/params")) //
+		this.mockMvc.perform(get("/reports/custom/params")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("Parameter")))
 				.andExpect(content().string(containsString("radio")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
 	public void testCustomParameterViewWithMissingParameter() throws Exception {
 
-		when(securityService.hasUserValidRole(eq("cascade_parameters"))).thenReturn(true);
-		this.mockMvc.perform(
-				get("/reports/cascade_parameters/params?params[customer].text=278")) //
+		when(securityService.hasUserValidRole(eq("cascade_parameters")))
+				.thenReturn(true);
+		this.mockMvc.perform(get(
+				"/reports/cascade_parameters/params?params[customer].text=278")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("278")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
 	public void testCustomParameterViewWithMissingParameter_Request()
 			throws Exception {
 
-		when(securityService.hasUserValidRole(eq("cascade_parameters"))).thenReturn(true);
-		this.mockMvc.perform(get("/reports/cascade_parameters/params?customer=278")) //
+		when(securityService.hasUserValidRole(eq("cascade_parameters")))
+				.thenReturn(true);
+		this.mockMvc
+				.perform(get("/reports/cascade_parameters/params?customer=278")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("278")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
 	public void testCustomParameterViewWithWrongType() throws Exception {
 
-		when(securityService.hasUserValidRole(eq("cascade_parameters"))).thenReturn(true);
-		this.mockMvc.perform(
-				get("/reports/cascade_parameters/params?params[customer].text=ABC")) //
+		when(securityService.hasUserValidRole(eq("cascade_parameters")))
+				.thenReturn(true);
+		this.mockMvc.perform(get(
+				"/reports/cascade_parameters/params?params[customer].text=ABC")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("help-block")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
 	public void testCustomParameterViewWithWrongType_Request()
 			throws Exception {
 
-		when(securityService.hasUserValidRole(eq("cascade_parameters"))).thenReturn(true);
-		this.mockMvc.perform(get("/reports/cascade_parameters/params?customer=ABC")) //
+		when(securityService.hasUserValidRole(eq("cascade_parameters")))
+				.thenReturn(true);
+		this.mockMvc
+				.perform(get("/reports/cascade_parameters/params?customer=ABC")) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("help-block")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
 	public void testCascadingParameterView() throws Exception {
 
-		when(securityService.hasUserValidRole(eq("cascade_parameters"))).thenReturn(true);
+		when(securityService.hasUserValidRole(eq("cascade_parameters")))
+				.thenReturn(true);
 		this.mockMvc.perform(get(
 				"/reports/cascade_parameters/params/cascade/customerorders?params[customer].text=278")) //
 				.andExpect(status().isOk()) //
-				.andDo(print());
+		// .andDo(print())
+		;
 	}
 
 	@Test
 	public void testCustomParameterViewPost() throws Exception {
 
 		when(securityService.hasUserValidRole(eq("custom"))).thenReturn(true);
-		this.mockMvc.perform(post("/reports/custom/params")).andExpect(status().isOk()) //
+		this.mockMvc.perform(post("/reports/custom/params"))
+				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("Parameter")))
-				.andDo(print());
+				// .andDo(print())
+				;
 	}
 
 	@Test
 	public void testMultiSelectGet() throws Exception {
-		List<String> roles = Arrays.asList("ROLE_CASCADE_PARAMETERS", "ROLE_MULTISELECT");
+		List<String> roles = Arrays.asList("ROLE_CASCADE_PARAMETERS",
+				"ROLE_MULTISELECT");
 
 		when(securityService.getRoles()).thenReturn(roles);
-		when(securityService.hasUserValidRole(eq("multiselect"))).thenReturn(true);
+		when(securityService.hasUserValidRole(eq("multiselect")))
+				.thenReturn(true);
 		this.mockMvc
 				.perform(
 						get("/reports/multiselect?order=10123&order=10298&order=10345&customer=103"))
 				.andExpect(status().is3xxRedirection()) //
-				// .andExpect(content().string(containsString("10123")))
-				// .andExpect(content().string(containsString("10298")))
-				// .andExpect(content().string(containsString("10345")))
-				.andDo(print());
+		// .andExpect(content().string(containsString("10123")))
+		// .andExpect(content().string(containsString("10298")))
+		// .andExpect(content().string(containsString("10345")))
+		// .andDo(print())
+		;
 	}
 
-    @Test
-    public void testDateFormField() throws Exception {
+	@Test
+	public void testDateFormField() throws Exception {
 
-		when(securityService.hasUserValidRole(eq("multiselect"))).thenReturn(true);
-        this.mockMvc.perform(get("/reports/multiselect/params?dateWithFunctionParam=2015-08-17"))
-                .andExpect(status().isOk()) //
+		when(securityService.hasUserValidRole(eq("multiselect")))
+				.thenReturn(true);
+		this.mockMvc
+				.perform(
+						get("/reports/multiselect/params?dateWithFunctionParam=2015-08-17"))
+				.andExpect(status().isOk()) //
 				.andExpect(content().string(containsString("2015-08-17")))
-                .andDo(print());
+				// .andDo(print())
+				;
 
-    }
+	}
 
-    @Test
-    public void testDateFormFieldWithScript() throws Exception {
-		List<String> roles = Arrays.asList("ROLE_CASCADE_PARAMETERS", "ROLE_MULTISELECT");
+	@Test
+	public void testDateFormFieldWithScript() throws Exception {
+		List<String> roles = Arrays.asList("CASCADE_PARAMETERS",
+				"ROLE_MULTISELECT");
 
 		when(securityService.getRoles()).thenReturn(roles);
-        LocaleContextHolder.setLocale(Locale.GERMANY);
-        this.mockMvc.perform(get("/reports/multiselect/params?language=DE"))
-                .andExpect(status().isOk()) //
-                .andExpect(content().string(containsString("01.01.15")))
-                .andDo(print());
+		LocaleContextHolder.setLocale(Locale.GERMANY);
+		this.mockMvc.perform(get("/reports/multiselect/params?language=DE"))
+				.andExpect(status().isOk()) //
+				.andExpect(content().string(containsString("01.01.2015")))
+				// .andDo(print())
+				;
 
-    }
+	}
 
 }

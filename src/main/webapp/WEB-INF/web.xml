@@ -9,6 +9,11 @@
         <welcome-file>/index</welcome-file>
     </welcome-file-list>
 
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error.html</location>
+    </error-page>
+
     <!--<listener>-->
     <!--<listener-class>org.springframework.web.context.ContextLoaderListener-->
     <!--</listener-class>-->

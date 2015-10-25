@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/headTag :: headTag">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Error Page</title>
+
+    <!-- Bootstrap -->
+    <link href="../resources/bootstrap/css/bootstrap.css"
+          th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+
+    <!-- Bootstrap theme -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css"
+          rel="stylesheet"/>
+</head>
+<body>
+<div class="container-fluid">
+    <div th:replace="/fragments/navbar :: defaultNavbar"></div>
+    <div class="jumbotron">
+        <h3><img src="../../images/birt-purple-logo.png" alt="BIRT Reporting"
+                 th:src="@{/images/birt-purple-logo.png}"/>&nbsp; &nbsp; &nbsp;
+            Fehler aufgetreten </h3>
+    </div>
+    <h1 th:text="${errorCode}"></h1>
+
+    <p th:text="${errorMessage}"></p>
+</div>
+<footer class="container-fluid" th:replace="/fragments/footerTag :: footerTag">
+    <span>Dummy</span>
+</footer>
+</body>
+</html>

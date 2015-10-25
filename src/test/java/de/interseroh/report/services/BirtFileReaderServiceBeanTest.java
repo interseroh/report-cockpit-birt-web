@@ -1,13 +1,15 @@
 package de.interseroh.report.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.interseroh.report.controller.SecurityServiceMock;
+import de.interseroh.report.webconfig.ReportConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,6 +18,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import de.interseroh.report.exception.BirtSystemException;
 import de.interseroh.report.model.ReportReference;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  *
@@ -23,8 +27,9 @@ import de.interseroh.report.model.ReportReference;
  * Created by hhopf on 07.07.15.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class BirtFileReaderServiceBeanTest {// todo autowire with problems
-											// (securityhelper)
+@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class})
+@PropertySource("classpath:config.properties")
+public class BirtFileReaderServiceBeanTest {
 
 	@InjectMocks
 	BirtFileReaderService serviceFileReader = new BirtFileReaderServiceBean();
@@ -35,10 +40,14 @@ public class BirtFileReaderServiceBeanTest {// todo autowire with problems
 	@Test
 	public void testGetAllFileNamesWithNull() throws BirtSystemException {
 
-		List<ReportReference> list = serviceFileReader
-				.getReportReferences(null);
+		File directory = new File(getClass().getResource("/reports").getFile());
 
-		assertNull("null is null", list);
+		when(securityControl.getTmpDirectory()).thenReturn(directory);
+
+		List<ReportReference> list = serviceFileReader
+				.getReportReferences();
+
+		assertTrue("nichts drin", list.size() == 0);
 	}
 
 	@Test
@@ -49,10 +58,12 @@ public class BirtFileReaderServiceBeanTest {// todo autowire with problems
 		List<String> roles = new ArrayList<>();
 		roles.add("ROLE_SALESINVOICE");
 
+		when(securityControl.getTmpDirectory()).thenReturn(directory);
+
 		when(securityControl.getRoles()).thenReturn(roles);
 
 		List<ReportReference> list = serviceFileReader
-				.getReportReferences(directory);
+				.getReportReferences();
 
 		assertEquals("1 report in directory with its role available", 1,
 				list.size());
@@ -61,29 +72,21 @@ public class BirtFileReaderServiceBeanTest {// todo autowire with problems
 	@Test
 	public void testGetTwoFilesNameWithRole() throws BirtSystemException {
 
-		File directory = new File(getClass().getResource("/reports").getFile());// target
-																				// folder
+		File directory = new File(getClass().getResource("/reports").getFile());//
+
 		List<String> roles = new ArrayList<>();
 		roles.add("ROLE_SALESINVOICE");
 		roles.add("ROLE_PRODUCTCATALOG");
 
+
+		when(securityControl.getTmpDirectory()).thenReturn(directory);
+
 		when(securityControl.getRoles()).thenReturn(roles);
 
 		List<ReportReference> list = serviceFileReader
-				.getReportReferences(directory);
+				.getReportReferences();
 
 		assertEquals("2 report in directory with its role available", 2,
 				list.size());
-	}
-
-	@Test
-	public void testGetAllFileNamesWithException() throws BirtSystemException {
-
-		File directory = new File("/onlyfortest");// target folder
-
-		List<ReportReference> list = serviceFileReader
-				.getReportReferences(directory);
-
-		assertEquals("directory not available", 0, list.size());
 	}
 }

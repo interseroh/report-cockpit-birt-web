@@ -41,11 +41,6 @@ public class DefaultReportController {
 	@Autowired
 	BirtFileReaderService birtFileReaderService;
 
-	@Autowired
-	private Environment environment;
-
-	@Autowired
-	private ResourceLoader resourceLoader;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -61,22 +56,8 @@ public class DefaultReportController {
 
 		logger.debug("executing allReportView for default");
 
-		// TODO move this to service layer and replace the string with
-		// BirtReportService.REPORT_SOURCE_URL_KEY
-		String tmpDirectory = environment.getProperty("java.io.tmpdir");
-		String location = environment.getProperty("report.source.url",
-				tmpDirectory);
-		Resource resource = resourceLoader.getResource(location);
-
-		File directory = null;
-		try {
-			directory = resource.getFile().getAbsoluteFile();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-
 		List<ReportReference> reportReferencesList = birtFileReaderService
-				.getReportReferences(directory);
+				.getReportReferences();
 
 		modelAndView.setViewName("/allreports");
 		modelAndView.addObject("reportReferencesList", reportReferencesList);

@@ -16,7 +16,7 @@ import de.interseroh.report.model.ReportReference;
  * this class give back all reports for current user with correspond role.
  * Created by hhopf on 06.07.15.
  */
-@Service("birtFileReaderServiceBean")
+@Service
 public class BirtFileReaderServiceBean implements BirtFileReaderService {
 
 	public static final int SUFFIXCOUNT = 10;
@@ -30,12 +30,12 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 	/**
 	 * deliver all file names (report names) in specified directory.
 	 *
-	 * @param directory
-	 *            file as directory
 	 * @return names of all files in this directory (only reports)
 	 */
 	@Override
-	public List<ReportReference> getReportReferences(final File directory) {
+	public List<ReportReference> getReportReferences() {
+
+		final File directory = securityControl.getTmpDirectory();
         logger.debug("call to get role of current user in directory {}", directory);
 
 		if (directory == null) {

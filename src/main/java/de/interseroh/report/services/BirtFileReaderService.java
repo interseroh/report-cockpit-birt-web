@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface BirtFileReaderService {
 
-	List<ReportReference> getReportReferences(File directory)
+	List<ReportReference> getReportReferences()
 			throws BirtSystemException;
 }

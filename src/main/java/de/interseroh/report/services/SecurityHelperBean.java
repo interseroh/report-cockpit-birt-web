@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by hhopf on 16.09.15.
  */
-@Service("securityHelperBean")
+@Service
 public class SecurityHelperBean implements SecurityHelper {
 
 	public String getPrincipalName() {

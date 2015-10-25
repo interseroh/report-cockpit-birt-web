@@ -56,9 +56,10 @@ public class SecurityService {
 		for (UserRole role : rolesCollection) {
 			roles.add(role.getRole().getName());
 		}
-		roles.add("ROLE_SALESINVOICE");
-		roles.add("ROLE_PRODUCTCATALOG");
-		roles.add("ROLE_MULTISELECT");
+		//only for testing - temp
+		//roles.add("ROLE_SALESINVOICE");
+		//roles.add("ROLE_PRODUCTCATALOG");
+		//roles.add("ROLE_MULTISELECT");
 		return roles;
 	}
 

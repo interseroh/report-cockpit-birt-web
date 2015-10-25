@@ -3,7 +3,6 @@ package de.interseroh.report.services;
 import de.interseroh.report.exception.BirtSystemException;
 import de.interseroh.report.model.ReportReference;
 
-import java.io.File;
 import java.util.List;
 
 /**

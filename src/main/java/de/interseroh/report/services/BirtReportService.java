@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ReportPage;
 import de.interseroh.report.exception.BirtReportException;
 
 /**
@@ -49,6 +50,8 @@ public interface BirtReportService {
 	 */
 	List<ParameterGroup> getParameterGroups(String reportName)
 			throws BirtReportException;
+
+    ReportPage getPageInfos(String reportName, Map<String, Object> parameters, boolean override) throws BirtReportException;
 
 	/**
 	 * Verifies which scalar parameters of the cascading group has values and

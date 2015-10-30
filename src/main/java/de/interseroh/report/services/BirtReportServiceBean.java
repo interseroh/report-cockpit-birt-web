@@ -31,6 +31,8 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import com.sun.xml.internal.ws.api.pipe.Engine;
+import de.interseroh.report.domain.ReportPage;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
@@ -138,7 +140,39 @@ public class BirtReportServiceBean implements BirtReportService {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public ReportPage getPageInfos(String reportName, Map<String, Object> parameters, boolean overwrite) throws BirtReportException {
+        ReportPage reportPage = new ReportPage();
+        try {
+            String reportFileName = absolutePathOf(reportFileName(reportName));
+            String documentFileName = absoluteTempPath(
+                    documentFileName(reportName));
+
+            recreateReportDocument(reportName, parameters, overwrite, reportFileName, documentFileName);
+
+            IReportDocument reportDocument = reportEngine.openReportDocument(documentFileName);
+            reportPage.setPageNumbers(reportDocument.getPageCount());
+        } catch (EngineException ex ) {
+            throw new BirtReportException(ex);
+        } catch (IOException ex) {
+            throw new BirtReportException(ex);
+        }
+        return reportPage;
+    }
+
+    private void recreateReportDocument(String reportName, Map<String, Object> parameters, boolean overwrite, String reportFileName, String documentFileName) throws IOException, EngineException {
+        if (needToCreateNewDocumentFile(reportName, overwrite)) {
+            logger.info("Need to create document file for {} report.",
+                    reportName);
+            IReportRunnable reportRunnable = reportEngine
+                    .openReportDesign(reportFileName);
+            IRunTask runTask = reportEngine.createRunTask(reportRunnable);
+            injectParameters(parameters, runTask);
+            runTask.run(documentFileName);
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void loadOptionsForCascadingGroup(String reportName,
 			ParameterGroup group) throws BirtReportException {
@@ -299,17 +333,9 @@ public class BirtReportServiceBean implements BirtReportService {
 			String documentFileName = absoluteTempPath(
 					documentFileName(reportName));
 
-			if (needToCreateNewDocumentFile(reportName, overwrite)) {
-				logger.info("Need to create document file for {} report.",
-						reportName);
-				IReportRunnable reportRunnable = reportEngine
-						.openReportDesign(reportFileName);
-				IRunTask runTask = reportEngine.createRunTask(reportRunnable);
-				injectParameters(parameters, runTask);
-				runTask.run(documentFileName);
-			}
+            recreateReportDocument(reportName, parameters, overwrite, reportFileName, documentFileName);
 
-			IReportDocument reportDocument = reportEngine
+            IReportDocument reportDocument = reportEngine
 					.openReportDocument(documentFileName);
 
 			HTMLRenderOption htmlOptions = new HTMLRenderOption();
@@ -333,7 +359,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			renderTask.close();
 
 		} catch (EngineException | IOException e) {
-			e.printStackTrace();
+			throw new BirtReportException(e);
 		}
 	}
 

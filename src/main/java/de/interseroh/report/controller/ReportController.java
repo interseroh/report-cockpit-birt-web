@@ -45,6 +45,8 @@ import de.interseroh.report.domain.visitors.ParameterValueMapBuilder;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.services.BirtReportService;
 
+import java.util.Map;
+
 @Controller
 @Scope(WebApplicationContext.SCOPE_REQUEST)
 @RequestMapping("/reports/{reportName}")
@@ -96,6 +98,14 @@ public class ReportController {
 				.withReportName(reportName) //
 				.withParameterGroups(
 						reportService.getParameterGroups(reportName));
+
+//        Map<String, Object> parameters = parameterForm.asReportParameters();
+
+//        reportService.getPageInfos()
+
+        // get report page information
+        // report has 5 pages
+        // ReportPage (pageNumbers, first, last, number)
 	}
 
 	@RequestMapping(value = "/params", method = RequestMethod.GET)
@@ -170,6 +180,7 @@ public class ReportController {
 
 		if (parameterForm.isValid()) {
 			// show report
+            // get page information here!!
 			modelAndView.setViewName("/report");
 			injectReportUri(parameterForm, modelAndView, reportName);
 			configSetter.setVersion(modelAndView);

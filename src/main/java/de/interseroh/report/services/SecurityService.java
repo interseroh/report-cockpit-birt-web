@@ -56,19 +56,16 @@ public class SecurityService {
 		for (UserRole role : rolesCollection) {
 			roles.add(role.getRole().getName());
 		}
-		//only for testing - temp
-		//roles.add("ROLE_SALESINVOICE");
-		//roles.add("ROLE_PRODUCTCATALOG");
-		//roles.add("ROLE_MULTISELECT");
 		return roles;
 	}
 
 	public boolean hasUserValidRole(String reportName) {
 		List<String> roles = getRoles();
-		reportName = reportName.toUpperCase();
+		String splitRoleName;
 
 		for(String role : roles) {
-			if(role.contains(reportName)) {
+			splitRoleName = role.substring(5);
+			if(splitRoleName.equalsIgnoreCase(reportName)) {
 				return true;
 			}
 		}

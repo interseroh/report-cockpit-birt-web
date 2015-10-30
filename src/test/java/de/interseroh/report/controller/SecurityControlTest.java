@@ -1,6 +1,7 @@
 package de.interseroh.report.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -86,6 +87,22 @@ public class SecurityControlTest {
 
 	}
 
+	@Test
+	public void testHasUserRoleValidWITHPräfixFalse() {
+		Collection<UserRole> roles = getUserRolesWithEqualsPräfix();
+		roles.add(getUserRoleForCascade());
+
+		when(securityHelper.getPrincipalName()).thenReturn("userName");
+
+		when(userService.findUserRolesByUserEmail(eq("userName")))
+				.thenReturn(roles);
+		boolean visible = securityControl
+				.hasUserValidRole("CHART");
+
+		assertFalse(visible);
+
+	}
+
 	private UserRole getUserRole() {
 		return createUserRole("ROLE_SALESINVOICE");
 	}
@@ -98,6 +115,13 @@ public class SecurityControlTest {
 		Collection<UserRole> userRoles = new ArrayList<>();
 		userRoles.add(createUserRole("ROLE_SALESINVOICE"));
 		userRoles.add(createUserRole("ROLE_PRODUCTCATALOG"));
+		return userRoles;
+	}
+
+	private Collection<UserRole> getUserRolesWithEqualsPräfix() {
+		Collection<UserRole> userRoles = new ArrayList<>();
+		userRoles.add(createUserRole("ROLE_CHARTI"));
+		userRoles.add(createUserRole("ROLE_CHARTDATE"));
 		return userRoles;
 	}
 

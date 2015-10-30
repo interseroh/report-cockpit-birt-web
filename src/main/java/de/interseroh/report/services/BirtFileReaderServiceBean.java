@@ -49,12 +49,14 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 			if (directory.exists() && directory.canRead()
 					&& directory.isDirectory()) {
 				File[] files = directory.listFiles();
+				String splitRoleName;
 				if (files != null) {
 					for (File file : files) {
 						String fileName = file.getName().substring(0,
 								(file.getName().length() - SUFFIXCOUNT));
 						for (String role : roles) {
-							if (role.contains(fileName.toUpperCase())) {
+							splitRoleName = role.substring(5);
+							if (splitRoleName.equalsIgnoreCase(fileName)) {
 								reportReferences.add(new ReportReference(
 										fileName, "reports..."));
 							}

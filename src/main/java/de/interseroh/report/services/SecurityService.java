@@ -56,6 +56,13 @@ public class SecurityService {
 		for (UserRole role : rolesCollection) {
 			roles.add(role.getRole().getName());
 		}
+		//only for testing - temp
+		roles.add("ROLE_SALESINVOICE");
+		roles.add("ROLE_CUSTOM");
+		roles.add("ROLE_MULTISELECT");
+		roles.add("ROLE_CHART");
+		roles.add("ROLE_CASCADE_PARAMETERS");
+		roles.add("ROLE_CHARTDATE");
 		return roles;
 	}
 

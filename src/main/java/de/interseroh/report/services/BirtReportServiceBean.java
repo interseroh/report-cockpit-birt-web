@@ -31,8 +31,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
-import com.sun.xml.internal.ws.api.pipe.Engine;
-import de.interseroh.report.domain.ReportPage;
+import de.interseroh.report.domain.*;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
@@ -64,10 +63,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import de.interseroh.report.domain.ParameterBuilder;
-import de.interseroh.report.domain.ParameterGroup;
-import de.interseroh.report.domain.ScalarParameter;
-import de.interseroh.report.domain.SelectionParameter;
 import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.exception.RenderReportException;
@@ -141,23 +136,30 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
     @Override
-    public ReportPage getPageInfos(String reportName, Map<String, Object> parameters, boolean overwrite) throws BirtReportException {
+    public ReportPage getPageInfos(final String reportName, final ParameterForm parameters) throws BirtReportException {
         ReportPage reportPage = new ReportPage();
         try {
             String reportFileName = absolutePathOf(reportFileName(reportName));
             String documentFileName = absoluteTempPath(
-                    documentFileName(reportName));
+					documentFileName(reportName));
 
-            recreateReportDocument(reportName, parameters, overwrite, reportFileName, documentFileName);
+			if(parameters.isOverwrite()) {
+				recreateReportDocument(reportName, parameters.asReportParameters(), true,
+						reportFileName, documentFileName);
+			}
 
             IReportDocument reportDocument = reportEngine.openReportDocument(documentFileName);
             reportPage.setPageNumbers(reportDocument.getPageCount());
-        } catch (EngineException ex ) {
-            throw new BirtReportException(ex);
-        } catch (IOException ex) {
-            throw new BirtReportException(ex);
+			if(parameters.getPageNumber() != null) {
+				reportPage.setCurrentPageNumber(parameters.getPageNumber());
+			} else {
+				reportPage.setCurrentPageNumber(1L);
+			}
+        } catch (EngineException | IOException ex ) {
+			logger.error(String.format("Report corrupt or path not valid - page information for %s not available", reportName));
+            throw new BirtReportException(String.format("Report corrupt or path not valid - page information for %s not available", reportName), ex);
         }
-        return reportPage;
+		return reportPage;
     }
 
     private void recreateReportDocument(String reportName, Map<String, Object> parameters, boolean overwrite, String reportFileName, String documentFileName) throws IOException, EngineException {

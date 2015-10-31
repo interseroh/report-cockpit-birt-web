@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import de.interseroh.report.domain.ParameterForm;
 import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.ReportPage;
 import de.interseroh.report.exception.BirtReportException;
@@ -35,7 +36,6 @@ public interface BirtReportService {
 
 	String REPORT_SOURCE_URL_KEY = "report.source.url";
 	String REPORT_BASE_IMAGE_URL_KEY = "report.base.image.url";
-	String REPORT_SOURCE_FILE = "report.reports.directory";
 	String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
 	String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
 	String REPORT_FILE_SUFFIX = ".rptdesign";
@@ -51,7 +51,16 @@ public interface BirtReportService {
 	List<ParameterGroup> getParameterGroups(String reportName)
 			throws BirtReportException;
 
-    ReportPage getPageInfos(String reportName, Map<String, Object> parameters, boolean override) throws BirtReportException;
+	/**
+	 *
+	 * Necessary Infos for pagination.
+	 *
+	 * @param reportName report name
+	 * @param parameters page infos
+	 * @return reportPage with specific infos
+	 * @throws BirtReportException
+	 */
+    ReportPage getPageInfos(final String reportName, final ParameterForm parameters) throws BirtReportException;
 
 	/**
 	 * Verifies which scalar parameters of the cascading group has values and

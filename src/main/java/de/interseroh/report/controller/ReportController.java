@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.controller;
 
+import de.interseroh.report.domain.ReportPage;
 import de.interseroh.report.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,14 +99,6 @@ public class ReportController {
 				.withReportName(reportName) //
 				.withParameterGroups(
 						reportService.getParameterGroups(reportName));
-
-//        Map<String, Object> parameters = parameterForm.asReportParameters();
-
-//        reportService.getPageInfos()
-
-        // get report page information
-        // report has 5 pages
-        // ReportPage (pageNumbers, first, last, number)
 	}
 
 	@RequestMapping(value = "/params", method = RequestMethod.GET)
@@ -179,8 +172,11 @@ public class ReportController {
 		parameterFormConverter.convert(parameterForm, errors);
 
 		if (parameterForm.isValid()) {
-			// show report
-            // get page information here!!
+			ReportPage reportPage = reportService.getPageInfos(reportName, parameterForm);
+			if(reportPage.getCurrentPageNumber() > reportPage.getPageNumbers()) {
+				throw new BirtReportException(String.format("For this report: %s no more pages available", reportName));
+			}
+			modelAndView.addObject("page", reportPage);
 			modelAndView.setViewName("/report");
 			injectReportUri(parameterForm, modelAndView, reportName);
 			configSetter.setVersion(modelAndView);

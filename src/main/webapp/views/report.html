@@ -19,22 +19,28 @@
 <div class="container-fluid">
     <div th:replace="/fragments/navbar :: defaultNavbar"></div>
 
-
-    <div class="container-fluid">
+    <div class="container-fluid" th:class="${not page.moreThanOne}? 'hidden' : ''">
         <nav>
             <ul class="pagination">
-                <li>
-                    <a href="#" aria-label="Previous">
+                <li th:class="${page.firstPage}? 'disabled' : ''">
+                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.previousPageNumber}}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li  class="active"><a href="1">1</a></li>
-                <li><a href="./2">2</a></li>
-                <li><a href="./3">3</a></li>
-                <li><a href="./4">4</a></li>
-                <li><a href="./5">5</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
+                <li th:class="${page.firstPage}? 'hidden' : ''">
+                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.previousPageNumber}}"><span
+                            th:text="${page.previousPageNumber}">page number</span></a>
+                </li>
+                <li class="active">
+                    <span th:text="${page.currentPageNumber}"> number</span>
+                </li>
+                <li th:class="${page.lastPage}? 'hidden' : ''">
+                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.nextPageNumber}}">
+                        <span th:text="${page.nextPageNumber}">page number</span>
+                    </a>
+                </li>
+                <li th:class="${page.lastPage}? 'disabled' : ''">
+                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.nextPageNumber}}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

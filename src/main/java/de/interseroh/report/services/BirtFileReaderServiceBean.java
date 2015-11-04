@@ -36,7 +36,8 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 	public List<ReportReference> getReportReferences() {
 
 		final File directory = securityControl.getTmpDirectory();
-        logger.debug("call to get role of current user in directory {}", directory);
+		logger.debug("call to get role of current user in directory {}",
+				directory);
 
 		if (directory == null) {
 			return null;

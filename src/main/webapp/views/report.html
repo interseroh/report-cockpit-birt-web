@@ -19,33 +19,42 @@
 <div class="container-fluid">
     <div th:replace="/fragments/navbar :: defaultNavbar"></div>
 
-    <div class="container-fluid" th:class="${not page.moreThanOne}? 'hidden' : ''">
-        <nav>
-            <ul class="pagination">
-                <li th:class="${page.firstPage}? 'disabled' : ''">
-                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.previousPageNumber}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li th:class="${page.firstPage}? 'hidden' : ''">
-                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.previousPageNumber}}"><span
-                            th:text="${page.previousPageNumber}">page number</span></a>
-                </li>
-                <li class="active">
-                    <span th:text="${page.currentPageNumber}"> number</span>
-                </li>
-                <li th:class="${page.lastPage}? 'hidden' : ''">
-                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.nextPageNumber}}">
-                        <span th:text="${page.nextPageNumber}">page number</span>
-                    </a>
-                </li>
-                <li th:class="${page.lastPage}? 'disabled' : ''">
-                    <a th:href="@{'/reports/'+${reportName}+'/'+${page.nextPageNumber}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    <div class="container-fluid">
+        <ul class="pagination pagination-sm">
+            <th:block th:each="page : ${pagination.pageLinks}">
+                <th:block th:switch="${page.linkType?.name()}">
+                    <li th:case="'FIRST'">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                            <span class="glyphicon glyphicon-step-backward"></span>
+                        </a>
+                    </li>
+                    <li th:case="'FASTBACKWARD'">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                            <span class="glyphicon glyphicon-backward"></span>
+                        </a>
+                    </li>
+
+                    <li th:case="'PAGE'" th:classappend="${page.active?'active':''}">
+                        <a th:if="${!page.active}"
+                           th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                            <span th:text="${page.pageNumber}">page number</span>
+                        </a>
+                        <span th:if="${page.active}"
+                              th:text="${page.pageNumber}">page number active</span>
+                    </li>
+                    <li th:case="'FASTFORWARD'">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                            <span class="glyphicon glyphicon-forward"></span>
+                        </a>
+                    </li>
+                    <li th:case="'LAST'">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                            <span class="glyphicon glyphicon-step-forward"></span>
+                        </a>
+                    </li>
+                </th:block>
+            </th:block>
+        </ul>
     </div>
 
     <div class="container-fluid">

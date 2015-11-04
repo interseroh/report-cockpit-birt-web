@@ -31,7 +31,6 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
-import de.interseroh.report.domain.*;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
@@ -63,9 +62,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import de.interseroh.report.domain.ParameterBuilder;
+import de.interseroh.report.domain.ParameterForm;
+import de.interseroh.report.domain.ParameterGroup;
+import de.interseroh.report.domain.ScalarParameter;
+import de.interseroh.report.domain.SelectionParameter;
 import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.exception.RenderReportException;
+import de.interseroh.report.pagination.Pagination;
 
 @Service
 @PropertySource({ "classpath:report-config.properties" })
@@ -135,46 +140,53 @@ public class BirtReportServiceBean implements BirtReportService {
 		}
 	}
 
-    @Override
-    public ReportPage getPageInfos(final String reportName, final ParameterForm parameters) throws BirtReportException {
-        ReportPage reportPage = new ReportPage();
-        try {
-            String reportFileName = absolutePathOf(reportFileName(reportName));
-            String documentFileName = absoluteTempPath(
+	@Override
+	public Pagination getPageInfos(final String reportName,
+			final ParameterForm parameters) throws BirtReportException {
+		try {
+			String reportFileName = absolutePathOf(reportFileName(reportName));
+			String documentFileName = absoluteTempPath(
 					documentFileName(reportName));
 
-			if(parameters.isOverwrite()) {
-				recreateReportDocument(reportName, parameters.asReportParameters(), true,
-						reportFileName, documentFileName);
+			if (parameters.isOverwrite()) {
+				recreateReportDocument(reportName,
+						parameters.asReportParameters(), true, reportFileName,
+						documentFileName);
 			}
 
-            IReportDocument reportDocument = reportEngine.openReportDocument(documentFileName);
-            reportPage.setPageNumbers(reportDocument.getPageCount());
-			if(parameters.getPageNumber() != null) {
-				reportPage.setCurrentPageNumber(parameters.getPageNumber());
-			} else {
-				reportPage.setCurrentPageNumber(1L);
-			}
-        } catch (EngineException | IOException ex ) {
-			logger.error(String.format("Report corrupt or path not valid - page information for %s not available", reportName));
-            throw new BirtReportException(String.format("Report corrupt or path not valid - page information for %s not available", reportName), ex);
-        }
-		return reportPage;
-    }
+			IReportDocument reportDocument = reportEngine
+					.openReportDocument(documentFileName);
 
-    private void recreateReportDocument(String reportName, Map<String, Object> parameters, boolean overwrite, String reportFileName, String documentFileName) throws IOException, EngineException {
-        if (needToCreateNewDocumentFile(reportName, overwrite)) {
-            logger.info("Need to create document file for {} report.",
-                    reportName);
-            IReportRunnable reportRunnable = reportEngine
-                    .openReportDesign(reportFileName);
-            IRunTask runTask = reportEngine.createRunTask(reportRunnable);
-            injectParameters(parameters, runTask);
-            runTask.run(documentFileName);
-        }
-    }
+			long pages = reportDocument.getPageCount();
+			long currentPage = (parameters.getPageNumber() != null)
+					? parameters.getPageNumber() : 1l;
+			return new Pagination(currentPage, pages);
+		} catch (EngineException | IOException ex) {
+			logger.error(String.format(
+					"Report corrupt or path not valid - page information for %s not available",
+					reportName));
+			throw new BirtReportException(String.format(
+					"Report corrupt or path not valid - page information for %s not available",
+					reportName), ex);
+		}
+	}
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void recreateReportDocument(String reportName,
+			Map<String, Object> parameters, boolean overwrite,
+			String reportFileName, String documentFileName)
+					throws IOException, EngineException {
+		if (needToCreateNewDocumentFile(reportName, overwrite)) {
+			logger.info("Need to create document file for {} report.",
+					reportName);
+			IReportRunnable reportRunnable = reportEngine
+					.openReportDesign(reportFileName);
+			IRunTask runTask = reportEngine.createRunTask(reportRunnable);
+			injectParameters(parameters, runTask);
+			runTask.run(documentFileName);
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void loadOptionsForCascadingGroup(String reportName,
 			ParameterGroup group) throws BirtReportException {
@@ -335,9 +347,10 @@ public class BirtReportServiceBean implements BirtReportService {
 			String documentFileName = absoluteTempPath(
 					documentFileName(reportName));
 
-            recreateReportDocument(reportName, parameters, overwrite, reportFileName, documentFileName);
+			recreateReportDocument(reportName, parameters, overwrite,
+					reportFileName, documentFileName);
 
-            IReportDocument reportDocument = reportEngine
+			IReportDocument reportDocument = reportEngine
 					.openReportDocument(documentFileName);
 
 			HTMLRenderOption htmlOptions = new HTMLRenderOption();
@@ -423,8 +436,10 @@ public class BirtReportServiceBean implements BirtReportService {
 
 	private String documentFileName(String reportName) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = (authentication != null) ? authentication.getName() : UUID.randomUUID().toString();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String name = (authentication != null) ? authentication.getName()
+				: UUID.randomUUID().toString();
 
 		return reportName + '_' + name + '_' + DOCUMENT_FILE_SUFFIX;
 	}
@@ -438,22 +453,25 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
 	private String absolutePathOf(String reportFileName) throws IOException {
-		String location = appendSeparatorIfNeeded(environment.getProperty(REPORT_SOURCE_URL_KEY))
+		String location = appendSeparatorIfNeeded(
+				environment.getProperty(REPORT_SOURCE_URL_KEY))
 				+ reportFileName;
 		Resource resource = resourceLoader.getResource(location);
 		return resource.getFile().getAbsolutePath();
 	}
 
 	private String absoluteTempPath(String fileName) throws IOException {
-        return appendSeparatorIfNeeded(environment.getProperty("java.io.tmpdir")) + fileName;
+		return appendSeparatorIfNeeded(
+				environment.getProperty("java.io.tmpdir")) + fileName;
 	}
 
-    private String appendSeparatorIfNeeded(String path) {
-        if (path != null && !path.isEmpty() && path.charAt(path.length() - 1) != File.separatorChar) {
-            return path + File.separatorChar;
-        } else {
-            return path;
-        }
-    }
+	private String appendSeparatorIfNeeded(String path) {
+		if (path != null && !path.isEmpty()
+				&& path.charAt(path.length() - 1) != File.separatorChar) {
+			return path + File.separatorChar;
+		} else {
+			return path;
+		}
+	}
 
 }

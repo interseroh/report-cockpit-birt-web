@@ -26,8 +26,8 @@ import java.util.Map;
 
 import de.interseroh.report.domain.ParameterForm;
 import de.interseroh.report.domain.ParameterGroup;
-import de.interseroh.report.domain.ReportPage;
 import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.pagination.Pagination;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -39,7 +39,7 @@ public interface BirtReportService {
 	String REPORT_IMAGE_DIRECTORY_KEY = "report.image.directory";
 	String REPORT_BASE_IMAGE_CONTEXT_PATH_KEY = "report.image.contextpath";
 	String REPORT_FILE_SUFFIX = ".rptdesign";
-    String DOCUMENT_FILE_SUFFIX = ".rptdocument";
+	String DOCUMENT_FILE_SUFFIX = ".rptdocument";
 
 	/**
 	 *
@@ -55,12 +55,15 @@ public interface BirtReportService {
 	 *
 	 * Necessary Infos for pagination.
 	 *
-	 * @param reportName report name
-	 * @param parameters page infos
-	 * @return reportPage with specific infos
+	 * @param reportName
+	 *            report name
+	 * @param parameters
+	 *            page infos
+	 * @return pagination with specific infos
 	 * @throws BirtReportException
 	 */
-    ReportPage getPageInfos(final String reportName, final ParameterForm parameters) throws BirtReportException;
+	Pagination getPageInfos(final String reportName,
+			final ParameterForm parameters) throws BirtReportException;
 
 	/**
 	 * Verifies which scalar parameters of the cascading group has values and
@@ -78,14 +81,14 @@ public interface BirtReportService {
 	void renderHtmlReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;
 
-    void renderHtmlReport(String reportName, Map<String, Object> parameters,
-                          OutputStream out, long pageNumber, boolean overwrite) throws BirtReportException;
+	void renderHtmlReport(String reportName, Map<String, Object> parameters,
+			OutputStream out, long pageNumber, boolean overwrite)
+					throws BirtReportException;
 
 	void renderPDFReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;
 
-    void renderExcelReport(String reportName, Map<String, Object> parameters,
+	void renderExcelReport(String reportName, Map<String, Object> parameters,
 			OutputStream out) throws BirtReportException;
-
 
 }

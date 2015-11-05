@@ -24,7 +24,12 @@ public class PaginationTest {
 		new Pagination(5, 1);
 	}
 
-	@Test
+    @Test
+    public void testOnlyOnePage() throws Exception {
+        assertThat(new Pagination(1,1).getPageLinks().isEmpty(), is(true));
+    }
+
+    @Test
 	public void testPageLinksWithThreeNine() throws Exception {
 		List<PageLink> links = new Pagination(3, 9, 3, false).getPageLinks();
 		assertThat(links.size(), is(5));

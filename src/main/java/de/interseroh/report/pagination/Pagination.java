@@ -47,8 +47,10 @@ public class Pagination {
             pageLinks.add(new PageLink(fastBackwardPage(), false, PageLinkType.FASTBACKWARD));
         }
 
-        for (long pageNumber = numberOfBeginLink(); pageNumber <= numberOfEndLink(); pageNumber++) {
-            pageLinks.add(new PageLink(pageNumber, isCurrentPage(pageNumber), PageLinkType.PAGE));
+        if (numberOfPages > 1) {
+            for (long pageNumber = numberOfBeginLink(); pageNumber <= numberOfEndLink(); pageNumber++) {
+                pageLinks.add(new PageLink(pageNumber, isCurrentPage(pageNumber), PageLinkType.PAGE));
+            }
         }
 
         if (isFastForwardedPossible()) {
@@ -59,6 +61,7 @@ public class Pagination {
             pageLinks.add(new PageLink(numberOfPages, isLastPage(), PageLinkType.LAST));
         }
     }
+
     private long numberOfBeginLink() {
         long offset = getMaxNumbersOfLinks() / 2;
         long diff = (numberOfPages - offset - currentPage);

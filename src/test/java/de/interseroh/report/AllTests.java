@@ -20,12 +20,11 @@
  */
 package de.interseroh.report;
 
+import de.interseroh.report.controller.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import de.interseroh.report.controller.ReportControllerTest;
-import de.interseroh.report.controller.ReportRestApiControllerTest;
 import de.interseroh.report.domain.ParameterTest;
 import de.interseroh.report.domain.ParameterToMapVisitorTest;
 import de.interseroh.report.domain.visitors.ReportParamsBuilderTest;
@@ -58,6 +57,9 @@ SecurityConfigTest.class, //
 		ReportControllerTest.class, //
 		ReportRestApiControllerTest.class, //
 		ReportParamsBuilderTest.class, //
+		CustomReportControllerTest.class,//
+		SecurityControlTest.class,//
+		ParameterFormFormatterTest.class,//
 		BirtConvertingTest.class })
 public class AllTests {
 }

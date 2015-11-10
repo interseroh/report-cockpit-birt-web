@@ -54,7 +54,6 @@ public class ReportRestApiController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReportRestApiController.class);
-	public static final int SUFFIXCOUNT = 10;
 
 	@Autowired
 	private BirtReportService reportService;
@@ -138,13 +137,12 @@ public class ReportRestApiController {
 		switch (outputFormat) {
 		case HTML5:
             if (pageNumber == null) {
-                reportService.renderHtmlReport(reportName, parameters,
-                        response.getOutputStream());
-            } else {
-                boolean overwriteFlag = overwrite == null || overwrite;
-                reportService.renderHtmlReport(reportName, parameters, response.getOutputStream(), pageNumber, overwriteFlag);
+				pageNumber = 1L;
+				overwrite = true;
             }
-			break;
+            boolean overwriteFlag = overwrite == null || overwrite;
+            reportService.renderHtmlReport(reportName, parameters, response.getOutputStream(), pageNumber, overwriteFlag);
+            break;
 		case PDF:
 			response.setHeader("Content-disposition",
 					"inline; filename=" + reportName + ".pdf");

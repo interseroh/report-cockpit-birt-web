@@ -48,8 +48,7 @@ public class ParameterFormFormatter {
 	 */
 	public static boolean isNotNullOrEmptyArray(Object value) {
 		return value != null //
-				&& (!value.getClass().isArray()
-						|| ((Object[]) value).length > 0);
+				&& (!value.getClass().isArray() || ((Object[]) value).length > 0);
 	}
 
 	public void format(ParameterForm parameterForm) {
@@ -66,11 +65,12 @@ public class ParameterFormFormatter {
 				convertDefaultValue(parameter, valueType, textType);
 			}
 
+			@SuppressWarnings("unchecked")
 			private <V, T> void convertValue(ScalarParameter<V, T> parameter,
 					Class<V> valueType, Class<T> textType) {
 
-				DisplayFormatHolder
-						.setDisplayFormat(parameter.getDisplayFormat());
+				DisplayFormatHolder.setDisplayFormat(parameter
+						.getDisplayFormat());
 
 				V value = parameter.getValue();
 				if (isNotNullOrEmptyArray(value)) {
@@ -90,15 +90,15 @@ public class ParameterFormFormatter {
 					ScalarParameter<V, T> parameter, Class<V> valueType,
 					Class<T> textType) {
 
-				DisplayFormatHolder
-						.setDisplayFormat(parameter.getDisplayFormat());
+				DisplayFormatHolder.setDisplayFormat(parameter
+						.getDisplayFormat());
 
 				V defaultValue = parameter.getDefaultValue();
 				if (defaultValue != null) {
 					if (conversionService.canConvert(valueType, textType)) {
 						try {
-							T formatted = conversionService
-									.convert(defaultValue, textType);
+							T formatted = conversionService.convert(
+									defaultValue, textType);
 							parameter.setDefaultText(formatted);
 						} catch (ConversionException ce) {
 						}

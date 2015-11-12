@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.interseroh.report.controller.SecurityServiceMock;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +33,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.controller.SecurityServiceMock;
 import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.ScalarParameter;
 import de.interseroh.report.webconfig.ReportConfig;
@@ -42,7 +42,7 @@ import de.interseroh.report.webconfig.ReportConfig;
  * @author Ingo Düppe (Crowdcode)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class })
+@ContextConfiguration(classes = { ReportConfig.class, SecurityServiceMock.class })
 @PropertySource("classpath:config.properties")
 public class BirtPdfReportServiceTest {
 
@@ -93,6 +93,7 @@ public class BirtPdfReportServiceTest {
 		renderPdfReport("cascade_parameters");
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void renderPdfReport(String reportName) throws Exception {
 		String outputFileName = "target/" + reportName + ".pdf";
 

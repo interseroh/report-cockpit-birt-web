@@ -5,22 +5,25 @@ package de.interseroh.report.pagination;
  */
 public class PaginationException extends Throwable {
 
-    public PaginationException() {
-    }
+	private static final long serialVersionUID = 4485371007080326063L;
 
-    public PaginationException(String message) {
-        super(message);
-    }
+	public PaginationException() {
+	}
 
-    public PaginationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public PaginationException(String message) {
+		super(message);
+	}
 
-    public PaginationException(Throwable cause) {
-        super(cause);
-    }
+	public PaginationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public PaginationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+	public PaginationException(Throwable cause) {
+		super(cause);
+	}
+
+	public PaginationException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 }

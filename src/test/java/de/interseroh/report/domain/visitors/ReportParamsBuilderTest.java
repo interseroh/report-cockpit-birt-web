@@ -23,9 +23,9 @@ package de.interseroh.report.domain.visitors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;

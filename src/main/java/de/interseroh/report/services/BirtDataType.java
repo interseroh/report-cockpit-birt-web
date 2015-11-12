@@ -43,8 +43,13 @@ public enum BirtDataType {
 	TYPE_TIME(8, "text", Time.class); //
 
 	private int dataType;
+
 	private String htmlFieldType;
+
+	@SuppressWarnings("rawtypes")
 	private Class valueType;
+
+	@SuppressWarnings("rawtypes")
 	private Class valueArrayType;
 
 	<T> BirtDataType(int dataType, String htmlFieldType, Class<T> valueType) {
@@ -71,10 +76,12 @@ public enum BirtDataType {
 		return dataType;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Class getValueType() {
 		return valueType;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Class getValueArrayType() {
 		return valueArrayType;
 	}

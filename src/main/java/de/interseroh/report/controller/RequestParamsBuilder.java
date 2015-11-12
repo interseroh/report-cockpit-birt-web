@@ -38,27 +38,30 @@ import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
 public class RequestParamsBuilder {
 
 	public String asRequestParams(ParameterForm parameterForm) {
-        List<String> params = buildParamList(parameterForm);
-        if (!parameterForm.isOverwrite()) {
-            params.add("__overwrite=false");
-        }
-        if (parameterForm.isPageSelected()) {
-            params.add("__pageNumber="+parameterForm.getPageNumber());
-        }
-        return conjoin(params);
+		List<String> params = buildParamList(parameterForm);
+		if (!parameterForm.isOverwrite()) {
+			params.add("__overwrite=false");
+		}
+		if (parameterForm.isPageSelected()) {
+			params.add("__pageNumber=" + parameterForm.getPageNumber());
+		}
+		return conjoin(params);
 	}
 
 	private List<String> buildParamList(ParameterForm parameterForm) {
 		final List<String> params = new ArrayList<>();
 
 		parameterForm.accept(new AbstractParameterVisitor() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public <V, T> void visit(ScalarParameter<V, T> parameter) {
 				String paramName = parameter.getName();
 
 				// FIXME - should be done by Generic Text Converter
 				if (parameter.getText() != null) {
-					if (parameter.isMultiValue() && (parameter.getText() != null && parameter.getText().getClass().isArray())) {
+					if (parameter.isMultiValue()
+							&& (parameter.getText() != null && parameter
+									.getText().getClass().isArray())) {
 						for (T paramText : (T[]) parameter.getText()) {
 							addKeyValueParam(paramName, (String) paramText);
 						}

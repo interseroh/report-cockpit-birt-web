@@ -8,18 +8,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.interseroh.report.controller.SecurityServiceMock;
-import de.interseroh.report.webconfig.ReportConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import de.interseroh.report.exception.BirtSystemException;
-import de.interseroh.report.model.ReportReference;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
+
+import de.interseroh.report.controller.SecurityServiceMock;
+import de.interseroh.report.exception.BirtSystemException;
+import de.interseroh.report.model.ReportReference;
+import de.interseroh.report.webconfig.ReportConfig;
 
 /**
  *

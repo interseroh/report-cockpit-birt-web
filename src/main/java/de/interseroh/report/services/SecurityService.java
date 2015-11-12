@@ -44,7 +44,6 @@ public class SecurityService {
 	 * @return all roles from user
 	 */
 	public List<String> getRoles() {
-
 		String userName = securityHelper.getPrincipalName();
 
 		Collection<UserRole> rolesCollection = userService
@@ -54,13 +53,7 @@ public class SecurityService {
 		for (UserRole role : rolesCollection) {
 			roles.add(role.getRole().getName());
 		}
-		// only for testing - temp
-/*		roles.add("ROLE_SALESINVOICE");
-		roles.add("ROLE_CUSTOM");
-		roles.add("ROLE_MULTISELECT");
-		roles.add("ROLE_CHART");
-		roles.add("ROLE_CASCADE_PARAMETERS");
-		roles.add("ROLE_CHARTDATE");*/
+
 		return roles;
 	}
 
@@ -74,11 +67,11 @@ public class SecurityService {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	public File getTmpDirectory() {
-
 		String tmpDirectory = environment.getProperty("java.io.tmpdir");
 		String location = environment.getProperty(
 				BirtReportService.REPORT_SOURCE_URL_KEY, tmpDirectory);

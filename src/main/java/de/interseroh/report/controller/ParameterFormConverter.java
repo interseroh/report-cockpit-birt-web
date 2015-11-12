@@ -20,7 +20,6 @@
  */
 package de.interseroh.report.controller;
 
-import de.interseroh.report.formatters.DisplayFormatHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.core.convert.ConversionService;
@@ -31,6 +30,7 @@ import de.interseroh.report.domain.ParameterForm;
 import de.interseroh.report.domain.ParameterUtils;
 import de.interseroh.report.domain.ScalarParameter;
 import de.interseroh.report.domain.visitors.AbstractParameterVisitor;
+import de.interseroh.report.formatters.DisplayFormatHolder;
 
 /**
  * @author Ingo Düppe (Crowdcode)

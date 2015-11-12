@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 
-import de.interseroh.report.controller.SecurityServiceMock;
 import org.eclipse.birt.report.engine.api.DocumentUtil;
 import org.eclipse.birt.report.engine.api.IBookmarkInfo;
 import org.eclipse.birt.report.engine.api.IReportDocument;
@@ -37,6 +36,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.controller.SecurityServiceMock;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**

@@ -20,7 +20,6 @@
  */
 package de.interseroh.report.controller;
 
-import de.interseroh.report.pagination.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,7 @@ import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.domain.visitors.ParameterValueMapBuilder;
 import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.pagination.Pagination;
 import de.interseroh.report.services.BirtReportService;
 import de.interseroh.report.services.SecurityService;
 
@@ -88,10 +88,11 @@ public class ReportController {
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
-					throws BirtReportException {
+			throws BirtReportException {
 		if (!securityService.hasUserValidRole(reportName)) {
-
+			// TODO: what should we do here?
 		}
+
 		return new ParameterForm() //
 				.withReportName(reportName) //
 				.withParameterGroups(
@@ -99,17 +100,18 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/params", method = RequestMethod.GET)
-	public ModelAndView showParameterForm( //
+	public ModelAndView showParameterForm(
+			//
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
 			@PathVariable("reportName") String reportName, BindingResult errors)
-					throws BirtReportException {
+			throws BirtReportException {
 
 		logger.debug("executing show parameter form for " + reportName);
 
 		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(
-					String.format("User has no role for %s", reportName));
+			throw new BirtReportException(String.format(
+					"User has no role for %s", reportName));
 		}
 
 		ModelAndView modelAndView = new ModelAndView();
@@ -139,11 +141,11 @@ public class ReportController {
 			@RequestParam(value = "__recreate", required = false, defaultValue = "false") boolean recreate,
 			@PathVariable("reportName") String reportName,
 			@PathVariable("pageNumber") Long pageNumber, BindingResult errors)
-					throws BirtReportException {
+			throws BirtReportException {
 
 		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(
-					String.format("User has no role for %s", reportName));
+			throw new BirtReportException(String.format(
+					"User has no role for %s", reportName));
 		}
 		// if requesting a specific page reuse existing report instead of
 		// creating a new one.
@@ -153,17 +155,18 @@ public class ReportController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showReport( //
+	public ModelAndView showReport(
+			//
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
 			@PathVariable("reportName") String reportName, BindingResult errors)
-					throws BirtReportException {
+			throws BirtReportException {
 
 		logger.debug("executing show report for " + reportName);
 
 		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(
-					String.format("User has no role for %s", reportName));
+			throw new BirtReportException(String.format(
+					"User has no role for %s", reportName));
 		}
 
 		ModelAndView modelAndView = new ModelAndView();
@@ -175,13 +178,13 @@ public class ReportController {
 			Pagination pagination = reportService.getPageInfos(reportName,
 					parameterForm);
 
-            // TODO reportPage
-//			if (reportPage.getCurrentPageNumber() > reportPage
-//					.getPageNumbers()) {
-//				throw new BirtReportException(String.format(
-//						"For this report: %s no more pages available",
-//						reportName));
-//			}
+			// TODO reportPage
+			// if (reportPage.getCurrentPageNumber() > reportPage
+			// .getPageNumbers()) {
+			// throw new BirtReportException(String.format(
+			// "For this report: %s no more pages available",
+			// reportName));
+			// }
 			modelAndView.addObject("pagination", pagination);
 			modelAndView.setViewName("/report");
 			injectReportUri(parameterForm, modelAndView, reportName);
@@ -195,8 +198,8 @@ public class ReportController {
 			redirectView.setPropagateQueryParams(false);
 			redirectView.setExposeModelAttributes(true);
 			modelAndView.setView(redirectView);
-			modelAndView.addAllObjects(
-					new ParameterValueMapBuilder().build(parameterForm));
+			modelAndView.addAllObjects(new ParameterValueMapBuilder()
+					.build(parameterForm));
 		}
 
 		parameterFormFormatter.format(parameterForm);
@@ -214,8 +217,8 @@ public class ReportController {
 			BindingResult bindingResult) throws BirtReportException {
 
 		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(
-					String.format("User has no role for %s", reportName));
+			throw new BirtReportException(String.format(
+					"User has no role for %s", reportName));
 		}
 
 		// filter by cascading group name
@@ -249,7 +252,8 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/params", method = { RequestMethod.POST })
-	public ModelAndView paramPOST(@PathVariable("reportName") String reportName, //
+	public ModelAndView paramPOST(
+			@PathVariable("reportName") String reportName, //
 			@ModelAttribute("parameterForm") ParameterForm form, //
 			@RequestParam MultiValueMap<String, String> requestParams,
 			BindingResult errors, //
@@ -257,8 +261,8 @@ public class ReportController {
 
 		logger.debug("Executing POST of form for {} ", reportName);
 		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(
-					String.format("User has no role for %s", reportName));
+			throw new BirtReportException(String.format(
+					"User has no role for %s", reportName));
 		}
 
 		parameterFormBinder.bind(form, requestParams, errors);
@@ -275,8 +279,8 @@ public class ReportController {
 			redirectView.setContextRelative(true);
 			redirectView.setPropagateQueryParams(false);
 			redirectView.setExposeModelAttributes(true);
-			modelAndView
-					.addAllObjects(new ParameterValueMapBuilder().build(form));
+			modelAndView.addAllObjects(new ParameterValueMapBuilder()
+					.build(form));
 			modelAndView.addObject("reportName", reportName);
 			modelAndView.setView(redirectView);
 		} else {

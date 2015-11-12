@@ -25,7 +25,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-import org.flywaydb.core.internal.util.TimeFormat;
 import org.springframework.format.Formatter;
 
 /**

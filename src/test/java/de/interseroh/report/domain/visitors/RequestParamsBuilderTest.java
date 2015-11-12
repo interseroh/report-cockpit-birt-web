@@ -23,13 +23,12 @@ package de.interseroh.report.domain.visitors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.interseroh.report.controller.ParameterFormFormatter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import de.interseroh.report.controller.ParameterFormFormatter;
 import de.interseroh.report.controller.RequestParamsBuilder;
 import de.interseroh.report.domain.GenericParameter;
 import de.interseroh.report.domain.ParameterForm;

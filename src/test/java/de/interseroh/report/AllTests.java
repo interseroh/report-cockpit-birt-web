@@ -20,11 +20,15 @@
  */
 package de.interseroh.report;
 
-import de.interseroh.report.controller.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.interseroh.report.controller.CustomReportControllerTest;
+import de.interseroh.report.controller.ParameterFormFormatterTest;
+import de.interseroh.report.controller.ReportControllerTest;
+import de.interseroh.report.controller.ReportRestApiControllerTest;
+import de.interseroh.report.controller.SecurityControlTest;
 import de.interseroh.report.domain.ParameterTest;
 import de.interseroh.report.domain.ParameterToMapVisitorTest;
 import de.interseroh.report.domain.visitors.ReportParamsBuilderTest;

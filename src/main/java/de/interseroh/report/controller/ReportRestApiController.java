@@ -26,7 +26,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.interseroh.report.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +43,7 @@ import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
 import de.interseroh.report.services.BirtOutputFormat;
 import de.interseroh.report.services.BirtReportService;
+import de.interseroh.report.services.SecurityService;
 
 /**
  * @author Ingo Düppe (Crowdcode)

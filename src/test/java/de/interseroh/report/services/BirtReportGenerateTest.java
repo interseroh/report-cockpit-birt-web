@@ -28,7 +28,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Collection;
 
-import de.interseroh.report.controller.SecurityServiceMock;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.eclipse.birt.report.engine.api.HTMLRenderOption;
 import org.eclipse.birt.report.engine.api.HTMLServerImageHandler;
@@ -50,19 +49,19 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import de.interseroh.report.parameter.BirtConvertingTest;
+import de.interseroh.report.controller.SecurityServiceMock;
 import de.interseroh.report.webconfig.ReportConfig;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class})
+@ContextConfiguration(classes = { ReportConfig.class, SecurityServiceMock.class })
 @PropertySource("classpath:config.properties")
 public class BirtReportGenerateTest {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(BirtConvertingTest.class);
+			.getLogger(BirtReportGenerateTest.class);
 
 	@Autowired
 	ApplicationContext applicationContext;
@@ -75,8 +74,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testHelloWorldReport()
-			throws EngineException, FileNotFoundException {
+	public void testHelloWorldReport() throws EngineException,
+			FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/hello_world.rptdesign";
@@ -86,8 +85,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testSalesInvoiceReport()
-			throws EngineException, FileNotFoundException {
+	public void testSalesInvoiceReport() throws EngineException,
+			FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/salesinvoice.rptdesign";
@@ -97,8 +96,8 @@ public class BirtReportGenerateTest {
 	}
 
 	@Test
-	public void testProductCatalogReport()
-			throws EngineException, FileNotFoundException {
+	public void testProductCatalogReport() throws EngineException,
+			FileNotFoundException {
 		assertThat(reportEngine, is(notNullValue()));
 
 		String reportName = "/reports/productcatalog.rptdesign";
@@ -108,6 +107,7 @@ public class BirtReportGenerateTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private void renderHtmlReport(String outputFile, String reportName)
 			throws EngineException, FileNotFoundException {
 		String file = this.getClass().getResource(reportName).getPath();
@@ -125,8 +125,9 @@ public class BirtReportGenerateTest {
 			logger.info("Helptext: " + parameterDefn.getHelpText());
 			logger.info("Name: " + parameterDefn.getName());
 			logger.info("Typename: " + parameterDefn.getTypeName());
-			logger.info("ParameterType: " + BirtParameterType
-					.valueOf(parameterDefn.getParameterType()));
+			logger.info("ParameterType: "
+					+ BirtParameterType.valueOf(parameterDefn
+							.getParameterType()));
 			logger.info("PromptText: " + parameterDefn.getPromptText());
 			logger.info("DefaultValue: "
 					+ parameterDefinitionTask.getDefaultValue(parameterDefn));

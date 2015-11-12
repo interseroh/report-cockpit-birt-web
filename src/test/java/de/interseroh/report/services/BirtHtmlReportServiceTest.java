@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.interseroh.report.controller.SecurityServiceMock;
 import org.eclipse.birt.report.engine.api.EngineException;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,6 +36,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.interseroh.report.controller.SecurityServiceMock;
 import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.ScalarParameter;
 import de.interseroh.report.exception.BirtReportException;
@@ -46,7 +46,7 @@ import de.interseroh.report.webconfig.ReportConfig;
  * @author Ingo Düppe (Crowdcode)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ReportConfig.class, SecurityServiceMock.class})
+@ContextConfiguration(classes = { ReportConfig.class, SecurityServiceMock.class })
 @PropertySource("classpath:config.properties")
 public class BirtHtmlReportServiceTest {
 
@@ -61,25 +61,26 @@ public class BirtHtmlReportServiceTest {
 	}
 
 	@Test
-	public void testHelloWorldReport()
-			throws EngineException, FileNotFoundException, BirtReportException {
+	public void testHelloWorldReport() throws EngineException,
+			FileNotFoundException, BirtReportException {
 		renderHtmlReport("hello_world");
 	}
 
 	@Test
-	public void testSalesInvoiceReport()
-			throws EngineException, FileNotFoundException, BirtReportException {
+	public void testSalesInvoiceReport() throws EngineException,
+			FileNotFoundException, BirtReportException {
 		renderHtmlReport("salesinvoice");
 	}
 
 	@Test
-	public void testProductCatalogReport()
-			throws EngineException, FileNotFoundException, BirtReportException {
+	public void testProductCatalogReport() throws EngineException,
+			FileNotFoundException, BirtReportException {
 		renderHtmlReport("productcatalog");
 	}
 
-	private void renderHtmlReport(String reportName)
-			throws EngineException, FileNotFoundException, BirtReportException {
+	@SuppressWarnings("rawtypes")
+	private void renderHtmlReport(String reportName) throws EngineException,
+			FileNotFoundException, BirtReportException {
 		String outputFileName = "target/" + reportName + ".html";
 
 		Collection<ParameterGroup> groups = reportService

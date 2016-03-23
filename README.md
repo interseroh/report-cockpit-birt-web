@@ -4,7 +4,7 @@ This projects provides an easy to integrate and enhanced BIRT Web-Viewer based o
 
 ## Build Status
 
-Our current build status at Travis CI: [![Build Status](https://travis-ci.org/interseroh/report-cockpit-birt-web.svg?branch=master)](https://travis-ci.org/interseroh/report-cockpit-birt-web)
+[![Build Status](https://travis-ci.org/interseroh/report-cockpit-birt-web.svg?branch=master)](https://travis-ci.org/interseroh/report-cockpit-birt-web)
 
 ## Documentation
 

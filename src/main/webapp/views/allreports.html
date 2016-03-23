@@ -31,6 +31,8 @@
     <div class="references">
         <div class="report-references" id="report-references">
             <div class="list-group">
+                <!--/*@thymesVar id="reportReferencesList" type="java.util.List"*/-->
+                <!--/*@thymesVar id="report" type="de.interseroh.report.model.ReportReference"*/-->
                 <th:block sec:authorize="isAuthenticated()" th:each="report : ${reportReferencesList}">
                     <a href="#param"
                        th:href="@{'/reports/'+${report.name}}"

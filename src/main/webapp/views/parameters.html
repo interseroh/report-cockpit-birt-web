@@ -41,6 +41,7 @@
                         <h3 class="panel-title">Parameter</h3>
                     </div>
                     <div class="panel-body">
+                        <!--/*@thymesVar id="reportName" type="java.lang.String"*/-->
                         <form id="parameters" class="form-horizontal render-partial"
                               th:action="@{'/reports/'+${reportName}+'/params'}"
                               th:object="${parameterForm}"

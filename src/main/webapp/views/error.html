@@ -23,8 +23,9 @@
                  th:src="@{/images/birt-purple-logo.png}"/>&nbsp; &nbsp; &nbsp;
             Fehler aufgetreten </h3>
     </div>
+    <!--/*@thymesVar id="errorMessage" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="errorCode" type="java.lang.String"*/-->
     <h1 th:text="${errorCode}"></h1>
-
     <p th:text="${errorMessage}"></p>
 </div>
 <footer class="container-fluid" th:replace="/fragments/footerTag :: footerTag">

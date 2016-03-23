@@ -28,10 +28,10 @@ import de.interseroh.report.services.BirtFileReaderService;
 @Controller
 @Scope(WebApplicationContext.SCOPE_REQUEST)
 @RequestMapping("/reports")
-public class DefaultReportController {
+public class AllReportsController {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(DefaultReportController.class);
+			.getLogger(AllReportsController.class);
 
 	@Autowired
 	BirtFileReaderService birtFileReaderService;

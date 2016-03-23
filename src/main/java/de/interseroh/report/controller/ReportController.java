@@ -151,11 +151,11 @@ public class ReportController {
 		// creating a new one.
 		parameterForm.setOverwrite(recreate);
 		parameterForm.setPageNumber(pageNumber);
-		return showReport(parameterForm, requestParams, reportName, errors);
+		return showReportForm(parameterForm, requestParams, reportName, errors);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showReport(
+	public ModelAndView showReportForm(
 			//
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
@@ -271,28 +271,34 @@ public class ReportController {
 		parameterFormFormatter.format(form);
 		parameterFormValidator.validate(form, errors);
 
-		ParameterLogVisitor.printParameters(form.getGroups());
-
 		if (form.isValid() && !errors.hasErrors()) {
-			RedirectView redirectView = new RedirectView();
-			redirectView.setUrl("/reports/{reportName}");
-			redirectView.setContextRelative(true);
-			redirectView.setPropagateQueryParams(false);
-			redirectView.setExposeModelAttributes(true);
-			modelAndView.addAllObjects(new ParameterValueMapBuilder()
-					.build(form));
-			modelAndView.addObject("reportName", reportName);
-			modelAndView.setView(redirectView);
+            showReportForm(reportName, form, modelAndView);
 		} else {
-			modelAndView.setViewName("/parameters");
-			configSetter.setBranding(modelAndView);
-			configSetter.setVersion(modelAndView);
-			modelAndView.addObject("parameterForm", form);
-			injectReportUri(form, modelAndView, reportName);
+            showParameterForm(reportName, form, modelAndView);
 		}
 
 		return modelAndView;
 
 	}
+
+    private void showParameterForm(@PathVariable("reportName") String reportName, @ModelAttribute("parameterForm") ParameterForm form, ModelAndView modelAndView) {
+        modelAndView.setViewName("/parameters");
+        configSetter.setBranding(modelAndView);
+        configSetter.setVersion(modelAndView);
+        modelAndView.addObject("parameterForm", form);
+        injectReportUri(form, modelAndView, reportName);
+    }
+
+    private void showReportForm(@PathVariable("reportName") String reportName, @ModelAttribute("parameterForm") ParameterForm form, ModelAndView modelAndView) {
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/reports/{reportName}");
+        redirectView.setContextRelative(true);
+        redirectView.setPropagateQueryParams(false);
+        redirectView.setExposeModelAttributes(true);
+        modelAndView.addAllObjects(new ParameterValueMapBuilder()
+                .build(form));
+        modelAndView.addObject("reportName", reportName);
+        modelAndView.setView(redirectView);
+    }
 
 }

@@ -1,6 +1,7 @@
 package de.interseroh.report.services;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,9 @@ import de.interseroh.report.model.ReportReference;
 @Service
 public class BirtFileReaderServiceBean implements BirtFileReaderService {
 
-	public static final int SUFFIXCOUNT = 10;
+    private static final String REPORT_FILESUFFIX = ".rptdesign";
+
+	public static final int REPORT_FILESUFFIX_LENGTH = REPORT_FILESUFFIX.length();
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(BirtFileReaderServiceBean.class);
@@ -44,20 +47,25 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 		}
 
 		List<ReportReference> reportReferences = new ArrayList<>();
-		List<String> roles = securityControl.getRoles();
+		List<String> stripRoleNames = securityControl.getStripRoleNames();
 
 		try {
 			if (directory.exists() && directory.canRead()
 					&& directory.isDirectory()) {
-				File[] files = directory.listFiles();
-				String splitRoleName;
+                FilenameFilter filter = new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        return false;
+                    }
+                };
+                File[] files = directory.listFiles(filter);
 				if (files != null) {
 					for (File file : files) {
+                        // TODO idueppe - make it robust - only files with *.rptdesign
 						String fileName = file.getName().substring(0,
-								(file.getName().length() - SUFFIXCOUNT));
-						for (String role : roles) {
-							splitRoleName = role.substring(5);
-							if (splitRoleName.equalsIgnoreCase(fileName)) {
+								(file.getName().length() - REPORT_FILESUFFIX_LENGTH));
+						for (String role : stripRoleNames) {
+							if (role.equalsIgnoreCase(fileName)) {
 								reportReferences.add(new ReportReference(
 										fileName, "reports..."));
 							}
@@ -73,5 +81,9 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 
 		return reportReferences;
 	}
+
+
+
+
 
 }

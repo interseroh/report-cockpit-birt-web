@@ -32,8 +32,15 @@ jdbc.password.reportcockpit=
 # jdbc.username.reportcockpit=USER
 # jdbc.password.reportcockpit=PASSWORD
 
+# Postgres Database
+# jdbc.driver.classname.reportcockpit=org.postgresql.Driver
+# jdbc.url.reportcockpit=jdbc:postgresql://localhost:5432/postgres
+# jdbc.username.reportcockpit=postgres
+# jdbc.password.reportcockpit=
+
 # Hibernate properties for database
 # hibernate.dialect.reportcockpit=org.hibernate.dialect.Oracle10gDialect
+# hibernate.dialect.reportcockpit=org.hibernate.dialect.PostgreSQL9Dialect
 hibernate.dialect.reportcockpit=org.hibernate.dialect.H2Dialect
 hibernate.show_sql.reportcockpit=false
 hibernate.hbm2ddl.auto.reportcockpit=create

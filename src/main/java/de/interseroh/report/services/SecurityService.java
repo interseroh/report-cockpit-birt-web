@@ -3,6 +3,7 @@ package de.interseroh.report.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,7 +27,11 @@ public class SecurityService {
 	private static final Logger logger = LoggerFactory
 			.getLogger(BirtFileReaderServiceBean.class);
 
-	@Autowired
+    private static final String ROLE_PREFIX = "ROLE_";
+
+    private static final int ROLE_PREFIX_LENGTH = ROLE_PREFIX.length();
+
+    @Autowired
 	private SecurityHelper securityHelper;
 
 	@Autowired
@@ -57,13 +62,21 @@ public class SecurityService {
 		return roles;
 	}
 
+
+    public List<String> getStripRoleNames() {
+        List<String> roles = getRoles();
+        List<String> stripRoleNames = new ArrayList<>(roles.size());
+        for (String role : roles) {
+            stripRoleNames.add(stripRolePrefix(role));
+        }
+        return roles;
+    }
+
 	public boolean hasUserValidRole(String reportName) {
 		List<String> roles = getRoles();
-		String splitRoleName;
 
-		for (String role : roles) {
-			splitRoleName = role.substring(5);
-			if (splitRoleName.equalsIgnoreCase(reportName)) {
+        for (String role : roles) {
+            if (stripRolePrefix(role).equalsIgnoreCase(reportName)) {
 				return true;
 			}
 		}
@@ -71,6 +84,15 @@ public class SecurityService {
 		return false;
 	}
 
+    private String stripRolePrefix(String role) {
+        if (role.startsWith(ROLE_PREFIX)) {
+            return role.substring(ROLE_PREFIX_LENGTH);
+        } else {
+            return role;
+        }
+    }
+
+    // TODO idueppe - separation of concerns violation. the method is not used here.
 	public File getTmpDirectory() {
 		String tmpDirectory = environment.getProperty("java.io.tmpdir");
 		String location = environment.getProperty(

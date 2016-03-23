@@ -69,7 +69,7 @@ public class SecurityService {
         for (String role : roles) {
             stripRoleNames.add(stripRolePrefix(role));
         }
-        return roles;
+        return stripRoleNames;
     }
 
 	public boolean hasUserValidRole(String reportName) {

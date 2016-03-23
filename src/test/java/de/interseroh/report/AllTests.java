@@ -20,6 +20,7 @@
  */
 package de.interseroh.report;
 
+import de.interseroh.report.services.SecurityServiceTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -64,6 +65,9 @@ SecurityConfigTest.class, //
 		CustomReportControllerTest.class,//
 		SecurityControlTest.class,//
 		ParameterFormFormatterTest.class,//
-		BirtConvertingTest.class })
+		BirtConvertingTest.class, //
+        SecurityServiceTest.class
+
+})
 public class AllTests {
 }

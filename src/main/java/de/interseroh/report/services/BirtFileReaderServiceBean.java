@@ -55,13 +55,12 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
                 FilenameFilter filter = new FilenameFilter() {
                     @Override
                     public boolean accept(File dir, String name) {
-                        return false;
+                        return name.endsWith(".rptdesign");
                     }
                 };
                 File[] files = directory.listFiles(filter);
 				if (files != null) {
 					for (File file : files) {
-                        // TODO idueppe - make it robust - only files with *.rptdesign
 						String fileName = file.getName().substring(0,
 								(file.getName().length() - REPORT_FILESUFFIX_LENGTH));
 						for (String role : stripRoleNames) {

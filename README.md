@@ -2,7 +2,7 @@
 
 This projects provides an easy to integrate and enhanced BIRT Web-Viewer based on Spring WebMVC, Thymeleaf and Bootstrap. The Projects consist of two parts. First, is the REST-API to render reports. Second, it provides an modern Front-End based on Bootstrap and JQuery to be easily customized.
 
-[![Travis Build Status](https://travis-ci.org/idueppe/report-cockpit-birt-web.png?branch=master)](https://travis-ci.org/idueppe/report-cockpit-birt-web)
+[![Build Status](https://travis-ci.org/interseroh/report-cockpit-birt-web.svg?branch=master)](https://travis-ci.org/interseroh/report-cockpit-birt-web)
 
 ## Documentation
 

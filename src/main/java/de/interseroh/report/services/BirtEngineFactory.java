@@ -46,8 +46,10 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>,
 		ApplicationContextAware, DisposableBean {
 
 	public static final String SPRING_KEY = "spring";
-	private final Logger logger = Logger
+
+    private final Logger logger = Logger
 			.getLogger(BirtEngineFactory.class.getName());
+
 	private ApplicationContext applicationContext;
 
 	private IReportEngine birtEngine;
@@ -78,6 +80,7 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>,
 		EngineConfig config = new EngineConfig();
 		config.setTempDir(env.getProperty("java.io.tmpdir"));
 		config.getAppContext().put(SPRING_KEY, this.applicationContext);
+
 		// config.setLogConfig(".", Level.ALL);
 		config.setLogger(logger);
 		return config;

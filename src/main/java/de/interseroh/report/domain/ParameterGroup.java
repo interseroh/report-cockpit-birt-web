@@ -23,9 +23,9 @@ package de.interseroh.report.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 
 import de.interseroh.report.domain.visitors.ParameterVisitor;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Ingo Düppe (Crowdcode)

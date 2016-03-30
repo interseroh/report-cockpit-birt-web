@@ -328,13 +328,13 @@ public class BirtReportServiceBean implements BirtReportService {
 				.openReportDesign(reportFileName);
 		IRunAndRenderTask task = reportEngine
 				.createRunAndRenderTask(iReportRunnable);
-		logger.debug("Setting Locale to " + LocaleContextHolder.getLocale());
-		task.setLocale(LocaleContextHolder.getLocale());
+        injectLocale(task);
 
 		return task;
 	}
 
-	@Override
+
+    @Override
 	public void renderHtmlReport(String reportName,
 			Map<String, Object> parameters, OutputStream out, long pageNumber,
 			boolean overwrite) throws BirtReportException {
@@ -365,6 +365,7 @@ public class BirtReportServiceBean implements BirtReportService {
 					reportDocument, reportDocument.getReportRunnable());
 			renderTask.setRenderOption(htmlOptions);
 			renderTask.setPageNumber(pageNumber);
+            injectLocale(renderTask);
 			renderTask.render();
 			renderTask.close();
 
@@ -444,6 +445,11 @@ public class BirtReportServiceBean implements BirtReportService {
 					parameter.getValue());
 		}
 	}
+
+    private void injectLocale(IEngineTask task) {
+        logger.debug("Setting Report Locale to " + LocaleContextHolder.getLocale());
+        task.setLocale(LocaleContextHolder.getLocale());
+    }
 
 	private String absolutePathOf(String reportFileName) throws IOException {
 		String location = appendSeparatorIfNeeded(environment

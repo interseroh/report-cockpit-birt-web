@@ -21,34 +21,37 @@
 
     <div class="container-fluid">
         <ul class="pagination pagination-sm">
+            <!--/*@thymesVar id="pagination" type="de.interseroh.report.pagination.Pagination"*/-->
+            <!--/*@thymesVar id="reportName" type="java.lang.String" */-->
+            <!--/*@thymesVar id="reportParams" type="java.lang.String" */-->
             <th:block th:each="page : ${pagination.pageLinks}">
                 <th:block th:switch="${page.linkType?.name()}">
                     <li th:case="'FIRST'">
-                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}+${reportParams}}">
                             <span class="glyphicon glyphicon-step-backward"></span>
                         </a>
                     </li>
                     <li th:case="'FASTBACKWARD'">
-                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}+${reportParams}}">
                             <span class="glyphicon glyphicon-backward"></span>
                         </a>
                     </li>
 
                     <li th:case="'PAGE'" th:classappend="${page.active?'active':''}">
                         <a th:if="${!page.active}"
-                           th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                           th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}+${reportParams}}">
                             <span th:text="${page.pageNumber}">page number</span>
                         </a>
                         <span th:if="${page.active}"
                               th:text="${page.pageNumber}">page number active</span>
                     </li>
                     <li th:case="'FASTFORWARD'">
-                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}+${reportParams}}">
                             <span class="glyphicon glyphicon-forward"></span>
                         </a>
                     </li>
                     <li th:case="'LAST'">
-                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}}">
+                        <a th:href="@{'/reports/'+${reportName}+'/'+${page.pageNumber}+${reportParams}}">
                             <span class="glyphicon glyphicon-step-forward"></span>
                         </a>
                     </li>

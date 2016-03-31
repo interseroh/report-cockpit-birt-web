@@ -73,12 +73,12 @@ public class ReportRestApiControllerTest {
         ;
 	}
 
-	@Test(expected = NestedServletException.class) // BirtReportException.class)
-	public void testCascadingParameterViewException() throws Exception {
-		when(securityService.hasUserValidRole(anyString())).thenReturn(false);
+	@Test
+	public void testCascadingParameterWithOutPermission() throws Exception {
+		when(securityService.hasUserValidRole("cascade_parameters")).thenReturn(false);
 		this.mockMvc.perform(get(
 				"/api/render/cascade_parameters/html?params[customer].text=112&params[order].text=10124")) //
-				.andExpect(status().isOk()) //
+				.andExpect(status().isUnauthorized()) //
 //				.andDo(print())
         ;
 	}

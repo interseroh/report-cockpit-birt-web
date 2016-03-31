@@ -17,19 +17,24 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div th:replace="/fragments/navbar :: defaultNavbar"></div>
-    <div class="jumbotron">
-        <h3><img src="../../images/birt-purple-logo.png" alt="BIRT Reporting"
-                 th:src="@{/images/birt-purple-logo.png}"/>&nbsp; &nbsp; &nbsp;
-            Fehler aufgetreten </h3>
-    </div>
     <!--/*@thymesVar id="errorMessage" type="java.lang.String"*/-->
     <!--/*@thymesVar id="errorCode" type="java.lang.String"*/-->
-    <h1 th:text="${errorCode}"></h1>
-    <p th:text="${errorMessage}"></p>
+    <div th:replace="/fragments/navbar :: defaultNavbar"></div>
+
+
+    <div class="col-sm-1">
+        <img src="../../images/birt-purple-logo.png" class="img-thumbnail" alt="BIRT Reporting"
+                 th:src="@{/images/birt-purple-logo.png}"/>&nbsp; &nbsp; &nbsp;
+        </div>
+    <div class="col-sm-8 col-sm-offset-1">
+        <h5 class="text-danger">
+            Ein Fehler ist aufgetreten:
+        </h5>
+        <h4 class="text-danger" th:text="${errorMessage}"></h4>
+    </div>
+
 </div>
 <footer class="container-fluid" th:replace="/fragments/footerTag :: footerTag">
-    <span>Dummy</span>
 </footer>
 </body>
 </html>

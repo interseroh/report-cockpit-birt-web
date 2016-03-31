@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import de.interseroh.report.exception.BirtUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,11 +119,9 @@ public class ReportRestApiController {
 
 		logger.debug("Rendering " + reportName + " in " + format + ".");
 
-		if(!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(String.format("User has no role for %s", reportName));
-		}
+        checkPermissionFor(reportName);
 
-		parameterFormBinder.bind(parameterForm, requestParams, errors);
+        parameterFormBinder.bind(parameterForm, requestParams, errors);
 		parameterFormConverter.convert(parameterForm, errors);
 		parameterFormFormatter.format(parameterForm);
 		parameterFormValidator.validate(parameterForm, errors);
@@ -161,7 +160,12 @@ public class ReportRestApiController {
 					response.getOutputStream());
 		}
 
-		// TODO idueppe - need exception handling
 	}
+
+    private void checkPermissionFor(String reportName) throws BirtReportException {
+        if(!securityService.hasUserValidRole(reportName)) {
+            throw new BirtUnauthorizedException(reportName);
+        }
+    }
 
 }

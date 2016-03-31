@@ -20,6 +20,7 @@
  */
 package de.interseroh.report.controller;
 
+import de.interseroh.report.exception.BirtUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,6 @@ import de.interseroh.report.services.SecurityService;
 @RequestMapping("/reports/{reportName}")
 public class ReportController {
 
-	public static final int SUFFIXCOUNT = 10;
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReportController.class);
 	@Autowired
@@ -89,9 +89,6 @@ public class ReportController {
 	public ParameterForm populateForm(
 			@PathVariable("reportName") String reportName)
 			throws BirtReportException {
-		if (!securityService.hasUserValidRole(reportName)) {
-			// TODO: what should we do here?
-		}
 
 		return new ParameterForm() //
 				.withReportName(reportName) //
@@ -109,10 +106,7 @@ public class ReportController {
 
 		logger.debug("executing show parameter form for " + reportName);
 
-		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(String.format(
-					"User has no role for %s", reportName));
-		}
+        checkPermisionFor(reportName);
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -143,10 +137,8 @@ public class ReportController {
 			@PathVariable("pageNumber") Long pageNumber, BindingResult errors)
 			throws BirtReportException {
 
-		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(String.format(
-					"User has no role for %s", reportName));
-		}
+        checkPermisionFor(reportName);
+
 		// if requesting a specific page reuse existing report instead of
 		// creating a new one.
 		parameterForm.setOverwrite(recreate);
@@ -164,10 +156,7 @@ public class ReportController {
 
 		logger.debug("executing show report for " + reportName);
 
-		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(String.format(
-					"User has no role for %s", reportName));
-		}
+        checkPermisionFor(reportName);
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -216,12 +205,9 @@ public class ReportController {
 			@RequestParam MultiValueMap<String, String> requestParams, //
 			BindingResult bindingResult) throws BirtReportException {
 
-		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(String.format(
-					"User has no role for %s", reportName));
-		}
+        checkPermisionFor(reportName);
 
-		// filter by cascading group name
+        // filter by cascading group name
 		parameterFormBinder.bind(form, requestParams, bindingResult);
 		parameterFormConverter.convert(form, bindingResult);
 
@@ -260,12 +246,9 @@ public class ReportController {
 			ModelAndView modelAndView) throws BirtReportException {
 
 		logger.debug("Executing POST of form for {} ", reportName);
-		if (!securityService.hasUserValidRole(reportName)) {
-			throw new BirtReportException(String.format(
-					"User has no role for %s", reportName));
-		}
+        checkPermisionFor(reportName);
 
-		parameterFormBinder.bind(form, requestParams, errors);
+        parameterFormBinder.bind(form, requestParams, errors);
 		parameterFormConverter.convert(form, errors);
 		cascadingGroupLoader.load(form);
 		parameterFormFormatter.format(form);
@@ -280,6 +263,12 @@ public class ReportController {
 		return modelAndView;
 
 	}
+
+    private void checkPermisionFor(@PathVariable("reportName") String reportName) throws BirtUnauthorizedException {
+        if (!securityService.hasUserValidRole(reportName)) {
+            throw new BirtUnauthorizedException(reportName);
+        }
+    }
 
     private void showParameterForm(@PathVariable("reportName") String reportName, @ModelAttribute("parameterForm") ParameterForm form, ModelAndView modelAndView) {
         modelAndView.setViewName("/parameters");

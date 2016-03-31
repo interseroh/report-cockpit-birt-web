@@ -9,9 +9,16 @@
         <welcome-file>/index</welcome-file>
     </welcome-file-list>
 
-    <error-page>
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/error.html</location>
-    </error-page>
+    <!--<error-page>-->
+        <!--<exception-type>java.lang.Throwable</exception-type>-->
+        <!--<location>/error.html</location>-->
+    <!--</error-page>-->
+
+    <resource-ref>
+        <description>ReportCockpit Portal Pool Data Source</description>
+        <res-ref-name>jdbc/reportcockpitds</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Application</res-auth>
+    </resource-ref>
 
 </web-app>

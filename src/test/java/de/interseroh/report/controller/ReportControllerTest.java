@@ -218,6 +218,8 @@ public class ReportControllerTest {
 
     }
 
+
+
     @Test
     public void testDateFormFieldWithScript() throws Exception {
         when(securityService.hasUserValidRole(eq("multiselect")))

@@ -26,11 +26,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import com.ibm.icu.util.ULocale;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
@@ -227,6 +229,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
 
 			injectParameters(parameters, runAndRenderTask);
+            injectLocale(runAndRenderTask);
 
 			HTMLRenderOption htmlOptions = new HTMLRenderOption();
 			htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
@@ -294,7 +297,6 @@ public class BirtReportServiceBean implements BirtReportService {
 			throws BirtReportException {
 		try {
 			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
-
 			injectParameters(parameters, runAndRenderTask);
 
 			EXCELRenderOption excelRenderOptions = new EXCELRenderOption();
@@ -316,6 +318,7 @@ public class BirtReportServiceBean implements BirtReportService {
 
 	private void runAndRenderTask(IRunAndRenderTask runAndRenderTask,
 			IRenderOption renderOptions) throws EngineException {
+        injectLocale(runAndRenderTask);
 		runAndRenderTask.setRenderOption(renderOptions);
 		runAndRenderTask.run();
 		runAndRenderTask.close();
@@ -365,7 +368,10 @@ public class BirtReportServiceBean implements BirtReportService {
 					reportDocument, reportDocument.getReportRunnable());
 			renderTask.setRenderOption(htmlOptions);
 			renderTask.setPageNumber(pageNumber);
+
             injectLocale(renderTask);
+
+
 			renderTask.render();
 			renderTask.close();
 
@@ -386,42 +392,6 @@ public class BirtReportServiceBean implements BirtReportService {
 				.lastModified();
 
 		return overwrite || !documentFile.exists() || outdated;
-	}
-
-	public IReportDocument openReportDocument(String reportName,
-			OutputStream out) throws IOException, EngineException {
-		String reportFileName = absolutePathOf(reportFileName(reportName));
-		IReportRunnable reportRunnable = reportEngine
-				.openReportDesign(reportFileName);
-
-		IRunTask runTask = reportEngine.createRunTask(reportRunnable);
-		String documentFileName = absoluteTempPath(documentFileName(reportName));
-		runTask.run(documentFileName);
-
-		IReportDocument reportDocument = reportEngine
-				.openReportDocument(documentFileName);
-
-		HTMLRenderOption htmlOptions = new HTMLRenderOption();
-		htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
-		htmlOptions.setOutputStream(out);
-		htmlOptions.setImageHandler(new HTMLServerImageHandler());
-		htmlOptions.setEmbeddable(true);
-
-		htmlOptions.setBaseImageURL(baseImageURL);
-		htmlOptions.setImageDirectory(imageDirectory);
-
-		htmlOptions.setHtmlPagination(true);
-		htmlOptions.setMasterPageContent(false);
-		htmlOptions.setPageFooterFloatFlag(true);
-
-		IRenderTask renderTask = reportEngine.createRenderTask(reportDocument,
-				reportRunnable);
-		renderTask.setRenderOption(htmlOptions);
-		renderTask.setPageNumber(2);
-		renderTask.render();
-		renderTask.close();
-
-		return reportDocument;
 	}
 
 	private String reportFileName(String reportName) {
@@ -447,8 +417,14 @@ public class BirtReportServiceBean implements BirtReportService {
 	}
 
     private void injectLocale(IEngineTask task) {
-        logger.debug("Setting Report Locale to " + LocaleContextHolder.getLocale());
-        task.setLocale(LocaleContextHolder.getLocale());
+        Locale locale = LocaleContextHolder.getLocale();
+
+        logger.debug("Setting Report Locale to " + locale);
+
+        task.setLocale(locale);
+        task.setLocale(ULocale.forLocale(locale));
+
+        logger.debug("Report Language is "+task.getULocale().getBaseName());
     }
 
 	private String absolutePathOf(String reportFileName) throws IOException {

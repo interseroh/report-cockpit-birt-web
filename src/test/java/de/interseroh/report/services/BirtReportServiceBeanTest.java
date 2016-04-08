@@ -69,23 +69,23 @@ public class BirtReportServiceBeanTest {
 		// out.writeTo(System.out);
 	}
 
-	@Test
-	public void testReportDocument() throws Exception {
-		ByteArrayOutputStream out = new ByteArrayOutputStream(40000000);
-		IReportDocument document = reportService.openReportDocument("chart",
-				out);
-		// out.writeTo(System.out);
+//	@Test
+//	public void testReportDocument() throws Exception {
+//		ByteArrayOutputStream out = new ByteArrayOutputStream(40000000);
+//		IReportDocument document = reportService.openReportDocument("chart",
+//				out);
+//		 out.writeTo(System.out);
+//
+//		Collection<IBookmarkInfo> bookmarks = DocumentUtil
+//				.getBookmarks(document, Locale.GERMANY);
+//		for (IBookmarkInfo bookmark : bookmarks) {
+//			System.out.println("DisplayName  :" + bookmark.getDisplayName());
+//			System.out.println("ElementType  :" + bookmark.getElementType());
+//			System.out.println("Bookmark     :" + bookmark.getBookmark());
+//			System.out.println("BookmarkType :" + bookmark.getBookmarkType());
+//			System.out.println("PageNumber   :"
+//					+ document.getPageNumber(bookmark.getBookmark()));
+//		}
+//	}
 
-		Collection<IBookmarkInfo> bookmarks = DocumentUtil
-				.getBookmarks(document, Locale.GERMANY);
-		for (IBookmarkInfo bookmark : bookmarks) {
-			System.out.println("DisplayName  :" + bookmark.getDisplayName());
-			System.out.println("ElementType  :" + bookmark.getElementType());
-			System.out.println("Bookmark     :" + bookmark.getBookmark());
-			System.out.println("BookmarkType :" + bookmark.getBookmarkType());
-			System.out.println("PageNumber   :"
-					+ document.getPageNumber(bookmark.getBookmark()));
-		}
-
-	}
 }

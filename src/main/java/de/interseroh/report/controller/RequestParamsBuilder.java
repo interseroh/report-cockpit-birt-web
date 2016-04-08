@@ -74,7 +74,7 @@ public class RequestParamsBuilder {
 
 			private void addKeyValueParam(String paramName, String paramValue) {
 				if (paramValue != null && !paramValue.trim().isEmpty()) {
-					params.add(paramName + "=" + urlEncode(paramValue));
+					params.add(paramName + "=" + paramValue);
 				}
 			}
 		});
@@ -92,12 +92,4 @@ public class RequestParamsBuilder {
 		return (builder.length() > 0) ? "?" + builder.toString() : "";
 	}
 
-	protected String urlEncode(String text) {
-		try {
-			return URLEncoder.encode(text, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(
-					"Report Parameter Encoding did not work.", e);
-		}
-	}
 }

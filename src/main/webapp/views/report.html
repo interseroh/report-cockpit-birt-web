@@ -16,14 +16,14 @@
 
 <body>
 
+<!--/*@thymesVar id="pagination" type="de.interseroh.report.pagination.Pagination"*/-->
+<!--/*@thymesVar id="reportName" type="java.lang.String" */-->
+<!--/*@thymesVar id="reportParams" type="java.lang.String" */-->
 <div class="container-fluid">
     <div th:replace="/fragments/navbar :: defaultNavbar"></div>
 
     <div class="container-fluid">
         <ul class="pagination pagination-sm">
-            <!--/*@thymesVar id="pagination" type="de.interseroh.report.pagination.Pagination"*/-->
-            <!--/*@thymesVar id="reportName" type="java.lang.String" */-->
-            <!--/*@thymesVar id="reportParams" type="java.lang.String" */-->
             <th:block th:each="page : ${pagination.pageLinks}">
                 <th:block th:switch="${page.linkType?.name()}">
                     <li th:case="'FIRST'">

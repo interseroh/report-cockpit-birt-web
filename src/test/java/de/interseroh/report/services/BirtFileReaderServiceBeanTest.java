@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -55,15 +56,11 @@ public class BirtFileReaderServiceBeanTest {
 
 		File directory = new File(getClass().getResource("/reports").getFile());// target
 																				// folder
-		List<String> roles = new ArrayList<>();
-		roles.add("ROLE_SALESINVOICE");
 
-		when(securityControl.getTmpDirectory()).thenReturn(directory);
+        when(securityControl.getTmpDirectory()).thenReturn(directory);
+		when(securityControl.getStripRoleNames()).thenReturn(Arrays.asList("SALESINVOICE"));
 
-		when(securityControl.getRoles()).thenReturn(roles);
-
-		List<ReportReference> list = serviceFileReader
-				.getReportReferences();
+		List<ReportReference> list = serviceFileReader.getReportReferences();
 
 		assertEquals("1 report in directory with its role available", 1,
 				list.size());
@@ -74,14 +71,10 @@ public class BirtFileReaderServiceBeanTest {
 
 		File directory = new File(getClass().getResource("/reports").getFile());//
 
-		List<String> roles = new ArrayList<>();
-		roles.add("ROLE_SALESINVOICE");
-		roles.add("ROLE_PRODUCTCATALOG");
-
+		List<String> roles = Arrays.asList("SALESINVOICE","PRODUCTCATALOG");
 
 		when(securityControl.getTmpDirectory()).thenReturn(directory);
-
-		when(securityControl.getRoles()).thenReturn(roles);
+		when(securityControl.getStripRoleNames()).thenReturn(roles);
 
 		List<ReportReference> list = serviceFileReader
 				.getReportReferences();

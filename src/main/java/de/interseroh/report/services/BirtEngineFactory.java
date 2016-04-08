@@ -27,6 +27,7 @@ import org.eclipse.birt.core.framework.Platform;
 import org.eclipse.birt.report.engine.api.EngineConfig;
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportEngineFactory;
+import org.eclipse.core.internal.registry.RegistryProviderFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
@@ -67,7 +68,6 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>,
 					.createFactoryObject(
 							IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
 			birtEngine = factory.createReportEngine(config);
-
 			return birtEngine;
 		} catch (BirtException be) {
 			throw new BirtSystemException("Failed to start birt engine.", be);
@@ -106,5 +106,6 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>,
 	public void destroy() throws Exception {
 		birtEngine.destroy();
 		Platform.shutdown();
+        RegistryProviderFactory.releaseDefault();
 	}
 }

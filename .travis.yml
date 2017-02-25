@@ -3,3 +3,18 @@ jdk:
   - openjdk7
   - oraclejdk7
   - oraclejdk8
+  
+env:
+  global:
+    - secure: "Dow1YDJgjHfiWxAcku2m9JfUOaEqyOzRC8sRYVgcgj83x5kGnUHp9/X6mcRl7JB5yyEBUd6VIuUbt9LesUt78GvxUhgpoA6bWTDXcNrBXYav1S4rh1zBkhe//LAJ0pg7+/KPXqkPbhacmj1Y2Nvw1IMX7Q6bexZYS4idt7i2bwoPL4mA+wT8uKZ65WDvWEY/37VaiPsILt/yY5ZO8/UzY8GSrK3vyiHQiFMkKKUfdTiNWm+7nTILgLK4Rb83SwIuP4WhpimIR+coX5Q8lfAXE4iHlpFSp+FPfvwbxzJ4QZ94hPCRwCEBD10CIF/oBeNSrgZbn9BGJqlQehEuTdZGv6KbI2xiWS5hSQ3Ecg8SjGXP/wGl4kw/TvWRJTt8jhc3A6SvLMx0RY/6dHP0p6DYeu5LsDU08MJ+9H2a4eeDV8D3R7tk2he+ke4VqXjxH/SVfWNnyukCPYQSgSX48vMaLZSZbI1F6ifpF/MBBtE8GRcDPygTcRuLPMYZUBJ4M9yhqki9Gp+Led32QbDgJigw2LJQK0fGJUm4fJPUe42/wfSSDGUyi20uj9GanLZonZ8XSPgTMUZWGbuP2bQdTZGZVbNH8+QKBYE4+wn5KK9nx4KwDQzkFk8Y5fd73VKqAwfEbv3qUIN8Sond3pDDos7en1ZGSVLslPfv2VSD9TY1lxs="
+    - secure: "N2DOuvkPLFndgDF8Kw5e7f0a9raToD4JPmhz14sgrzJe2QEAMraDuxeBGyBt+9QFdx42xyLesCXQNPJuBtuMuAoxQZ6HQk/9NMqXR16qhs6MnlwHsuiIzycTfpCF+t/kCr+xsV1BfbqFAy5uQkeKnNR2lCwT7Pqfx4zrueXXvibH+A1UhG7HGaf+Hop4qj9JfRySIdmMPmwtWtsr44jYBp7qQlIDO9MY+ymuiapBGkbCQzJKrOXBmnY41Ch9O4XnTnUQWSLikEJINgaTpERA6dlzjx75Vj5E5XLQW2sDoZRp/KOymEIIKNbhVHU99ko+maf4avUxmAaTAGvofIdq+eJMtPrdkd0uJnplVii8k/ZifFseIRHp9pwc6XoRZtbQesjd/gwz7JmyJFuTErFYUShVXBXoaN5C/tyKMbBD7jQJWZauWgv6SMGKxFnT7OFQanS5OQOXR4FV06uyi2C0qVhr3A/x85rhOwmV3mTLCdeIgHFnYf409P2TQByN2t1YOGOdNBVMEX68XwXa0/5QFjf+sVh2mynBne6AfdFjoa/FqFCzUmDcm9OvGXshIR7bukh48Uyoax/WwBU4Fk+D9jDSq9M0CIu8vOz+wF8pbYA/99ucdvTCE5rtmMCe2fJcNh1L4i+z+SUjEFcwEwdgP8P2DUUnlaC0xSsbbpSfSCQ="
+
+addons:
+  sonarqube: true
+
+script:
+  - mvn clean install
+  - if [[ -n $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST != "false" ]]; then mvn --batch-mode --errors --show-version clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.analysis.mode=preview  -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN  -Dsonar.github.oauth=$SONAR_GITHUB_TOKEN  -Dsonar.github.pullRequest=$TRAVIS_PULL_REQUEST  -Dsonar.github.repository=$TRAVIS_REPO_SLUG; else mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar; fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

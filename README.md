@@ -5,6 +5,8 @@ This projects provides an easy to integrate and enhanced BIRT Web-Viewer based o
 ## Build Status
 
 [![Build Status](https://travis-ci.org/interseroh/report-cockpit-birt-web.svg?branch=master)](https://travis-ci.org/interseroh/report-cockpit-birt-web)
+[![Quality Gate](http://sonarqube.com/api/badges/gate?key=de.interseroh.report%3Areport-cockpit-birt-web)](https://sonarqube.com/dashboard?id=de.interseroh.report%3Areport-cockpit-birt-web)
+
 
 ## Documentation
 

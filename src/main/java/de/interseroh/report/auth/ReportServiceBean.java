@@ -36,9 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportServiceBean implements ReportService {
 
 	@Autowired
-	private ReportRepository reportRepository;
-
-	@Autowired
 	private RoleRepository roleRepository;
 
 	@Autowired
@@ -48,9 +45,7 @@ public class ReportServiceBean implements ReportService {
 	@Override
 	public Collection<Report> findReportsByRoleId(Long roleId) {
 		RoleEntity role = roleRepository.findOne(roleId);
-		Collection<Report> reports = role.getReports();
-
-		return reports;
+		return role.getReports();
 	}
 
 	@Transactional(readOnly = true)
@@ -59,7 +54,7 @@ public class ReportServiceBean implements ReportService {
 		Collection<UserRoleEntity> userRoles = userRoleRepository
 				.findByUserEmail(email);
 
-		Collection<Report> allReports = new ArrayList<Report>();
+		Collection<Report> allReports = new ArrayList<>();
 		for (UserRoleEntity userRoleEntity : userRoles) {
 			Role currentRole = userRoleEntity.getRole();
 			Collection<Report> reports = currentRole.getReports();

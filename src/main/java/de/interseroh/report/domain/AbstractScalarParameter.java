@@ -47,16 +47,22 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		this.textType = textType;
 	}
 
+	@Override
 	public Class<V> getValueType() {
 		return valueType;
 	}
 
+	@Override
 	public Class<T> getTextType() {
 		return textType;
 	}
 
+	/**
+	 * @return value or default value
+	 * @deprecated
+	 */
 	@Override
-    @Deprecated
+	@Deprecated
 	public V getValueOrDefault() {
 		return (value != null) ? value : defaultValue;
 	}

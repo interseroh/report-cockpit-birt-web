@@ -20,8 +20,6 @@
  */
 package de.interseroh.report.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 

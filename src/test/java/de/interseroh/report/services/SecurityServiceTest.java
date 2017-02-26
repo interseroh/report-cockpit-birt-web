@@ -1,17 +1,17 @@
 package de.interseroh.report.services;
 
-import de.interseroh.report.auth.Role;
-import de.interseroh.report.auth.UserRole;
-import de.interseroh.report.auth.UserService;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.List;
+import de.interseroh.report.auth.Role;
+import de.interseroh.report.auth.UserRole;
+import de.interseroh.report.auth.UserService;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertThat;

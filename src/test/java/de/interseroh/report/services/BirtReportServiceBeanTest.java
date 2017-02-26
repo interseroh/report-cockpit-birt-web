@@ -21,13 +21,8 @@
 package de.interseroh.report.services;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 
-import org.eclipse.birt.report.engine.api.DocumentUtil;
-import org.eclipse.birt.report.engine.api.IBookmarkInfo;
-import org.eclipse.birt.report.engine.api.IReportDocument;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

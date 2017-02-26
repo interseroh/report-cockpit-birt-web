@@ -5,5 +5,12 @@ package de.interseroh.report.pagination;
  */
 public enum PageLinkType {
 
-    FIRST, LAST, PREVIOUS, NEXT, FASTBACKWARD, FASTFORWARD, CURRENT, PAGE;
+    FIRST,
+    LAST,
+    PREVIOUS,
+    NEXT,
+    FASTBACKWARD,
+    FASTFORWARD,
+    CURRENT,
+    PAGE
 }

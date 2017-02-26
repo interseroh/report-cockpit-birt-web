@@ -1,11 +1,6 @@
 package de.interseroh.report.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +16,10 @@ import de.interseroh.report.controller.SecurityServiceMock;
 import de.interseroh.report.exception.BirtSystemException;
 import de.interseroh.report.model.ReportReference;
 import de.interseroh.report.webconfig.ReportConfig;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 /**
  *

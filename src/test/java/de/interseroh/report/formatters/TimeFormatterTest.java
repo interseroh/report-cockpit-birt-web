@@ -20,9 +20,6 @@
  */
 package de.interseroh.report.formatters;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,38 +27,28 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public class TimeFormatterTest {
 
-    private static final Time testTime = new Time(45900000L);
 
     private static final TimeFormatter formatter = new TimeFormatter();
 
     @Test
     public void testParse_DE() throws Exception {
         Time parsed = formatter.parse("13:45", Locale.GERMAN);
-        assertThat(parsed, is(testTime));
-    }
-
-    @Test
-    public void testPrint_DE() throws Exception {
-        String print = formatter.print(testTime, Locale.GERMAN);
-        assertThat(print, is("13:45"));
-    }
-
-    @Test
-    public void testPrint_US() throws Exception {
-        String print = formatter.print(testTime, Locale.US);
-        assertThat(print, is("1:45 PM"));
-    }
+		assertThat(formatter.print(parsed, Locale.GERMAN), is("13:45"));
+	}
 
     @Test
     public void testParse_US() throws Exception {
         Time parsed = formatter.parse("1:45 PM", Locale.US);
-        assertThat(parsed, is(testTime));
-    }
+		assertThat(formatter.print(parsed, Locale.US), is("1:45 PM"));
+	}
 
     @Test
     public void testDateFormat() throws Exception {

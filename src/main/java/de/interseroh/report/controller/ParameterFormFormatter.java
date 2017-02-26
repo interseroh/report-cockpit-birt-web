@@ -85,6 +85,7 @@ public class ParameterFormFormatter {
 								.convert(value, textType);
 						parameter.setText(formatted);
 					} catch (ConversionException ce) {
+						logger.trace(ce.getMessage(), ce);
 						parameter.setText((T) value.toString());
 					}
 				}
@@ -105,7 +106,7 @@ public class ParameterFormFormatter {
 								.convert(defaultValue, textType);
 						parameter.setDefaultText(formatted);
 					} catch (ConversionException ce) {
-						logger.debug(ce.getMessage(), ce);
+						logger.trace(ce.getMessage(), ce);
 					}
 				}
 			}

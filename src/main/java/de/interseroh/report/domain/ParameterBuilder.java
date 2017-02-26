@@ -123,11 +123,13 @@ public class ParameterBuilder {
 
 		AbstractScalarParameter parameter;
 
-		Class valueType = (isSingleValue(definition)) ? dataType.getValueType()
-				: dataType.getValueArrayType();
+		Class valueType = isSingleValue(definition) ?
+				dataType.getValueType() :
+				dataType.getValueArrayType();
 
-		Class textType = (isSingleValue(definition)) ? String.class
-				: String[].class;
+		Class textType = isSingleValue(definition) ?
+				String.class :
+				String[].class;
 
 		switch (controlType) {
 		case SELECTION:
@@ -149,7 +151,7 @@ public class ParameterBuilder {
 		parameter.setTooltip(definition.getHelpText());
 		parameter.setControlType(controlType);
 		parameter.setDataType(dataType);
-        parameter.setDisplayFormat(definition.getDisplayFormat());
+		parameter.setDisplayFormat(definition.getDisplayFormat());
 
 		return parameter;
 	}

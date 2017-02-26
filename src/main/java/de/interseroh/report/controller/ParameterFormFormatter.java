@@ -78,15 +78,14 @@ public class ParameterFormFormatter {
 						.setDisplayFormat(parameter.getDisplayFormat());
 
 				V value = parameter.getValue();
-				if (isNotNullOrEmptyArray(value)) {
-					if (conversionService.canConvert(valueType, textType)) {
-						try {
-							T formatted = conversionService
-									.convert(value, textType);
-							parameter.setText(formatted);
-						} catch (ConversionException ce) {
-							parameter.setText((T) value.toString());
-						}
+				if (isNotNullOrEmptyArray(value) && //
+						conversionService.canConvert(valueType, textType)) {
+					try {
+						T formatted = conversionService
+								.convert(value, textType);
+						parameter.setText(formatted);
+					} catch (ConversionException ce) {
+						parameter.setText((T) value.toString());
 					}
 				}
 			}

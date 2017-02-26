@@ -25,6 +25,9 @@ package de.interseroh.report.domain;
  */
 public class ParameterUtils {
 
+	private ParameterUtils() {
+	}
+
 	public static String nameToValuePath(String parameterName) {
 		return "params[" + parameterName + "].value";
 	}

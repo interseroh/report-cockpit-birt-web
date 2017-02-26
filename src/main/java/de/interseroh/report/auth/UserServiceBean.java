@@ -65,9 +65,8 @@ public class UserServiceBean implements UserService {
 
 		userRepository.save((UserEntity) user);
 		roleRepository.save((RoleEntity) role);
-		UserRoleEntity userRoleEntity = userRoleRepository
-				.save((UserRoleEntity) userRole);
 
-		return userRoleEntity;
+		return userRoleRepository
+				.save((UserRoleEntity) userRole);
 	}
 }

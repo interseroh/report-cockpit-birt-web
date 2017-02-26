@@ -51,24 +51,19 @@ public class SessionListener implements HttpSessionListener {
 
 		event.getSession().setMaxInactiveInterval(Integer.parseInt(timeout));
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Session created, timeout: " + timeout);
-		}
+		logger.debug("Session created, timeout: {} ", timeout);
 	}
 
 	private ApplicationContext getApplicationContext(HttpSessionEvent event) {
 		HttpSession session = event.getSession();
-		ApplicationContext ctx = WebApplicationContextUtils
+		return WebApplicationContextUtils
 				.getWebApplicationContext(session.getServletContext());
-		return ctx;
 	}
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent event) {
 		// Do nothing
-		if (logger.isDebugEnabled()) {
-			logger.debug("Session destroyed.");
-		}
+		logger.debug("Session destroyed.");
 	}
 
 }

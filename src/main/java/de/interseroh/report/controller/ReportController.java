@@ -20,7 +20,6 @@
  */
 package de.interseroh.report.controller;
 
-import de.interseroh.report.exception.BirtUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,7 @@ import de.interseroh.report.domain.ParameterGroup;
 import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.domain.visitors.ParameterValueMapBuilder;
 import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.exception.BirtUnauthorizedException;
 import de.interseroh.report.pagination.Pagination;
 import de.interseroh.report.services.BirtReportService;
 import de.interseroh.report.services.SecurityService;
@@ -52,6 +52,7 @@ import de.interseroh.report.services.SecurityService;
 @RequestMapping("/reports/{reportName}")
 public class ReportController {
 
+	public static final String REPORT_NAME = "reportName";
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReportController.class);
 	@Autowired
@@ -87,7 +88,7 @@ public class ReportController {
 
 	@ModelAttribute("parameterForm")
 	public ParameterForm populateForm(
-			@PathVariable("reportName") String reportName)
+			@PathVariable(REPORT_NAME) String reportName)
 			throws BirtReportException {
 
 		return new ParameterForm() //
@@ -101,7 +102,7 @@ public class ReportController {
 			//
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
-			@PathVariable("reportName") String reportName, BindingResult errors)
+			@PathVariable(REPORT_NAME) String reportName, BindingResult errors)
 			throws BirtReportException {
 
 		logger.debug("executing show parameter form for " + reportName);
@@ -133,7 +134,7 @@ public class ReportController {
 			@ModelAttribute ParameterForm parameterForm,
 			@RequestParam MultiValueMap<String, String> requestParams,
 			@RequestParam(value = "__recreate", required = false, defaultValue = "false") boolean recreate,
-			@PathVariable("reportName") String reportName,
+			@PathVariable(REPORT_NAME) String reportName,
 			@PathVariable("pageNumber") Long pageNumber, BindingResult errors)
 			throws BirtReportException {
 
@@ -151,7 +152,7 @@ public class ReportController {
 			//
 			@ModelAttribute ParameterForm parameterForm, //
 			@RequestParam MultiValueMap<String, String> requestParams,
-			@PathVariable("reportName") String reportName, BindingResult errors)
+			@PathVariable(REPORT_NAME) String reportName, BindingResult errors)
 			throws BirtReportException {
 
 		logger.debug("executing show report for " + reportName);
@@ -167,13 +168,6 @@ public class ReportController {
 			Pagination pagination = reportService.getPageInfos(reportName,
 					parameterForm);
 
-			// TODO reportPage
-			// if (reportPage.getCurrentPageNumber() > reportPage
-			// .getPageNumbers()) {
-			// throw new BirtReportException(String.format(
-			// "For this report: %s no more pages available",
-			// reportName));
-			// }
 			modelAndView.addObject("pagination", pagination);
 			modelAndView.setViewName("/report");
 			injectReportUri(parameterForm, modelAndView, reportName);
@@ -192,14 +186,14 @@ public class ReportController {
 		}
 
 		parameterFormFormatter.format(parameterForm);
-		modelAndView.addObject("reportName", reportName);
+		modelAndView.addObject(REPORT_NAME, reportName);
 
 		return modelAndView;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/params/cascade/{groupName}")
 	public String cascadingGroup( //
-			@PathVariable("reportName") String reportName, //
+			@PathVariable(REPORT_NAME) String reportName, //
 			@PathVariable("groupName") String groupName, //
 			@ModelAttribute ParameterForm form, //
 			@RequestParam MultiValueMap<String, String> requestParams, //
@@ -228,8 +222,8 @@ public class ReportController {
 
 	private void injectReportUri(@ModelAttribute ParameterForm form,
 			ModelAndView modelAndView,
-			@PathVariable("reportName") String reportName) {
-		modelAndView.addObject("reportName", reportName);
+			@PathVariable(REPORT_NAME) String reportName) {
+		modelAndView.addObject(REPORT_NAME, reportName);
 		String url = "/api/render/" + reportName;
 		modelAndView.addObject("reportApiUrl", url);
 
@@ -238,8 +232,8 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/params", method = { RequestMethod.POST })
-	public ModelAndView paramPOST(
-			@PathVariable("reportName") String reportName, //
+	public ModelAndView paramPOST(@PathVariable(REPORT_NAME) String reportName,
+			//
 			@ModelAttribute("parameterForm") ParameterForm form, //
 			@RequestParam MultiValueMap<String, String> requestParams,
 			BindingResult errors, //
@@ -264,30 +258,35 @@ public class ReportController {
 
 	}
 
-    private void checkPermisionFor(@PathVariable("reportName") String reportName) throws BirtUnauthorizedException {
-        if (!securityService.hasUserValidRole(reportName)) {
+	private void checkPermisionFor(@PathVariable(REPORT_NAME) String reportName)
+			throws BirtUnauthorizedException {
+		if (!securityService.hasUserValidRole(reportName)) {
             throw new BirtUnauthorizedException(reportName);
         }
     }
 
-    private void showParameterForm(@PathVariable("reportName") String reportName, @ModelAttribute("parameterForm") ParameterForm form, ModelAndView modelAndView) {
-        modelAndView.setViewName("/parameters");
+	private void showParameterForm(@PathVariable(REPORT_NAME) String reportName,
+			@ModelAttribute("parameterForm") ParameterForm form,
+			ModelAndView modelAndView) {
+		modelAndView.setViewName("/parameters");
         configSetter.setBranding(modelAndView);
         configSetter.setVersion(modelAndView);
         modelAndView.addObject("parameterForm", form);
         injectReportUri(form, modelAndView, reportName);
     }
 
-    private void showReportForm(@PathVariable("reportName") String reportName, @ModelAttribute("parameterForm") ParameterForm form, ModelAndView modelAndView) {
-        RedirectView redirectView = new RedirectView();
+	private void showReportForm(@PathVariable(REPORT_NAME) String reportName,
+			@ModelAttribute("parameterForm") ParameterForm form,
+			ModelAndView modelAndView) {
+		RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/reports/{reportName}");
         redirectView.setContextRelative(true);
         redirectView.setPropagateQueryParams(false);
         redirectView.setExposeModelAttributes(true);
         modelAndView.addAllObjects(new ParameterValueMapBuilder()
                 .build(form));
-        modelAndView.addObject("reportName", reportName);
-        modelAndView.setView(redirectView);
+		modelAndView.addObject(REPORT_NAME, reportName);
+		modelAndView.setView(redirectView);
     }
 
 }

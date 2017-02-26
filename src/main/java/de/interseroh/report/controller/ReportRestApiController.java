@@ -26,7 +26,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.interseroh.report.exception.BirtUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import de.interseroh.report.domain.ParameterForm;
 import de.interseroh.report.domain.visitors.ParameterLogVisitor;
 import de.interseroh.report.exception.BirtReportException;
+import de.interseroh.report.exception.BirtUnauthorizedException;
 import de.interseroh.report.services.BirtOutputFormat;
 import de.interseroh.report.services.BirtReportService;
 import de.interseroh.report.services.SecurityService;
@@ -53,9 +53,9 @@ import de.interseroh.report.services.SecurityService;
 @RequestMapping("/api")
 public class ReportRestApiController {
 
+	public static final String CONTENT_DISPOSITION = "Content-disposition";
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReportRestApiController.class);
-
 	@Autowired
 	private BirtReportService reportService;
 
@@ -139,22 +139,23 @@ public class ReportRestApiController {
 				pageNumber = 1L;
 				overwrite = true;
             }
-            boolean overwriteFlag = overwrite == null || overwrite;
-            reportService.renderHtmlReport(reportName, parameters, response.getOutputStream(), pageNumber, overwriteFlag);
-            break;
+			reportService.renderHtmlReport(reportName, parameters,
+					response.getOutputStream(), pageNumber,
+					overwrite == null || overwrite);
+			break;
 		case PDF:
-			response.setHeader("Content-disposition",
+			response.setHeader(CONTENT_DISPOSITION,
 					"inline; filename=" + reportName + ".pdf");
 			reportService.renderPDFReport(reportName, parameters,
 					response.getOutputStream());
 			break;
 		case EXCEL2010:
-			response.setHeader("Content-disposition",
+			response.setHeader(CONTENT_DISPOSITION,
 					"attachment; filename=" + reportName + ".xlsx");
 			reportService.renderExcelReport(reportName, parameters,
 					response.getOutputStream());
 		case EXCEL:
-			response.setHeader("Content-disposition",
+			response.setHeader(CONTENT_DISPOSITION,
 					"attachment; filename=" + reportName + ".xls");
 			reportService.renderExcelReport(reportName, parameters,
 					response.getOutputStream());

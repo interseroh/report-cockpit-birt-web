@@ -25,20 +25,22 @@ package de.interseroh.report.formatters;
  */
 public class DisplayFormatHolder {
 
-	private static ThreadLocal<String> displayFormatHolder = new ThreadLocal<>();
+	private static ThreadLocal<String> displayFormat = new ThreadLocal<>();
+
+	private DisplayFormatHolder() {
+	}
 
 	public static synchronized String getDisplayFormat() {
-		return displayFormatHolder.get();
+		return displayFormat.get();
 	}
 
 	public static synchronized void setDisplayFormat(String displayFormat) {
-		displayFormatHolder.set(displayFormat);
+		DisplayFormatHolder.displayFormat.set(displayFormat);
 	}
 
 	public static synchronized boolean isDisplayFormatSet() {
-		return displayFormatHolder != null
-                && displayFormatHolder.get() != null
-				&& !displayFormatHolder.get().isEmpty();
+		return displayFormat != null && displayFormat.get() != null
+				&& !displayFormat.get().isEmpty();
 	}
 
 }

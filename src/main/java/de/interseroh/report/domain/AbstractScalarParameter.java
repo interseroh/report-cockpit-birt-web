@@ -130,6 +130,7 @@ public abstract class AbstractScalarParameter<SUB extends AbstractScalarParamete
 		return defaultValue;
 	}
 
+	@Override
 	public void setDefaultValue(V defaultValue) {
 		this.defaultValue = defaultValue;
 	}

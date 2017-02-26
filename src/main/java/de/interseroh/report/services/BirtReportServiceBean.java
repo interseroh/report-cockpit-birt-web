@@ -107,8 +107,8 @@ public class BirtReportServiceBean implements BirtReportService {
 		imageDirectory = environment
 				.getProperty(REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
 
-		logger.info("\tBaseImageUrl:   " + baseImageURL);
-		logger.info("\tImageDirectory: " + imageDirectory);
+		logger.info("\tBaseImageUrl: {} ", baseImageURL);
+		logger.info("\tImageDirectory: {} ", imageDirectory);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -430,12 +430,12 @@ public class BirtReportServiceBean implements BirtReportService {
 	private void injectLocale(IEngineTask task) {
 		Locale locale = LocaleContextHolder.getLocale();
 
-		logger.debug("Setting Report Locale to " + locale);
+		logger.debug("Setting Report Locale to {} ", locale);
 
 		task.setLocale(locale);
 		task.setLocale(ULocale.forLocale(locale));
 
-		logger.debug("Report Language is " + task.getULocale().getBaseName());
+		logger.debug("Report Language is {} ", task.getULocale().getBaseName());
 	}
 
 	private String absolutePathOf(String reportFileName) throws IOException {

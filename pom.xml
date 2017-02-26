@@ -31,6 +31,9 @@
 	<description>Report Cockpit for BIRT</description>
 
 	<scm>
+		<connection>
+			scm:git:git@github.com:interseroh/report-cockpit-birt-web.git
+		</connection>
 		<developerConnection>
             scm:git:git@github.com:interseroh/report-cockpit-birt-web.git
         </developerConnection>

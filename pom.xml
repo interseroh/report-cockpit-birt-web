@@ -489,6 +489,7 @@
 				<configuration>
 					<includes>
 						<include>**/*AllITs.java</include>
+						<include>**/*AllTests.java</include>
 					</includes>
 				</configuration>
 			</plugin>

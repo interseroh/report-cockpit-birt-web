@@ -20,30 +20,36 @@
  */
 package de.interseroh.report;
 
-import de.interseroh.report.controller.ReportControllerPermissionTest;
-import de.interseroh.report.services.BirtFileReaderServiceBeanTest;
-import de.interseroh.report.services.SecurityServiceTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import de.interseroh.report.controller.CustomReportControllerTest;
 import de.interseroh.report.controller.ParameterFormFormatterTest;
+import de.interseroh.report.controller.ReportControllerChartTest;
+import de.interseroh.report.controller.ReportControllerPermissionTest;
 import de.interseroh.report.controller.ReportControllerTest;
 import de.interseroh.report.controller.ReportRestApiControllerTest;
 import de.interseroh.report.controller.SecurityControlTest;
 import de.interseroh.report.domain.ParameterTest;
 import de.interseroh.report.domain.ParameterToMapVisitorTest;
 import de.interseroh.report.domain.visitors.ReportParamsBuilderTest;
+import de.interseroh.report.domain.visitors.RequestParamsBuilderTest;
+import de.interseroh.report.formatters.DateFormatterTest;
+import de.interseroh.report.formatters.TimeFormatterTest;
+import de.interseroh.report.formatters.TimestampFormatterTest;
+import de.interseroh.report.pagination.PaginationTest;
 import de.interseroh.report.parameter.BirtConvertingTest;
 import de.interseroh.report.services.BirtDataTypeTest;
 import de.interseroh.report.services.BirtExcelReportServiceTest;
+import de.interseroh.report.services.BirtFileReaderServiceBeanTest;
 import de.interseroh.report.services.BirtHtmlReportServiceTest;
 import de.interseroh.report.services.BirtOutputFormatTest;
 import de.interseroh.report.services.BirtParameterTypeTest;
 import de.interseroh.report.services.BirtPdfReportServiceTest;
 import de.interseroh.report.services.BirtReportGenerateTest;
 import de.interseroh.report.services.BirtReportServiceBeanTest;
+import de.interseroh.report.services.SecurityServiceTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
 
@@ -70,7 +76,13 @@ SecurityConfigTest.class, //
 		BirtConvertingTest.class, //
         SecurityServiceTest.class, //
         ReportControllerPermissionTest.class, //
-        BirtFileReaderServiceBeanTest.class
+		BirtFileReaderServiceBeanTest.class, //
+		ReportControllerChartTest.class, //
+		RequestParamsBuilderTest.class, //
+		DateFormatterTest.class, //
+		TimeFormatterTest.class, //
+		TimestampFormatterTest.class, //
+		PaginationTest.class
 
 })
 public class AllTests {

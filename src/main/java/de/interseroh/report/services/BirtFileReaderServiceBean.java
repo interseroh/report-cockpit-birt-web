@@ -3,6 +3,7 @@ package de.interseroh.report.services;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 				directory);
 
 		if (directory == null) {
-			return null;
+			return Collections.emptyList();
 		}
 
 		List<ReportReference> reportReferences = new ArrayList<>();

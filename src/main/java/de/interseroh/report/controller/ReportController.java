@@ -105,7 +105,7 @@ public class ReportController {
 			@PathVariable(REPORT_NAME) String reportName, BindingResult errors)
 			throws BirtReportException {
 
-		logger.debug("executing show parameter form for " + reportName);
+		logger.debug("executing show parameter form for {}", reportName);
 
         checkPermisionFor(reportName);
 
@@ -155,7 +155,7 @@ public class ReportController {
 			@PathVariable(REPORT_NAME) String reportName, BindingResult errors)
 			throws BirtReportException {
 
-		logger.debug("executing show report for " + reportName);
+		logger.debug("executing show report for {}", reportName);
 
         checkPermisionFor(reportName);
 

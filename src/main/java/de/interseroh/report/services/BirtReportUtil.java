@@ -77,7 +77,7 @@ public class BirtReportUtil {
 	private static void printInterfaces(IParameterDefnBase definition) {
 		logger.debug("Class:" + definition.getClass().getCanonicalName());
 		for (Class<?> anInterface : definition.getClass().getInterfaces()) {
-			logger.debug("\t" + anInterface);
+			logger.debug("\t {}", anInterface);
 		}
 	}
 

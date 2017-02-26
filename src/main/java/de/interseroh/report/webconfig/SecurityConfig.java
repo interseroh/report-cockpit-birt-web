@@ -95,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// LDAP or InMemory
 		String ldapAuth = prepareLdapAuth();
-		if (!ldapAuth.equalsIgnoreCase("true")) {
+		if (!"true".equalsIgnoreCase(ldapAuth)) {
 			// In memory authentication
 			String inMemoryUser = prepareInMemoryUser();
 			String inMemoryPassword = prepareInMemoryPassword();
@@ -122,8 +122,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			ldapAuth = confLdapAuth;
 		}
 
-		if (!ldapAuth.equalsIgnoreCase("true")
-				&& !ldapAuth.equalsIgnoreCase("false")) {
+		if (!"true".equalsIgnoreCase(ldapAuth) && !"false"
+				.equalsIgnoreCase(ldapAuth)) {
 			ldapAuth = "true";
 		}
 

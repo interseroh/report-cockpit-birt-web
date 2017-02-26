@@ -44,8 +44,8 @@ public class BirtReportUtil {
 		logger.debug("---------- CHOICES:");
 		if (selectionChoices != null) {
 			for (IParameterSelectionChoice selectionChoice : selectionChoices) {
-				logger.debug("Label: " + selectionChoice.getLabel());
-				logger.debug(" |  Value: " + selectionChoice.getValue());
+				logger.debug("Label: {}", selectionChoice.getLabel());
+				logger.debug(" |  Value: {}", selectionChoice.getValue());
 			}
 		}
 	}
@@ -67,7 +67,6 @@ public class BirtReportUtil {
 		for (IParameterDefnBase definition : parameterDefinitions) {
 			logger.debug("-------------------------------------------------");
 			printInterfaces(definition);
-			logger.debug("");
 			printParameter(definition);
 			printScalarParameter(definition);
 			printParameterGroup(task, definition);
@@ -80,16 +79,15 @@ public class BirtReportUtil {
 		for (Class<?> anInterface : definition.getClass().getInterfaces()) {
 			logger.debug("\t" + anInterface);
 		}
-		logger.debug("");
 	}
 
 	public static void printParameter(IParameterDefnBase definition) {
-		logger.debug("Displayname: " + definition.getDisplayName());
-		logger.debug("Helptext: " + definition.getHelpText());
-		logger.debug("Name: " + definition.getName());
-		logger.debug("Typename: " + definition.getTypeName());
-		logger.debug("ParameterType: "
-				+ BirtParameterType.valueOf(definition.getParameterType()));
+		logger.debug("Displayname: {}", definition.getDisplayName());
+		logger.debug("Helptext: {}", definition.getHelpText());
+		logger.debug("Name: {}", definition.getName());
+		logger.debug("Typename: {}", definition.getTypeName());
+		logger.debug("ParameterType: {}",
+				BirtParameterType.valueOf(definition.getParameterType()));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -105,15 +103,16 @@ public class BirtReportUtil {
 
 			if (definition instanceof ICascadingParameterGroup) {
 				ICascadingParameterGroup cascadingParameterGroup = (ICascadingParameterGroup) definition;
-				logger.debug(
-						"DataSet: " + cascadingParameterGroup.getDataSet());
+				logger.debug("DataSet: {}",
+						cascadingParameterGroup.getDataSet());
 			}
 
 			printSelectionChoices(selectionChoices);
 
 			logger.debug(".......");
-			selectionChoices = task.getSelectionListForCascadingGroup(
-					group.getName(), new Object[] { 103 });
+			selectionChoices = task
+					.getSelectionListForCascadingGroup(group.getName(),
+							new Object[] { 103 });
 			printSelectionChoices(selectionChoices);
 		}
 	}
@@ -121,21 +120,22 @@ public class BirtReportUtil {
 	public static void printScalarParameter(IParameterDefnBase definition) {
 		if (definition instanceof IScalarParameterDefn) {
 			IScalarParameterDefn scalar = (IScalarParameterDefn) definition;
-			logger.debug(
-					"DataType: " + BirtDataType.valueOf(scalar.getDataType()));
-			logger.debug("PromptText: " + scalar.getPromptText());
-			logger.debug("Required: " + scalar.isRequired());
-			logger.debug("AllowNewValues: " + scalar.allowNewValues());
-			logger.debug(
-					"DisplayInFixedOrder: " + scalar.displayInFixedOrder());
-			logger.debug("IsValueConcealed: " + scalar.isValueConcealed());
-			logger.debug("DisplayFormat: " + scalar.getDisplayFormat());
-			logger.debug("ControlType: "
-					+ BirtControlType.valueOf(scalar.getControlType()));
-			logger.debug("DefaultValue: " + scalar.getDefaultValue());
-			logger.debug(
-					"ScalarParameterType: " + scalar.getScalarParameterType());
-			logger.debug("SelectionListType: " + scalar.getSelectionListType());
+			logger.debug("DataType: {}",
+					BirtDataType.valueOf(scalar.getDataType()));
+			logger.debug("PromptText: {}", scalar.getPromptText());
+			logger.debug("Required: {}", scalar.isRequired());
+			logger.debug("AllowNewValues: {}", scalar.allowNewValues());
+			logger.debug("DisplayInFixedOrder: {}",
+					scalar.displayInFixedOrder());
+			logger.debug("IsValueConcealed: {}", scalar.isValueConcealed());
+			logger.debug("DisplayFormat: {}", scalar.getDisplayFormat());
+			logger.debug("ControlType: {}",
+					BirtControlType.valueOf(scalar.getControlType()));
+			logger.debug("DefaultValue: {}", scalar.getDefaultValue());
+			logger.debug("ScalarParameterType: {}",
+					scalar.getScalarParameterType());
+			logger.debug("SelectionListType: {}",
+					scalar.getSelectionListType());
 		}
 	}
 }

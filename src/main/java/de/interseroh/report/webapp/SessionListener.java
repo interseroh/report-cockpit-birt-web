@@ -44,7 +44,7 @@ public class SessionListener implements HttpSessionListener {
 
 		String timeout = env.getProperty("session.timeout.interval");
 
-		if (timeout == null || timeout.equals("")) {
+		if (timeout == null || timeout.isEmpty()) {
 			// Default seconds 21600 == 6 hours
 			timeout = DEFAULT_TIMEOUT_INTERVAL;
 		}

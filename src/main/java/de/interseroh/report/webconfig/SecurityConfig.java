@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String SUCCESSFUL_LOGOUT_PAGE = "/index?logout";
 
+
 	private static final String MANAGER_PASSWORD = "xxx";
 
 	private static final String MANAGER_DN = "xxx";
@@ -117,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		String ldapAuth = "true";
 		String confLdapAuth = env.getProperty("ldap.authentication");
 
-		if (confLdapAuth != null && !confLdapAuth.equals("")) {
+		if (confLdapAuth != null && !confLdapAuth.isEmpty()) {
 			ldapAuth = confLdapAuth;
 		}
 
@@ -132,7 +133,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	String prepareManagerPassword() {
 		String managerPassword = MANAGER_PASSWORD;
 		String confManagerPassword = env.getProperty("ldap.managerPassword");
-		if (confManagerPassword != null && !confManagerPassword.equals("")) {
+		if (confManagerPassword != null && !confManagerPassword.isEmpty()) {
 			managerPassword = confManagerPassword;
 		}
 		return managerPassword;
@@ -141,7 +142,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	String prepareManagerDn() {
 		String managerDn = MANAGER_DN;
 		String confManagerDn = env.getProperty("ldap.managerDn");
-		if (confManagerDn != null && !confManagerDn.equals("")) {
+		if (confManagerDn != null && !confManagerDn.isEmpty()) {
 			managerDn = confManagerDn;
 		}
 		return managerDn;
@@ -150,7 +151,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	String prepareLdapUrl() {
 		String ldapUrl = LDAP_URL;
 		String confLdapUrl = env.getProperty("ldap.url");
-		if (confLdapUrl != null && !confLdapUrl.equals("")) {
+		if (confLdapUrl != null && !confLdapUrl.isEmpty()) {
 			ldapUrl = confLdapUrl;
 		}
 		return ldapUrl;
@@ -159,7 +160,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	String prepareInMemoryPassword() {
 		String inMemoryPassword = IN_MEMORY_PASSWORD;
 		String confInMemoryPassword = env.getProperty("ldap.inmemory.password");
-		if (confInMemoryPassword != null && !confInMemoryPassword.equals("")) {
+		if (confInMemoryPassword != null && !confInMemoryPassword.isEmpty()) {
 			inMemoryPassword = confInMemoryPassword;
 		}
 		return inMemoryPassword;
@@ -168,7 +169,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	String prepareInMemoryUser() {
 		String inMemoryUser = IN_MEMORY_USER;
 		String confInMemoryUser = env.getProperty("ldap.inmemory.user");
-		if (confInMemoryUser != null && !confInMemoryUser.equals("")) {
+		if (confInMemoryUser != null && !confInMemoryUser.isEmpty()) {
 			inMemoryUser = confInMemoryUser;
 		}
 		return inMemoryUser;

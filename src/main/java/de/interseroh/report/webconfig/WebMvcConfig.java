@@ -23,8 +23,6 @@ package de.interseroh.report.webconfig;
 import java.io.File;
 import java.util.Locale;
 
-import nz.net.ultraq.thymeleaf.LayoutDialect;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +55,7 @@ import de.interseroh.report.formatters.DateFormatter;
 import de.interseroh.report.formatters.TimeFormatter;
 import de.interseroh.report.formatters.TimestampFormatter;
 import de.interseroh.report.services.BirtReportService;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
 @EnableWebMvc
@@ -158,9 +157,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		String imageDirectory = "file://" + environment.getProperty(
 				BirtReportService.REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
 
-		logger.info("\tBaseImageUrl:   " + baseImageURL);
-		logger.info(
-				"\tImageDirectory: " + ensureTrailingSeparator(imageDirectory));
+		logger.info("\tBaseImageUrl: {}", baseImageURL);
+		logger.info("\tImageDirectory: {}",
+				ensureTrailingSeparator(imageDirectory));
 
 		registry.addResourceHandler(baseImageURL + "/**")
 				.addResourceLocations(ensureTrailingSeparator(imageDirectory));
@@ -176,12 +175,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		registry.addFormatter(new TimestampFormatter());
 	}
 
-	private String ensureTrailingSeparator(String imageDirectory) {
+	private String ensureTrailingSeparator(final String imageDirectory) {
 		if (imageDirectory
 				.charAt(imageDirectory.length() - 1) != File.separatorChar) {
-			imageDirectory = imageDirectory + "/";
+			return imageDirectory + "/";
+		} else {
+			return imageDirectory;
 		}
-		return imageDirectory;
 	}
 
 }

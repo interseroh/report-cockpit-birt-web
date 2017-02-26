@@ -1,11 +1,11 @@
 package de.interseroh.report.pagination;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
 
 import org.junit.Test;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -15,7 +15,7 @@ public class PaginationTest {
 	@Test
 	public void testConstructor() throws Exception {
 		Pagination pagination = new Pagination(1, 5);
-		assertThat(pagination.getCurrentPageNumber(), is(1l));
+		assertThat(pagination.getCurrentPageNumber(), is(1L));
 		assertThat(pagination.getNumberOfPages(), is(5l));
 	}
 

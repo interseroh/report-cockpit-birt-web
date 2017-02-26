@@ -96,7 +96,7 @@ public class Pagination {
     }
 
     public boolean isFirstPage() {
-        return currentPage == 1l;
+        return currentPage == 1L;
     }
 
     public boolean isCurrentPage(long pageNumber) {

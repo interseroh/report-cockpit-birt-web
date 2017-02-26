@@ -2,6 +2,7 @@ package de.interseroh.report.services;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -57,7 +58,8 @@ public class BirtFileReaderServiceBeanTest {
 																				// folder
 
         when(securityControl.getTmpDirectory()).thenReturn(directory);
-		when(securityControl.getStripRoleNames()).thenReturn(Arrays.asList("SALESINVOICE"));
+		when(securityControl.getStripRoleNames())
+				.thenReturn(Collections.singletonList("SALESINVOICE"));
 
 		List<ReportReference> list = serviceFileReader.getReportReferences();
 

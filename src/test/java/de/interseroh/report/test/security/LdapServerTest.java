@@ -90,7 +90,7 @@ public class LdapServerTest {
 
 	@Test
 	public void testJndiSun() throws NamingException {
-		Hashtable<String, String> contextParams = new Hashtable<String, String>();
+		Hashtable<String, String> contextParams = new Hashtable<>();
 		contextParams.put(Context.PROVIDER_URL, "ldap://ldap.xxx:389");
 		contextParams.put(Context.SECURITY_PRINCIPAL, USER_LDAP);
 		contextParams.put(Context.SECURITY_CREDENTIALS, PASSWORD_LDAP);

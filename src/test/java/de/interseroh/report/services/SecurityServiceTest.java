@@ -1,6 +1,6 @@
 package de.interseroh.report.services;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -44,7 +44,8 @@ public class SecurityServiceTest {
 
         when(userRole.getRole()).thenReturn(role);
         when(role.getName()).thenReturn("ROLE_REPORT1");
-        when(userService.findUserRolesByUserEmail(anyString())).thenReturn(Arrays.asList(userRole));
+        when(userService.findUserRolesByUserEmail(anyString()))
+                .thenReturn(Collections.singletonList(userRole));
 
         List<String> stripRoleNames = securityService.getStripRoleNames();
 

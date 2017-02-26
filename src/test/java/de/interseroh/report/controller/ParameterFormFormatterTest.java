@@ -1,10 +1,10 @@
 package de.interseroh.report.controller;
 
+import org.junit.Test;
+
 import static de.interseroh.report.controller.ParameterFormFormatter.isNotNullOrEmptyArray;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -14,7 +14,7 @@ public class ParameterFormFormatterTest {
     @Test
     public void testIsNotNullOrEmptyWithObjects() throws Exception {
         assertThat(isNotNullOrEmptyArray(null), is(false));
-        assertThat(isNotNullOrEmptyArray(1l), is(true));
+        assertThat(isNotNullOrEmptyArray(1L), is(true));
     }
 
     @Test

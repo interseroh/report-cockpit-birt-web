@@ -164,7 +164,7 @@ public class BirtReportServiceBean implements BirtReportService {
 			long pages = reportDocument.getPageCount();
 			long currentPage = (parameters.getPageNumber() != null) ?
 					parameters.getPageNumber() :
-					1l;
+					1L;
 			return new Pagination(currentPage, pages);
 		} catch (EngineException | IOException ex) {
 			logger.error(String.format(

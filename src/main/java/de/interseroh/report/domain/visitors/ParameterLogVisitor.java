@@ -66,7 +66,8 @@ public class ParameterLogVisitor implements ParameterVisitor {
 		output.append(indent);
 		output.append(title);
 		output.append(indent);
-		output.append("\t" + parameter.toString());
+		output.append('\t');
+		output.append(parameter.toString());
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class ParameterLogVisitor implements ParameterVisitor {
 	public void visit(ParameterGroup group) {
 		output.append("\n\n");
 		output.append(group.getName());
-		output.append("{" + group.isCascading() + "}");
+		output.append('{').append(group.isCascading()).append('}');
 		visitParameters(group.getParameters());
 	}
 }

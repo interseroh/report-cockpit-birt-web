@@ -21,9 +21,10 @@ import de.interseroh.report.model.ReportReference;
 @Service
 public class BirtFileReaderServiceBean implements BirtFileReaderService {
 
-    private static final String REPORT_FILESUFFIX = ".rptdesign";
+	private static final String REPORT_FILESUFFIX = ".rptdesign";
 
-	public static final int REPORT_FILESUFFIX_LENGTH = REPORT_FILESUFFIX.length();
+	public static final int REPORT_FILESUFFIX_LENGTH = REPORT_FILESUFFIX
+			.length();
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(BirtFileReaderServiceBean.class);
@@ -51,29 +52,32 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 		List<String> stripRoleNames = securityControl.getStripRoleNames();
 
 		try {
-			if (directory.exists() && directory.canRead()
-					&& directory.isDirectory()) {
-                FilenameFilter filter = new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return name.endsWith(".rptdesign");
-                    }
-                };
-                File[] files = directory.listFiles(filter);
+			if (directory.exists() && directory.canRead() && directory
+					.isDirectory()) {
+				FilenameFilter filter = new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.endsWith(".rptdesign");
+					}
+				};
+				File[] files = directory.listFiles(filter);
 				if (files != null) {
 					for (File file : files) {
 						String fileName = file.getName().substring(0,
-								(file.getName().length() - REPORT_FILESUFFIX_LENGTH));
+								(file.getName().length()
+										- REPORT_FILESUFFIX_LENGTH));
 						for (String role : stripRoleNames) {
 							if (role.equalsIgnoreCase(fileName)) {
-								reportReferences.add(new ReportReference(
-										fileName, "reports..."));
+								reportReferences
+										.add(new ReportReference(fileName,
+												"reports..."));
 							}
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
+			logger.debug(e.getMessage(), e);
 			throw new BirtSystemException(String.format(
 					"Error during to fill report list in directory: %s",
 					directory), e.getCause());
@@ -81,9 +85,5 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 
 		return reportReferences;
 	}
-
-
-
-
 
 }

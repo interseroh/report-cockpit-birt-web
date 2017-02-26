@@ -20,7 +20,7 @@ public class Pagination {
             throws IndexOutOfBoundsException {
         if (currentPage < 1 || currentPage > numberOfPages)
             throw new IndexOutOfBoundsException(String.format(
-                    "CurrentPage is out of range. It must be between 1 and {}. It is {}.",
+                    "CurrentPage is out of range. It must be between 1 and %s. It is %s.",
                     numberOfPages, currentPage));
         if (maxNumberOfLinks < 2)
             throw new IllegalArgumentException("MaxNumberOfLinks must be greater than 1");

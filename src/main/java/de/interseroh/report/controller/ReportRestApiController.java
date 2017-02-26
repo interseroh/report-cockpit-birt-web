@@ -117,7 +117,7 @@ public class ReportRestApiController {
 			HttpServletResponse response, BindingResult errors)
 					throws IOException, BirtReportException, ParseException {
 
-		logger.debug("Rendering " + reportName + " in " + format + ".");
+		logger.debug("Rendering {} in {}.", reportName, format);
 
         checkPermissionFor(reportName);
 

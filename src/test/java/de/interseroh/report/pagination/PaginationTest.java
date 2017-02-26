@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -24,8 +25,18 @@ public class PaginationTest {
 		new Pagination(5, 1);
 	}
 
-    @Test
-    public void testOnlyOnePage() throws Exception {
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testConstructorErrorMessage() throws Exception {
+		try {
+			new Pagination(5, 1);
+		} catch (IndexOutOfBoundsException e) {
+			assertThat(e.getMessage(), containsString("1 and 1. It is 5"));
+			throw e;
+		}
+	}
+
+	@Test
+	public void testOnlyOnePage() throws Exception {
         assertThat(new Pagination(1,1).getPageLinks().isEmpty(), is(true));
     }
 

@@ -38,9 +38,9 @@ public class RoleEntity extends AbstractPersistable<Long> implements Role {
 
 	private static final long serialVersionUID = 3878644102882809215L;
 	@OneToMany(mappedBy = "role", targetEntity = UserRoleEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private final Collection<UserRole> userRoles = new ArrayList<UserRole>();
+	private final Collection<UserRole> userRoles = new ArrayList<>();
 	@OneToMany(mappedBy = "role", targetEntity = ReportEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private final Collection<Report> reports = new ArrayList<Report>();
+	private final Collection<Report> reports = new ArrayList<>();
 	@Column(name = "ROLE_NAME")
 	private String name;
 

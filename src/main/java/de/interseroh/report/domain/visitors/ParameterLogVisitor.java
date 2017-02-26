@@ -54,7 +54,9 @@ public class ParameterLogVisitor implements ParameterVisitor {
 	private void print(Collection<? extends Parameter> params) {
 		output = new StringBuilder();
 		visitParameters(params);
-		logger.debug(output.toString());
+		if (logger.isDebugEnabled()) {
+			logger.debug(output.toString());
+		}
 	}
 
 	private void visitParameters(Collection<? extends Parameter> params) {

@@ -37,7 +37,7 @@ public class ParameterLogVisitor implements ParameterVisitor {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ParameterLogVisitor.class);
-	private static final String indent = "\n\t";
+	private static final String INDENT = "\n\t";
 
 	private StringBuilder output;
 
@@ -64,9 +64,9 @@ public class ParameterLogVisitor implements ParameterVisitor {
 	}
 
 	private void print(String title, Parameter parameter) {
-		output.append(indent);
+		output.append(INDENT);
 		output.append(title);
-		output.append(indent);
+		output.append(INDENT);
 		output.append('\t');
 		output.append(parameter.toString());
 	}

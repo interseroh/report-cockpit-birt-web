@@ -44,6 +44,7 @@ public class TimeFormatter extends AbstractDateFormatter
 		return getDateFormat(locale).format(new java.util.Date(date.getTime()));
 	}
 
+	@Override
 	protected DateFormat getFormatterInstance(Locale locale) {
 		return DateFormat.getTimeInstance(DateFormat.SHORT, locale);
 	}

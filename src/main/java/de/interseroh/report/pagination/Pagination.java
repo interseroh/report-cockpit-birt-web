@@ -64,7 +64,7 @@ public class Pagination {
 
     private long numberOfBeginLink() {
         long offset = getMaxNumbersOfLinks() / 2;
-        long diff = (numberOfPages - offset - currentPage);
+        long diff = numberOfPages - offset - currentPage;
         diff = diff < 0 ? -diff : 0;
         long linksBegin = currentPage - offset - diff;
         return (linksBegin < 1) ? 1 : linksBegin;

@@ -154,15 +154,16 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		String defaultDirectory = environment.getProperty("java.io.tmpdir");
 		String baseImageURL = environment
 				.getProperty(BirtReportService.REPORT_BASE_IMAGE_URL_KEY);
-		String imageDirectory = "file://" + environment.getProperty(
-				BirtReportService.REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
+		String imageDirectory = ensureTrailingSeparator("file://" + environment
+				.getProperty(BirtReportService.REPORT_IMAGE_DIRECTORY_KEY,
+						defaultDirectory));
+
 
 		logger.info("\tBaseImageUrl: {}", baseImageURL);
-		logger.info("\tImageDirectory: {}",
-				ensureTrailingSeparator(imageDirectory));
+		logger.info("\tImageDirectory: {}", imageDirectory);
 
 		registry.addResourceHandler(baseImageURL + "/**")
-				.addResourceLocations(ensureTrailingSeparator(imageDirectory));
+				.addResourceLocations(imageDirectory);
 
 	}
 

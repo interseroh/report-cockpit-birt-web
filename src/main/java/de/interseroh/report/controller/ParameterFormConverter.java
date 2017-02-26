@@ -54,13 +54,11 @@ public class ParameterFormConverter {
 				if (isConversionNeeded(requiredType, textValue)) {
 					try {
                         DisplayFormatHolder.setDisplayFormat(parameter.getDisplayFormat());
-
                         V converted = conversionService.convert(textValue,
 								requiredType);
 						parameter.setValue(converted);
 					} catch (ConversionException ce) {
-						// TODO idueppe - here we need a more user friendly
-						// error code with parameters
+						// TODO idueppe - here we need a more user friendly solution
 						errors.rejectValue(propertyPath,
 								"conversion.error.unknown_format",
 								ce.getMessage());

@@ -39,6 +39,10 @@ public class BirtReportUtil {
 	private static final Logger logger = LoggerFactory
 			.getLogger(BirtReportUtil.class);
 
+	private BirtReportUtil() {
+		// do not create an instance of this class.
+	}
+
 	public static void printSelectionChoices(
 			Collection<IParameterSelectionChoice> selectionChoices) {
 		logger.debug("---------- CHOICES:");

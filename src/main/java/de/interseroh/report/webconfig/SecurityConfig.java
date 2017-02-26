@@ -23,8 +23,11 @@ package de.interseroh.report.webconfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,28 +39,38 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(SecurityConfig.class);
+
 	private static final String SUCCESSFUL_LOGIN_PAGE = "/reports";
 
 	private static final String SUCCESSFUL_LOGOUT_PAGE = "/index?logout";
 
-
-	private static final String MANAGER_PASSWORD = "xxx";
-
-	private static final String MANAGER_DN = "xxx";
-
 	private static final String LDAP_URL = "ldap://ldap.xxx:389/OU=xxx";
-
-	private static final String IN_MEMORY_USER = "birt";
-
-	private static final String IN_MEMORY_PASSWORD = "birt";
 
 	private static final String USER_SEARCH_FILTER = "(&(objectCategory=Person)(sAMAccountName={0}))";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(SecurityConfig.class);
+	@Value("${ldap.managerDn}")
+	private String ldapManagerDn;
+
+	@Value("${ldap.managerPassword}")
+	private String ldapManagerPassword;
+
+	@Value("${ldap.inmemory.password}")
+	private String ldapInMemoryPassword;
+
+	@Value("${ldap.inmemory.user}")
+	private String ldapInMemoryUser;
+
 
 	@Autowired
 	private Environment env;
+
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -131,21 +144,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	String prepareManagerPassword() {
-		String managerPassword = MANAGER_PASSWORD;
-		String confManagerPassword = env.getProperty("ldap.managerPassword");
-		if (confManagerPassword != null && !confManagerPassword.isEmpty()) {
-			managerPassword = confManagerPassword;
-		}
-		return managerPassword;
+		return ldapManagerPassword;
 	}
 
 	String prepareManagerDn() {
-		String managerDn = MANAGER_DN;
-		String confManagerDn = env.getProperty("ldap.managerDn");
-		if (confManagerDn != null && !confManagerDn.isEmpty()) {
-			managerDn = confManagerDn;
-		}
-		return managerDn;
+		return ldapManagerDn;
 	}
 
 	String prepareLdapUrl() {
@@ -158,20 +161,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	String prepareInMemoryPassword() {
-		String inMemoryPassword = IN_MEMORY_PASSWORD;
-		String confInMemoryPassword = env.getProperty("ldap.inmemory.password");
-		if (confInMemoryPassword != null && !confInMemoryPassword.isEmpty()) {
-			inMemoryPassword = confInMemoryPassword;
-		}
-		return inMemoryPassword;
+		return ldapInMemoryPassword;
 	}
 
 	String prepareInMemoryUser() {
-		String inMemoryUser = IN_MEMORY_USER;
-		String confInMemoryUser = env.getProperty("ldap.inmemory.user");
-		if (confInMemoryUser != null && !confInMemoryUser.isEmpty()) {
-			inMemoryUser = confInMemoryUser;
-		}
-		return inMemoryUser;
+		return ldapInMemoryPassword;
 	}
 }

@@ -20,8 +20,6 @@
  */
 package de.interseroh.report.webconfig;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +30,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SecurityConfigAuthTest {
@@ -106,37 +106,6 @@ public class SecurityConfigAuthTest {
 		result = securityConfig.prepareLdapAuth();
 		// Asserts
 		assertEquals("true", result);
-	}
-
-	@Test
-	public void testPrepareManagerPasswordTrue() throws Exception {
-		// Prepare
-		Mockito.when(env.getProperty("ldap.managerPassword"))
-				.thenReturn("test");
-		// CUT
-		String result = securityConfig.prepareManagerPassword();
-		// Asserts
-		assertEquals("test", result);
-	}
-
-	@Test
-	public void testPrepareManagerPasswordNull() throws Exception {
-		// Prepare
-		Mockito.when(env.getProperty("ldap.managerPassword")).thenReturn(null);
-		// CUT
-		String result = securityConfig.prepareManagerPassword();
-		// Asserts
-		assertEquals("xxx", result);
-	}
-
-	@Test
-	public void testPrepareManagerPasswordEmpty() throws Exception {
-		// Prepare
-		Mockito.when(env.getProperty("ldap.managerPassword")).thenReturn("");
-		// CUT
-		String result = securityConfig.prepareManagerPassword();
-		// Asserts
-		assertEquals("xxx", result);
 	}
 
 }

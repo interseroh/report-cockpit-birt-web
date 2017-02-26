@@ -20,6 +20,8 @@
  */
 package de.interseroh.report.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.core.convert.ConversionService;
@@ -38,6 +40,9 @@ import de.interseroh.report.formatters.DisplayFormatHolder;
 @Component
 public class ParameterFormConverter {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(ParameterFormConverter.class);
+
 	@Autowired
 	private ConversionService conversionService;
 
@@ -53,12 +58,13 @@ public class ParameterFormConverter {
 				T textValue = parameter.getText();
 				if (isConversionNeeded(requiredType, textValue)) {
 					try {
-                        DisplayFormatHolder.setDisplayFormat(parameter.getDisplayFormat());
-                        V converted = conversionService.convert(textValue,
-								requiredType);
+						DisplayFormatHolder
+								.setDisplayFormat(parameter.getDisplayFormat());
+						V converted = conversionService
+								.convert(textValue, requiredType);
 						parameter.setValue(converted);
 					} catch (ConversionException ce) {
-						// TODO idueppe - here we need a more user friendly solution
+						logger.trace(ce.getMessage(), ce);
 						errors.rejectValue(propertyPath,
 								"conversion.error.unknown_format",
 								ce.getMessage());

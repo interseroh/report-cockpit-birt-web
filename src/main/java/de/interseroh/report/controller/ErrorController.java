@@ -28,7 +28,8 @@ public class ErrorController {
 
     @ExceptionHandler(Exception.class)
     public ModelAndView exception(HttpServletRequest request, Exception exception) {
-        logger.error("Request: " + request.getRequestURL() + " raised " + exception);
+		logger.error("Request: {} raised {}. ", request.getRequestURL(),
+				exception);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("errorMessage", exception.getLocalizedMessage());

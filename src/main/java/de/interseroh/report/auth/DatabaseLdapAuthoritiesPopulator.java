@@ -48,7 +48,7 @@ public class DatabaseLdapAuthoritiesPopulator implements
 	@Override
 	public Collection<? extends GrantedAuthority> getGrantedAuthorities(
 			DirContextOperations userData, String userName) {
-		Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		Collection<GrantedAuthority> authorities = new HashSet<>();
 
 		// Username == email
 		Collection<Report> reports = reportService.findReportsByUser(userName);

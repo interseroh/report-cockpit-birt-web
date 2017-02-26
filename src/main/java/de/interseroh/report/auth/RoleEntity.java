@@ -37,15 +37,12 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 public class RoleEntity extends AbstractPersistable<Long> implements Role {
 
 	private static final long serialVersionUID = 3878644102882809215L;
-
-	@Column(name = "ROLE_NAME")
-	private String name;
-
 	@OneToMany(mappedBy = "role", targetEntity = UserRoleEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private final Collection<UserRole> userRoles = new ArrayList<UserRole>();
-
 	@OneToMany(mappedBy = "role", targetEntity = ReportEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private final Collection<Report> reports = new ArrayList<Report>();
+	@Column(name = "ROLE_NAME")
+	private String name;
 
 	@Override
 	public Collection<UserRole> getUserRoles() {
@@ -77,4 +74,24 @@ public class RoleEntity extends AbstractPersistable<Long> implements Role {
 		reports.add(report);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		if (!super.equals(o))
+			return false;
+
+		RoleEntity that = (RoleEntity) o;
+
+		return name != null ? name.equals(that.name) : that.name == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		return result;
+	}
 }

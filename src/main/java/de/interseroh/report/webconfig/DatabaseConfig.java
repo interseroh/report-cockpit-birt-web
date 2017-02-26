@@ -28,10 +28,10 @@ public class DatabaseConfig {
 
 	public static final String REPORTCOCKPIT_JPA_TX_MANAGER = "transactionManager";
 	private static final String REPORTCOCKPIT_PERSISTENCE_UNIT = "reportcockpitPersistenceUnit";
-	private static final String JDBC_PASSWORD_REPORTCOCKPIT_KEY = "jdbc.password.reportcockpit";
-	private static final String JDBC_USERNAME_REPORTCOCKPIT_KEY = "jdbc.username.reportcockpit";
-	private static final String JDBC_URL_REPORTCOCKPIT_KEY = "jdbc.url.reportcockpit";
-	private static final String JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT_LEY = "jdbc.driver.classname.reportcockpit";
+	private static final String KEY_JDBC_PASSWD_REPORTCOCKPIT = "jdbc.password.reportcockpit";
+	private static final String KEY_JDBC_USERNAME_REPORTCOCKPIT = "jdbc.username.reportcockpit";
+	private static final String KEY_JDBC_URL_REPORTCOCKPIT = "jdbc.url.reportcockpit";
+	private static final String KEY_JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT = "jdbc.driver.classname.reportcockpit";
 	private static final String REPORTCOCKPIT_ENTITYMANAGER_PACKAGES_TO_SCAN = "de.interseroh.report.auth";
 
 	private static final String REPORTCOCKPIT_PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect.reportcockpit";
@@ -54,12 +54,11 @@ public class DatabaseConfig {
 	public DataSource reportcockpitDataSource() {
 		final HikariDataSource dataSource = new HikariDataSource();
 		dataSource.setDriverClassName(env
-				.getProperty(JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT_LEY));
-		dataSource.setJdbcUrl(env.getProperty(JDBC_URL_REPORTCOCKPIT_KEY));
+				.getProperty(KEY_JDBC_DRIVER_CLASSNAME_REPORTCOCKPIT));
+		dataSource.setJdbcUrl(env.getProperty(KEY_JDBC_URL_REPORTCOCKPIT));
 		dataSource
-				.setUsername(env.getProperty(JDBC_USERNAME_REPORTCOCKPIT_KEY));
-		dataSource
-				.setPassword(env.getProperty(JDBC_PASSWORD_REPORTCOCKPIT_KEY));
+				.setUsername(env.getProperty(KEY_JDBC_USERNAME_REPORTCOCKPIT));
+		dataSource.setPassword(env.getProperty(KEY_JDBC_PASSWD_REPORTCOCKPIT));
 		return dataSource;
 	}
 

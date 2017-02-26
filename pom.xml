@@ -468,9 +468,9 @@
 					</includes>
 					<!-- Disable Assertions due to Birt Engine -->
 					<enableAssertions>false</enableAssertions>
-                    <forkCount>4</forkCount>
-                    <reuseForks>true</reuseForks>
-                    <argLine>-Xmx1800M -XX:MaxPermSize=512M</argLine>
+					<!--<forkCount>4</forkCount>-->
+					<!--<reuseForks>true</reuseForks>-->
+					<!--<argLine>-Xmx1800M -XX:MaxPermSize=512M</argLine>-->
 				</configuration>
 			</plugin>
 

@@ -3,7 +3,7 @@ package de.interseroh.report.pagination;
 /**
  * @author Ingo Düppe (Crowdcode)
  */
-public class PaginationException extends Throwable {
+public class PaginationException extends Exception {
 
 	private static final long serialVersionUID = 4485371007080326063L;
 

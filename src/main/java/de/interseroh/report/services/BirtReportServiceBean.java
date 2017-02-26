@@ -32,7 +32,6 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
-import com.ibm.icu.util.ULocale;
 import org.eclipse.birt.core.exception.BirtException;
 import org.eclipse.birt.report.engine.api.EXCELRenderOption;
 import org.eclipse.birt.report.engine.api.EngineException;
@@ -63,6 +62,8 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.ibm.icu.util.ULocale;
 
 import de.interseroh.report.domain.ParameterBuilder;
 import de.interseroh.report.domain.ParameterForm;
@@ -97,13 +98,14 @@ public class BirtReportServiceBean implements BirtReportService {
 	public void init() {
 		logger.info("Initializing Birt Report Service URLs");
 
-		String baseImageContextPath = environment.getProperty(
-				REPORT_BASE_IMAGE_CONTEXT_PATH_KEY, "/report-cockpit-birt");
-		baseImageURL = baseImageContextPath
-				+ environment.getProperty(REPORT_BASE_IMAGE_URL_KEY);
+		String baseImageContextPath = environment
+				.getProperty(REPORT_BASE_IMAGE_CONTEXT_PATH_KEY,
+						"/report-cockpit-birt");
+		baseImageURL = baseImageContextPath + environment
+				.getProperty(REPORT_BASE_IMAGE_URL_KEY);
 		String defaultDirectory = environment.getProperty("java.io.tmpdir");
-		imageDirectory = environment.getProperty(REPORT_IMAGE_DIRECTORY_KEY,
-				defaultDirectory);
+		imageDirectory = environment
+				.getProperty(REPORT_IMAGE_DIRECTORY_KEY, defaultDirectory);
 
 		logger.info("\tBaseImageUrl:   " + baseImageURL);
 		logger.info("\tImageDirectory: " + imageDirectory);
@@ -137,8 +139,8 @@ public class BirtReportServiceBean implements BirtReportService {
 			return groups;
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting parameter definition for "
-							+ reportName + ".", e);
+					"Error while getting parameter definition for " + reportName
+							+ ".", e);
 		}
 	}
 
@@ -147,7 +149,8 @@ public class BirtReportServiceBean implements BirtReportService {
 			final ParameterForm parameters) throws BirtReportException {
 		try {
 			String reportFileName = absolutePathOf(reportFileName(reportName));
-			String documentFileName = absoluteTempPath(documentFileName(reportName));
+			String documentFileName = absoluteTempPath(
+					documentFileName(reportName));
 
 			if (parameters.isOverwrite()) {
 				recreateReportDocument(reportName,
@@ -159,24 +162,24 @@ public class BirtReportServiceBean implements BirtReportService {
 					.openReportDocument(documentFileName);
 
 			long pages = reportDocument.getPageCount();
-			long currentPage = (parameters.getPageNumber() != null) ? parameters
-					.getPageNumber() : 1l;
+			long currentPage = (parameters.getPageNumber() != null) ?
+					parameters.getPageNumber() :
+					1l;
 			return new Pagination(currentPage, pages);
 		} catch (EngineException | IOException ex) {
-			logger.error(String
-					.format("Report corrupt or path not valid - page information for %s not available",
-							reportName));
-			throw new BirtReportException(
-					String.format(
-							"Report corrupt or path not valid - page information for %s not available",
-							reportName), ex);
+			logger.error(String.format(
+					"Report corrupt or path not valid - page information for %s not available",
+					reportName));
+			throw new BirtReportException(String.format(
+					"Report corrupt or path not valid - page information for %s not available",
+					reportName), ex);
 		}
 	}
 
 	private void recreateReportDocument(String reportName,
 			Map<String, Object> parameters, boolean overwrite,
-			String reportFileName, String documentFileName) throws IOException,
-			EngineException {
+			String reportFileName, String documentFileName)
+			throws IOException, EngineException {
 		if (needToCreateNewDocumentFile(reportName, overwrite)) {
 			logger.info("Need to create document file for {} report.",
 					reportName);
@@ -216,20 +219,21 @@ public class BirtReportServiceBean implements BirtReportService {
 			}
 		} catch (EngineException | IOException e) {
 			throw new BirtReportException(
-					"Error while getting cascading parameters for "
-							+ reportName + ".", e);
+					"Error while getting cascading parameters for " + reportName
+							+ ".", e);
 		}
 	}
 
 	@Override
-	public void renderHtmlReport(String reportName,
+	public void renderHtmlReport(final String reportName,
 			Map<String, Object> parameters, OutputStream out)
 			throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
-            injectLocale(runAndRenderTask);
+			injectLocale(runAndRenderTask);
 
 			HTMLRenderOption htmlOptions = new HTMLRenderOption();
 			htmlOptions.setOutputFormat(IRenderOption.OUTPUT_FORMAT_HTML);
@@ -256,7 +260,10 @@ public class BirtReportServiceBean implements BirtReportService {
 							logger.info(reportDocument.toString());
 						}
 					} catch (BirtException e) {
-						e.printStackTrace();
+						logger.error(
+								"Error while trying to render html report of {}",
+								reportName);
+						logger.error(e.getMessage(), e);
 					}
 
 				}
@@ -273,7 +280,8 @@ public class BirtReportServiceBean implements BirtReportService {
 			Map<String, Object> parameters, OutputStream out)
 			throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 
 			injectParameters(parameters, runAndRenderTask);
 
@@ -296,7 +304,8 @@ public class BirtReportServiceBean implements BirtReportService {
 			Map<String, Object> parameters, OutputStream out)
 			throws BirtReportException {
 		try {
-			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(reportName);
+			IRunAndRenderTask runAndRenderTask = createRunAndRenderTask(
+					reportName);
 			injectParameters(parameters, runAndRenderTask);
 
 			EXCELRenderOption excelRenderOptions = new EXCELRenderOption();
@@ -318,7 +327,7 @@ public class BirtReportServiceBean implements BirtReportService {
 
 	private void runAndRenderTask(IRunAndRenderTask runAndRenderTask,
 			IRenderOption renderOptions) throws EngineException {
-        injectLocale(runAndRenderTask);
+		injectLocale(runAndRenderTask);
 		runAndRenderTask.setRenderOption(renderOptions);
 		runAndRenderTask.run();
 		runAndRenderTask.close();
@@ -331,19 +340,19 @@ public class BirtReportServiceBean implements BirtReportService {
 				.openReportDesign(reportFileName);
 		IRunAndRenderTask task = reportEngine
 				.createRunAndRenderTask(iReportRunnable);
-        injectLocale(task);
+		injectLocale(task);
 
 		return task;
 	}
 
-
-    @Override
+	@Override
 	public void renderHtmlReport(String reportName,
 			Map<String, Object> parameters, OutputStream out, long pageNumber,
 			boolean overwrite) throws BirtReportException {
 		try {
 			String reportFileName = absolutePathOf(reportFileName(reportName));
-			String documentFileName = absoluteTempPath(documentFileName(reportName));
+			String documentFileName = absoluteTempPath(
+					documentFileName(reportName));
 
 			recreateReportDocument(reportName, parameters, overwrite,
 					reportFileName, documentFileName);
@@ -364,13 +373,13 @@ public class BirtReportServiceBean implements BirtReportService {
 			htmlOptions.setMasterPageContent(false);
 			htmlOptions.setPageFooterFloatFlag(true);
 
-			IRenderTask renderTask = reportEngine.createRenderTask(
-					reportDocument, reportDocument.getReportRunnable());
+			IRenderTask renderTask = reportEngine
+					.createRenderTask(reportDocument,
+							reportDocument.getReportRunnable());
 			renderTask.setRenderOption(htmlOptions);
 			renderTask.setPageNumber(pageNumber);
 
-            injectLocale(renderTask);
-
+			injectLocale(renderTask);
 
 			renderTask.render();
 			renderTask.close();
@@ -383,13 +392,14 @@ public class BirtReportServiceBean implements BirtReportService {
 	private boolean needToCreateNewDocumentFile(String reportName,
 			boolean overwrite) throws IOException {
 		String reportFileName = absolutePathOf(reportFileName(reportName));
-		String documentFileName = absoluteTempPath(documentFileName(reportName));
+		String documentFileName = absoluteTempPath(
+				documentFileName(reportName));
 
 		File reportFile = new File(reportFileName);
 		File documentFile = new File(documentFileName);
 
-		boolean outdated = reportFile.lastModified() > documentFile
-				.lastModified();
+		boolean outdated =
+				reportFile.lastModified() > documentFile.lastModified();
 
 		return overwrite || !documentFile.exists() || outdated;
 	}
@@ -402,8 +412,9 @@ public class BirtReportServiceBean implements BirtReportService {
 
 		Authentication authentication = SecurityContextHolder.getContext()
 				.getAuthentication();
-		String name = (authentication != null) ? authentication.getName()
-				: UUID.randomUUID().toString();
+		String name = (authentication != null) ?
+				authentication.getName() :
+				UUID.randomUUID().toString();
 
 		return reportName + '_' + name + '_' + DOCUMENT_FILE_SUFFIX;
 	}
@@ -416,27 +427,28 @@ public class BirtReportServiceBean implements BirtReportService {
 		}
 	}
 
-    private void injectLocale(IEngineTask task) {
-        Locale locale = LocaleContextHolder.getLocale();
+	private void injectLocale(IEngineTask task) {
+		Locale locale = LocaleContextHolder.getLocale();
 
-        logger.debug("Setting Report Locale to " + locale);
+		logger.debug("Setting Report Locale to " + locale);
 
-        task.setLocale(locale);
-        task.setLocale(ULocale.forLocale(locale));
+		task.setLocale(locale);
+		task.setLocale(ULocale.forLocale(locale));
 
-        logger.debug("Report Language is "+task.getULocale().getBaseName());
-    }
+		logger.debug("Report Language is " + task.getULocale().getBaseName());
+	}
 
 	private String absolutePathOf(String reportFileName) throws IOException {
-		String location = appendSeparatorIfNeeded(environment
-				.getProperty(REPORT_SOURCE_URL_KEY)) + reportFileName;
+		String location = appendSeparatorIfNeeded(
+				environment.getProperty(REPORT_SOURCE_URL_KEY))
+				+ reportFileName;
 		Resource resource = resourceLoader.getResource(location);
 		return resource.getFile().getAbsolutePath();
 	}
 
 	private String absoluteTempPath(String fileName) throws IOException {
-		return appendSeparatorIfNeeded(environment
-				.getProperty("java.io.tmpdir")) + fileName;
+		return appendSeparatorIfNeeded(
+				environment.getProperty("java.io.tmpdir")) + fileName;
 	}
 
 	private String appendSeparatorIfNeeded(String path) {

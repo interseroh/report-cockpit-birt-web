@@ -20,6 +20,8 @@
  */
 package de.interseroh.report.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.core.convert.ConversionService;
@@ -36,11 +38,13 @@ import de.interseroh.report.formatters.DisplayFormatHolder;
 @Component
 public class ParameterFormFormatter {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(ParameterFormFormatter.class);
+
 	@Autowired
 	private ConversionService conversionService;
 
 	/**
-	 *
 	 * Checks if value is not null, is not an empty array
 	 *
 	 * @param value
@@ -48,7 +52,8 @@ public class ParameterFormFormatter {
 	 */
 	public static boolean isNotNullOrEmptyArray(Object value) {
 		return value != null //
-				&& (!value.getClass().isArray() || ((Object[]) value).length > 0);
+				&& (!value.getClass().isArray()
+				|| ((Object[]) value).length > 0);
 	}
 
 	public void format(ParameterForm parameterForm) {
@@ -69,15 +74,15 @@ public class ParameterFormFormatter {
 			private <V, T> void convertValue(ScalarParameter<V, T> parameter,
 					Class<V> valueType, Class<T> textType) {
 
-				DisplayFormatHolder.setDisplayFormat(parameter
-						.getDisplayFormat());
+				DisplayFormatHolder
+						.setDisplayFormat(parameter.getDisplayFormat());
 
 				V value = parameter.getValue();
 				if (isNotNullOrEmptyArray(value)) {
 					if (conversionService.canConvert(valueType, textType)) {
 						try {
-							T formatted = conversionService.convert(value,
-									textType);
+							T formatted = conversionService
+									.convert(value, textType);
 							parameter.setText(formatted);
 						} catch (ConversionException ce) {
 							parameter.setText((T) value.toString());
@@ -90,18 +95,18 @@ public class ParameterFormFormatter {
 					ScalarParameter<V, T> parameter, Class<V> valueType,
 					Class<T> textType) {
 
-				DisplayFormatHolder.setDisplayFormat(parameter
-						.getDisplayFormat());
+				DisplayFormatHolder
+						.setDisplayFormat(parameter.getDisplayFormat());
 
 				V defaultValue = parameter.getDefaultValue();
-				if (defaultValue != null) {
-					if (conversionService.canConvert(valueType, textType)) {
-						try {
-							T formatted = conversionService.convert(
-									defaultValue, textType);
-							parameter.setDefaultText(formatted);
-						} catch (ConversionException ce) {
-						}
+				if (defaultValue != null && conversionService
+						.canConvert(valueType, textType)) {
+					try {
+						T formatted = conversionService
+								.convert(defaultValue, textType);
+						parameter.setDefaultText(formatted);
+					} catch (ConversionException ce) {
+						logger.debug(ce.getMessage(), ce);
 					}
 				}
 			}

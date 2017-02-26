@@ -1,19 +1,19 @@
 package de.interseroh.report.formatters;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 import java.sql.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Ingo Düppe (Crowdcode)
  */
 public class DateFormatterTest {
 
-	private static final Date testDate = new Date(1449961200000L);
+	private static final Date testDate = new Date(2015, 12, 13);
 
     private static final DateFormatter formatter = new DateFormatter();
 

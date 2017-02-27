@@ -49,6 +49,7 @@ import de.interseroh.report.services.BirtParameterTypeTest;
 import de.interseroh.report.services.BirtPdfReportServiceTest;
 import de.interseroh.report.services.BirtReportGenerateTest;
 import de.interseroh.report.services.BirtReportServiceBeanTest;
+import de.interseroh.report.services.BirtReportUtilTest;
 import de.interseroh.report.services.SecurityServiceTest;
 import de.interseroh.report.webconfig.SecurityConfigAuthTest;
 import de.interseroh.report.webconfig.SecurityConfigTest;
@@ -82,7 +83,8 @@ SecurityConfigTest.class, //
 		DateFormatterTest.class, //
 		TimeFormatterTest.class, //
 		TimestampFormatterTest.class, //
-		PaginationTest.class
+		PaginationTest.class, //
+		BirtReportUtilTest.class
 
 })
 public class AllTests {

@@ -20,13 +20,6 @@
  */
 package de.interseroh.report.domain.visitors;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -39,11 +32,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.interseroh.report.controller.ParameterFormFormatter;
 import de.interseroh.report.controller.RequestParamsBuilder;
-import de.interseroh.report.domain.GenericParameter;
 import de.interseroh.report.domain.ParameterForm;
-import de.interseroh.report.domain.ParameterGroup;
-import de.interseroh.report.domain.SelectionParameter;
+import de.interseroh.report.parameter.RequestParamsFixture;
 import de.interseroh.report.webconfig.WebMvcConfig;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -63,8 +57,8 @@ public class RequestParamsBuilderTest {
 	public void testConversionService() throws Exception {
         LocaleContextHolder.setLocale(Locale.GERMAN);
 
-        ParameterForm form = buildTestData();
-        parameterFormFormatter.format(form);
+		ParameterForm form = RequestParamsFixture.buildTestData();
+		parameterFormFormatter.format(form);
 
         String requestParams = requestParamsBuilder
 				.asRequestParams(form);
@@ -73,37 +67,5 @@ public class RequestParamsBuilderTest {
 				"?double=55.5&boolean=false&string=value&dateTime=05.09.15&scalarMULTI=1&scalarMULTI=2"));
 	}
 
-	private ParameterForm buildTestData() {
-		List<ParameterGroup> groups = new ArrayList<>();
-
-		groups.add(new ParameterGroup() //
-				.withName("group1").withSynthetic(false)
-				.addScalarParameter(GenericParameter.newInstance(Double.class) //
-						.withName("double").withValue(55.5))
-				.addScalarParameter(GenericParameter.newInstance(Boolean.class) //
-						.withName("boolean").withValue(false)));
-		groups.add(new ParameterGroup() //
-				.withName("group2").withSynthetic(true)
-				.addScalarParameter(GenericParameter.newInstance(String.class) //
-						.withName("string").withValue("value"))
-				.addScalarParameter(GenericParameter.newInstance(Date.class) //
-						.withName("dateTime").withValue(fixedDate())));
-		groups.add(new ParameterGroup() //
-				.withName("group3").withCascading(true)
-				.addScalarParameter(SelectionParameter
-						.newInstance(Boolean.class).withName("radioNULL"))
-				.addScalarParameter(SelectionParameter.newInstance(String.class)
-						.withName("selectNULL"))
-				.addScalarParameter(SelectionParameter
-						.newMultiInstance(Integer[].class).withName("scalarMULTI")
-						.withValue(new Integer[] { 1, 2 })));
-		return new ParameterForm().withParameterGroups(groups);
-	}
-
-	private Date fixedDate() {
-		Calendar calendar = Calendar.getInstance(Locale.GERMANY);
-		calendar.set(2015, 8, 5, 21, 12, 23);
-		return new Date(calendar.getTimeInMillis());
-	}
 
 }

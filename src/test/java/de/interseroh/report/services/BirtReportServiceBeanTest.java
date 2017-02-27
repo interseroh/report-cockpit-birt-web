@@ -32,7 +32,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import de.interseroh.report.controller.SecurityServiceMock;
+import de.interseroh.report.pagination.Pagination;
+import de.interseroh.report.parameter.RequestParamsFixture;
 import de.interseroh.report.webconfig.ReportConfig;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Ingo Düppe (Crowdcode)
@@ -64,7 +69,15 @@ public class BirtReportServiceBeanTest {
 		// out.writeTo(System.out);
 	}
 
-//	@Test
+	@Test
+	public void testGetPageInfos() throws Exception {
+		Pagination pageInfos = reportService
+				.getPageInfos("chart", RequestParamsFixture.buildTestData());
+		assertThat(pageInfos.getNumberOfPages(), is(63L));
+
+	}
+
+	//	@Test
 //	public void testReportDocument() throws Exception {
 //		ByteArrayOutputStream out = new ByteArrayOutputStream(40000000);
 //		IReportDocument document = reportService.openReportDocument("chart",

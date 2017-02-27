@@ -64,8 +64,8 @@ public class BirtFileReaderServiceBean implements BirtFileReaderService {
 				if (files != null) {
 					for (File file : files) {
 						String fileName = file.getName().substring(0,
-								(file.getName().length()
-										- REPORT_FILESUFFIX_LENGTH));
+								file.getName().length()
+										- REPORT_FILESUFFIX_LENGTH);
 						for (String role : stripRoleNames) {
 							if (role.equalsIgnoreCase(fileName)) {
 								reportReferences

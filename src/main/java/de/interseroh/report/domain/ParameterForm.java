@@ -96,6 +96,11 @@ public class ParameterForm {
 		return Collections.synchronizedMap(parameterMap);
 	}
 
+	public void setParams(Map<String, ScalarParameter> params) {
+		logger.info("Got:{}", params);
+		// nothing to do read only
+	}
+
     public Long getPageNumber() {
         return pageNumber;
     }
@@ -107,11 +112,6 @@ public class ParameterForm {
     public boolean isPageSelected() {
         return pageNumber != null;
     }
-
-    public void setParams(Map<String, ScalarParameter> params) {
-		logger.info("Got:{}", params);
-		// nothing to do read only
-	}
 
 	public MultiValueMap<String, String> getRequestParameters() {
 		return requestParameters;
@@ -156,7 +156,7 @@ public class ParameterForm {
 	}
 
 	public boolean hasNoParameters() {
-		return groups.size() == 0;
+		return groups.isEmpty();
 	}
 
 	public String getReportName() {

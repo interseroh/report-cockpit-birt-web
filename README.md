@@ -52,9 +52,9 @@ To generate the source code from the model we use [NoMagic MagicDraw](http://www
  - for html: [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/html](http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/html)
  - for pdf:
  [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/pdf](http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/pdf)
- - for xls:
- [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xlsx](http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/xlsx)
  - for xlsx:
+ [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xlsx](http://localhost:8080/report-cockpit-birt/api/render/salesinvoice/xlsx)
+ - for xls:
  [http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xls](http://localhost:8080/report-cockpit-birt-web/api/render/salesinvoice/xls)
 
 

@@ -29,10 +29,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @PropertySource("classpath:config.properties")
 @Configuration
@@ -62,6 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${ldap.inmemory.user}")
 	private String ldapInMemoryUser;
 
+	@Value("${security.enabled:true}")
+	private String securityEnabled;
 
 	@Autowired
 	private Environment env;
@@ -71,7 +76,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		String successfulLoginPage = env.getProperty("login.successful.page",
@@ -79,27 +83,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		String successfulLogoutPage = env.getProperty("logout.successful.page",
 				SUCCESSFUL_LOGOUT_PAGE);
 
-		http.authorizeRequests()
-				.antMatchers("/", SUCCESSFUL_LOGIN_PAGE, "/resources/**",
-						"/imprint", "/images/**") // white list of urls
-				.permitAll() // allow anyone on these links
-				.anyRequest().authenticated() // all other urls need a
-												// authentication
-				.and().formLogin() // configure the login
-				.loginPage("/login") // this is the loginPage
-				.failureUrl("/login?error") // redirect to this page on failure
-				.defaultSuccessUrl(successfulLoginPage) // redirect to this page
-														// on success
-				.permitAll() // permit any user to access the login page
-				.and().logout() // logout config
-				.logoutUrl("/logout") // url to trigger logout
-				.logoutSuccessUrl(successfulLogoutPage) // redirect to start
-														// page
-				.permitAll(); // allow anyone to call the logout page
+		if (Boolean.valueOf(securityEnabled)) {
+			logger.info("Security enabled true: " + securityEnabled);
+			http.authorizeRequests()
+					.antMatchers("/", SUCCESSFUL_LOGIN_PAGE, "/resources/**",
+							"/imprint", "/images/**") // white list of urls
+					.permitAll() // allow anyone on these links
+					.anyRequest().authenticated() // all other urls need a
+					// authentication
+					.and().formLogin() // configure the login
+					.loginPage("/login") // this is the loginPage
+					.failureUrl("/login?error") // redirect to this page on failure
+					.defaultSuccessUrl(successfulLoginPage) // redirect to this page
+					// on success
+					.permitAll() // permit any user to access the login page
+					.and().logout() // logout config
+					.logoutUrl("/logout") // url to trigger logout
+					.logoutSuccessUrl(successfulLogoutPage) // redirect to start
+					// page
+					.permitAll(); // allow anyone to call the logout page
 
-		http.csrf().disable(); // TODO Why is CSRF disabled?
-		http.headers().disable(); // TODO need a different solution then
-									// disabling security headers.
+			http.csrf().disable(); // TODO Why is CSRF disabled?
+			http.headers().disable(); // TODO need a different solution then
+			// disabling security headers.
+		} else {
+			logger.info("Security enabled false: " + securityEnabled);
+			http.authorizeRequests()
+					.antMatchers("/**") // white list of urls
+					.permitAll(); // allow anyone on these links
+
+			// disabling security headers
+			http.csrf().disable();
+			http.headers().disable();
+		}
 	}
 
 	@Override
@@ -167,4 +183,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	String prepareInMemoryUser() {
 		return ldapInMemoryPassword;
 	}
+
 }

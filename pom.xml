@@ -47,9 +47,9 @@
 		<spring.data.version>1.8.2.RELEASE</spring.data.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
 		<jackson-version>2.0.2</jackson-version>
-		<kissmda.maven.plugin.version>2.0.0</kissmda.maven.plugin.version>
-        <kissmda.cartridges.simple.java.version>2.0.2</kissmda.cartridges.simple.java.version>
-        <kissmda.extensions.importpacker.version>1.0.0</kissmda.extensions.importpacker.version>
+		<kissmda.maven.plugin.version>2.1.1</kissmda.maven.plugin.version>
+        <kissmda.cartridges.simple.java.version>2.1.1</kissmda.cartridges.simple.java.version>
+        <kissmda.extensions.importpacker.version>2.1.1</kissmda.extensions.importpacker.version>
 		<sonar.language>java</sonar.language>
 		<sonar.excludsions>
 			**/jquery.min.js,**/jquery.js,**/boostrap.js,**/npm.js

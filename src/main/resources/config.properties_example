@@ -2,6 +2,9 @@
 text.branding=Report Cockpit
 logo.branding=/images/birt-logo.png
 
+# Use security or not?
+security.enabled=false
+
 # LDAP or InMemory? Possible values "true" or "false"
 # Value true = Using LDAP
 # Value false = Using InMemory

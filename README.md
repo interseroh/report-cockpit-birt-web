@@ -13,7 +13,12 @@ This projects provides an easy to integrate and enhanced BIRT Web-Viewer based o
 
 ### Configuration
 
-For security and branding configuration see `[src/main/resources/config.properties](https://github.com/interseroh/report-cockpit-birt-web/blob/master/src/main/resources/config.properties_example)`. Be aware that the file will generated on the first `mvn initialize`.
+For security and branding configuration see [src/main/resources/config.properties](https://github.com/interseroh/report-cockpit-birt-web/blob/master/src/main/resources/config.properties_example). Be aware that the file will generated on the first `mvn initialize`.
+
+Per default is the security disabled:
+```
+security.enabled=false
+```
 
 Per default inmemory authentication is activated:
 ```

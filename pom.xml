@@ -26,7 +26,7 @@
 	<artifactId>report-cockpit-birt-web</artifactId>
 	<packaging>war</packaging>
 	<name>report-cockpit-birt-web</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<url>https://github.com/interseroh/report-cockpit-birt-web</url>
 	<description>Report Cockpit for BIRT</description>
 
@@ -627,8 +627,8 @@
 	<distributionManagement>
 		<repository>
 			<id>nexus</id>
-			<name>snapshots</name>
-			<url>http://nexus/repository/snapshots</url>
+			<name>releases</name>
+			<url>http://nexus/repository/releases</url>
 		</repository>
 	</distributionManagement>
 </project>

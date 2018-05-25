@@ -31,6 +31,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
@@ -61,7 +62,8 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 @EnableWebMvc
 @ComponentScan({ "de.interseroh.report.controller",
 		"de.interseroh.report.domain" })
-@PropertySource({ "classpath:report-config.properties" })
+@PropertySources({ @PropertySource("classpath:config.properties"),
+		@PropertySource(value = "classpath:config-${profile}.properties", ignoreResourceNotFound = true) })
 @Import({ ReportConfig.class, DatabaseConfig.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 

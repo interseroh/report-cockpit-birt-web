@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,7 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@PropertySource("classpath:config.properties")
+@PropertySources({ @PropertySource("classpath:config.properties"),
+		@PropertySource(value = "classpath:config-${profile}.properties", ignoreResourceNotFound = true) })
 @ComponentScan("de.interseroh.report.auth")
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "de.interseroh.report.auth", entityManagerFactoryRef = "reportcockpitEntityManagerFactory")

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -21,7 +22,8 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DatabaseConfig.class)
-@PropertySource("classpath:config.properties")
+@PropertySources({ @PropertySource("classpath:config.properties"),
+		@PropertySource(value = "classpath:config-${profile}.properties", ignoreResourceNotFound = true) })
 public class DatabaseConfigTest {
 
 	@Autowired

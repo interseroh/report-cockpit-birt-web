@@ -27,17 +27,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-@PropertySource("classpath:config.properties")
+@PropertySources({ @PropertySource("classpath:config.properties"),
+		@PropertySource(value = "classpath:config-${profile}.properties", ignoreResourceNotFound = true) })
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -78,10 +77,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		String successfulLoginPage = env.getProperty("login.successful.page",
-				SUCCESSFUL_LOGIN_PAGE);
-		String successfulLogoutPage = env.getProperty("logout.successful.page",
-				SUCCESSFUL_LOGOUT_PAGE);
+		String successfulLoginPage = env
+				.getProperty("login.successful.page", SUCCESSFUL_LOGIN_PAGE);
+		String successfulLogoutPage = env
+				.getProperty("logout.successful.page", SUCCESSFUL_LOGOUT_PAGE);
 
 		if (Boolean.valueOf(securityEnabled)) {
 			logger.info("Security enabled true: " + securityEnabled);
@@ -93,8 +92,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					// authentication
 					.and().formLogin() // configure the login
 					.loginPage("/login") // this is the loginPage
-					.failureUrl("/login?error") // redirect to this page on failure
-					.defaultSuccessUrl(successfulLoginPage) // redirect to this page
+					.failureUrl(
+							"/login?error") // redirect to this page on failure
+					.defaultSuccessUrl(
+							successfulLoginPage) // redirect to this page
 					// on success
 					.permitAll() // permit any user to access the login page
 					.and().logout() // logout config
@@ -108,8 +109,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// disabling security headers.
 		} else {
 			logger.info("Security enabled false: " + securityEnabled);
-			http.authorizeRequests()
-					.antMatchers("/**") // white list of urls
+			http.authorizeRequests().antMatchers("/**") // white list of urls
 					.permitAll(); // allow anyone on these links
 
 			// disabling security headers

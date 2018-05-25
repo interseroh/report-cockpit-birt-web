@@ -24,12 +24,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import de.interseroh.report.services.BirtEngineFactory;
 
 @Configuration
 @ComponentScan({"de.interseroh.report.services"})
-@PropertySource("classpath:config.properties")
+@PropertySources({ @PropertySource("classpath:config.properties"),
+		@PropertySource(value = "classpath:config-${profile}.properties", ignoreResourceNotFound = true) })
 public class ReportConfig {
 
 	@Bean

@@ -22,6 +22,7 @@ package de.interseroh.report.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,8 +30,8 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * @author Lofi Dewanto (Interseroh)
  */
-@PropertySource({ "classpath:config.properties",
-		"classpath:version.properties" })
+@PropertySources({ @PropertySource("classpath:config.properties"),
+		@PropertySource(value = "classpath:config-${profile}.properties", ignoreResourceNotFound = true) })
 @Component
 public class ConfigSetter {
 
